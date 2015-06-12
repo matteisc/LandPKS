@@ -1,0 +1,224 @@
+QUICK 'N DIRTY USERS MANUAL OF
+
+******************************************
+*Rosetta v2.0-alpha (DOS/UNIX) April 2002*
+*Marcel G. Schaap                        *
+*GEBJ Salinity Laboratory                *
+*450 W. Big Springs Rd.                  *
+*Riverside, CA 92507 USA                 *
+******************************************
+
+
+
+			    
+NOTE:  This software is under development, but will most likely provide correct estimates of soil hydraulic parameters.  
+The estimated parameters/values may change in future. Models may be deleted or added,file-formats may change.
+
+Please report any bugs to me: mschaap@ussl.ars.usda.gov
+
+
+INSTALLATION
+============
+
+unzip rosetta2.zip into a folder (use pkzip or winzip)
+MAKE SURE that
+1) there is a subfolder called weights (containing 11 files)
+2) rosetta.exe, cygwin1.dll and ex_input.txt are present
+
+USAGE - TESTING THE PROGRAM
+=====   ===================
+
+1) open DOS window in MS-windows
+2) navigate (cd) to the folder where rosetta was installed
+3) type 
+      rosetta
+
+You should see the following output:
+
+Rosetta v2.0-alpha (DOS/UNIX) April 2002
+Marcel G. Schaap                        
+GEBJ Salinity Laboratory                
+450 W. Big Springs Rd.                  
+Riverside, CA 92507 USA                 
+
+ 
+Model 1:  USDA soil textural classes
+Model 2:  percentages sand, silt, clay
+Model 3:  ++ Bulk density
+Model 4:  ++ Water content @ 33 KPa (330 cm suction)
+Model 5:  ++ Water content @ 1500 KPa (15000 cm suction)
+Model 6:  Model 1 with modified retention parameters
+Model 7:  Model 2 with modified retention parameters
+Model 8:  Model 3 with modified retention parameters
+Model 9:  Model 4 with modified retention parameters
+Model 10: Model 5 with modified retention parameters
+Model 11: Rawls BC model (sand, clay, porosity)
+Model 12: Rawls VG4 model (sand, clay, porosity)
+Model 13: Cosby 1-variable model (sand, clay)
+Model 14: Cosby 2-variable model (sand, silt, clay)
+Model 15: Vereecken (sand, clay, bd, oc)
+Model 16: Woesten (silt, clay, bd, om [=1.72*oc], topsoil)
+
+
+Usage:   Rosetta ConfigDir Model Inputfile Outputfile 
+
+
+
+
+USAGE - RUNNING AN EXAMPLE
+=====   ==================
+
+type
+Rosetta WEIGHTS 3 ex_input.txt ex_output,txt
+
+You should see the same output as above plus lines saying
+
+processing......
+............Done!
+
+You just ran Model 3 with the file ex_input.txt as input data and 
+generated the results file ex_output.txt
+
+The other models can be run by selecting a different model number.
+
+
+SOMETHING ABOUT THE MODELS IN ROSETTA2
+======================================
+
+The models have different data requirements but all read their input from one file.  When insufficient data is available -9.9 is listed in the output.
+
+************
+Model 1 through 5: traditional Rosetta models. See:
+
+Schaap, M.G., F.J. Leij, and M.Th. van Genuchten, 2001.  Rosetta: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. J. of Hydr. 251:163-176.
+
+Model 6 through 10: modified versions of models 1 through 5, please see the PDF (acrobat) file schaap_etal_2002.pdf for more information.
+
+
+Models 1..10 estimate van Genuchten (1980) water retention parameters (Theta_R, Theta_S, ALPHA, N), saturated conductivity (Ks). It also estimates unsaturated conductivity parameters of the Mualem-van Genuchten model (van Genuchten, 1980; Schaap and Leij): Ko and L. See:
+
+Schaap, M.G., and F.J. Leij, 2000. Improved prediction of unsaturated hydraulic conductivity with the Mualem-van Genuchten model, Soil Sci. Soc. Am. J., 64:843-851.
+
+
+**********
+Model 11 and 12: see PDF file for more information. These models were derived from:
+
+Rawls, W.J., and D.L. Brakensiek, 1985. Prediction of soil water properties for hydrologic modeling. p 293-299. In: Jones, E.B. and T.J. Ward (eds.), Watershed Management in the Eighties. Proc. Irrig. Drain. Div., ASCE, Denver, CO. April 30 - May 1, 1985., 34, 3293-3302.
+
+Model 11: Brooks-Corey (1964) parameters (Theta_R, Theta_S, HB, N (aka Lambda) and Ks
+Model 12: van Genuchten (1980) parameters Theta_R, Theta_S, ALPHA, N) derived from Brooks-Corey parameters, Ks. (see above reference) 
+
+
+***********
+Model 13 and 14: see PDF file for more information. These models were derived from:
+
+Cosby B.J., G.M Hornberger, R.B. Clapp, and T.R. Ginn, 1984. A statistical exploration of the relationships of soil moisture characteristics to the physical properties of soils. Water Resour. Res. 20:683-690.
+
+Both model 13 and 14 estimate Campbell (1974) parameters, which were converted to Brooks-Corey parameters (Theta_R, Theta_S, HB, N (aka Lambda) and Ks
+
+
+
+***********
+Model 15 see PDF file for more information. This model was derived from:
+
+Vereecken, H., J. Maes, J. Feyen, and P. Darius, 1989. Estimating the soil moisture retention characteristic from texture, bulk density, and carbon content. Soil Sci. 148:389-403.
+
+This model estimates parameters of MODIFIED van Genuchten curve See reference and PDF file). The second exponent in the VG curve is traditionally set to 1-1/N, here this exponent is equal to 1. Estimated: Theta_R, Theta_S, ALPHA, N and Ks
+
+
+
+************
+Model 16 see PDF file for more information. This model was derived from:
+
+Wösten J.H.M., A. Lilly, A. Nemes, and C. Le Bas. 1999. Development and use of a database of hydraulic properties of European soils. Geoderma 90:169-185.
+
+Estimated parameters: van Genuchten (1980) water retention parameters (Theta_R, Theta_S, ALPHA, N), saturated conductivity (Ks). It also estimates L parameter in the unsaturated conductivity of Mualem-van Genuchten model (van Genuchten, 1980; Schaap and Leij).
+
+
+
+OUTPUT
+======
+The output files can be loaded into your favorite text editor or into EXCEL (Use File->Open (select Files of Type: Text Files (*.prn; *.txt; *.csv))
+
+
+Note that some models generate different output formats
+
+All output files have the following format
+Column 1  Identifier (integer)
+Column 2  Identifier (numerical or text, but WITHOUT spaces)
+
+
+Output format for: models 1 through 10 (Rosetta and modified models)
+
+col 3 Theta_R
+col 4 Theta_S
+col 5 Alpha
+col 6 N
+col 7 Ks
+col 8 Ko
+col 9 L
+
+Model 11 (Rawls and Brakensiek)
+
+col 3 Theta_R
+col 4 Theta_S
+col 5 Hb (bubbling pressure or air entry value)
+col 6 N (exponent,aka lambda)
+col 7 Ks
+
+Model 12 (Rawls and Brakensiek)
+
+col 3 Theta_R
+col 4 Theta_S
+col 5 Alpha (inverse of bubbling pressure or air entry value)
+col 6 N (exponent)
+col 7 Ks
+
+Model 13 and 14  (Cosby)
+
+col 3 Theta_R
+col 4 Theta_S
+col 5 Hb (bubbling pressure or air entry value)
+col 6 N (exponent,aka lambda)
+col 7 Ks
+
+Model 15 (Vereecken)
+
+MODIFIED VAN GENUCHTEN MODEL
+
+col 3 Theta_R
+col 4 Theta_S
+col 5 Alpha (inverse of bubbling pressure or air entry value)
+col 6 N (exponent SEE NOTE ABOVE)
+col 7 Ks
+
+
+Model 16 Woesten
+
+col 3 Theta_R
+col 4 Theta_S
+col 5 ALPHA (bubbling pressure or air entry value)
+col 6 N (exponent)
+col 7 Ks
+col 8 L
+
+
+SPECIFYING YOUR OWN INPUT DATA FILE
+===================================
+
+FIRST TWO LINES ARE IGNORED, USE FOR IDENTIFICATION OF THE FILE AND DATA
+
+Col 1 integer identifier
+Col 2 text identifier (horizon?, etc) NO SPACES ALLOWED!
+Col 3 upper depth (cm, use -9.9 when not known)
+Col 4 lower depth (cm, use -9.9 when not known) is used by Woesten model
+Col 5 sand %
+Col 6 silt %
+Col 7 clay %
+sand, sith and clay percentages MUST sum up to 100% (allowed margin 99% to 101%). None of the models accounts for gravel!
+col 8 bulk density in gr/cm3 (use -9.9 when not known)
+col 9 organic CARBON content, not ORGANIC matter (for the Woesten model Rosetta uses OM=1.72 OC) (use -9.9 when not known)
+col 10 water content in cm3/cm3 at 33kPa (330 cm) use -9.9 when not known)
+col 11 water content in cm3/cm3 at 1500kPa (15000 cm) use -9.9 when not known)
+
+

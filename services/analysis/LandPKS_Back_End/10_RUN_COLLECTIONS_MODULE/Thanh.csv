@@ -1,0 +1,61 @@
+Name,Recorder Name,Transect,Segment,Date,Canopy Height,Canopy Gap, Basal Gap, Species 1 Density, Species 2 Density, Species List, Stick Segment 0, Stick Segment 1, Stick Segment 2, Stick Segment 3, Stick Segment 4, Bare Total, Trees Total, Shrubs Total, Sub-shrubs Total, Perennial Grasses Total, Annuals Total, Herb Litter Total, Wood Litter Total, Rock Total
+bz1,adambeh1@gmail.com,EAST,5m,9/7/2014,2-3m,FALSE,TRUE,0,1,,Bare,Trees,"Trees, Tree Litter","Bare, Trees","Bare, Trees",3,4,0,0,0,0,0,1,0
+bz1,adambeh1@gmail.com,EAST,10m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,EAST,15m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,EAST,20m,9/7/2014,2-3m,FALSE,FALSE,0,1,,"Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees",5,5,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,EAST,25m,9/7/2014,1-2m,FALSE,TRUE,0,2,,Bare,"Bare, Trees",Bare,Bare,Bare,5,1,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,NORTH,5m,9/7/2014,<10cm,TRUE,TRUE,0,0,species,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,NORTH,10m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,NORTH,15m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,NORTH,20m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,NORTH,25m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Herb Litter,Bare,Bare,Bare,Bare,4,0,0,0,0,0,1,0,0
+bz1,adambeh1@gmail.com,SOUTH,5m,9/7/2014,2-3m,FALSE,TRUE,0,1,,"Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees",5,5,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,SOUTH,10m,9/7/2014,>3m,FALSE,TRUE,0,2,,"Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees",5,5,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,SOUTH,15m,9/7/2014,>3m,FALSE,TRUE,0,2,,Annuals,"Trees, Tree Litter","Bare, Trees","Bare, Trees","Bare, Trees",3,4,0,0,0,1,0,1,0
+bz1,adambeh1@gmail.com,SOUTH,20m,9/7/2014,>3m,FALSE,TRUE,0,2,,"Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees",5,5,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,SOUTH,25m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Tree Litter,Bare,Bare,4,0,0,0,0,0,0,1,0
+bz1,adambeh1@gmail.com,WEST,5m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,WEST,10m,9/7/2014,2-3m,FALSE,TRUE,0,1,,"Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees","Bare, Trees",5,5,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,WEST,15m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,WEST,20m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+bz1,adambeh1@gmail.com,WEST,25m,9/7/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,EAST,5m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,EAST,10m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,EAST,15m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,EAST,20m,9/6/2014,<10cm,TRUE,TRUE,2,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,EAST,25m,9/6/2014,1-2m,FALSE,TRUE,0,0,,Bare,Bare,Bare,Bare,Trees,4,1,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,NORTH,5m,9/6/2014,<10cm,TRUE,TRUE,0,0,species,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,NORTH,10m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,NORTH,15m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,NORTH,20m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Rock,Bare,Bare,Bare,Bare,4,0,0,0,0,0,0,0,1
+naisunyei,adambeh1@gmail.com,NORTH,25m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,SOUTH,5m,9/6/2014,<10cm,TRUE,TRUE,1,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,SOUTH,10m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,SOUTH,15m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Herb Litter,Bare,Rock,Bare,3,0,0,0,0,0,1,0,1
+naisunyei,adambeh1@gmail.com,SOUTH,20m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,SOUTH,25m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Herb Litter,Bare,Bare,4,0,0,0,0,0,1,0,0
+naisunyei,adambeh1@gmail.com,WEST,5m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,WEST,10m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,WEST,15m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,WEST,20m,9/6/2014,<10cm,TRUE,TRUE,4,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+naisunyei,adambeh1@gmail.com,WEST,25m,9/6/2014,<10cm,TRUE,TRUE,0,0,,Bare,Bare,Bare,Bare,Bare,5,0,0,0,0,0,0,0,0
+100 NY 172,erastusngaruka@gmail.com,EAST,5m,9/6/2014,1-2m,FALSE,TRUE,2,0,,Herb Litter,Herb Litter,"Grasses, Herb Litter","Shrubs, Herb Litter","Shrubs, Sub-Shrubs, Herb Litter",0,0,2,1,1,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,EAST,10m,9/6/2014,>3m,FALSE,TRUE,0,0,,Herb Litter,Herb Litter,Herb Litter,"Shrubs, Herb Litter","Shrubs, Herb Litter",0,0,2,0,0,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,EAST,15m,9/6/2014,>3m,FALSE,TRUE,3,0,,Herb Litter,"Grasses, Herb Litter","Grasses, Herb Litter","Trees, Herb Litter","Grasses, Herb Litter",0,1,0,0,3,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,EAST,20m,9/6/2014,>3m,FALSE,FALSE,2,0,,"Shrubs, Herb Litter","Shrubs, Herb Litter","Shrubs, Herb Litter",Herb Litter,"Grasses, Herb Litter",0,0,3,0,1,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,EAST,25m,9/6/2014,>3m,FALSE,TRUE,2,0,,Herb Litter,"Grasses, Herb Litter","Shrubs, Grasses, Herb Litter","Shrubs, Herb Litter","Shrubs, Grasses, Herb Litter",0,0,3,0,3,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,NORTH,5m,9/6/2014,1-2m,FALSE,FALSE,1,0,"species, species, species, species",Herb Litter,Herb Litter,Herb Litter,"Shrubs, Herb Litter",Herb Litter,0,0,1,0,0,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,NORTH,10m,9/6/2014,1-2m,FALSE,TRUE,5,0,,"Grasses, Herb Litter",Herb Litter,Bare,Herb Litter,"Grasses, Herb Litter",1,0,0,0,2,0,4,0,0
+100 NY 172,erastusngaruka@gmail.com,NORTH,15m,9/6/2014,>3m,FALSE,FALSE,3,0,,Herb Litter,Herb Litter,Herb Litter,"Grasses, Herb Litter","Grasses, Herb Litter",0,0,0,0,2,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,NORTH,20m,9/6/2014,50cm-1m,FALSE,FALSE,2,0,,Herb Litter,"Grasses, Herb Litter",Herb Litter,Herb Litter,"Grasses, Herb Litter",0,0,0,0,2,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,NORTH,25m,9/6/2014,1-2m,FALSE,TRUE,1,0,,"Grasses, Herb Litter",Herb Litter,Herb Litter,Herb Litter,Herb Litter,0,0,0,0,1,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,SOUTH,5m,9/6/2014,>3m,FALSE,TRUE,0,0,,Tree Litter,"Sub-Shrubs, Tree Litter",Tree Litter,"Annuals, Tree Litter",Tree Litter,0,0,0,1,0,1,0,5,0
+100 NY 172,erastusngaruka@gmail.com,SOUTH,10m,9/6/2014,>3m,FALSE,TRUE,1,0,,"Trees, Herb Litter","Trees, Herb Litter",Herb Litter,"Trees, Shrubs, Herb Litter","Trees, Shrubs, Herb Litter",0,4,2,0,0,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,SOUTH,15m,9/6/2014,1-2m,FALSE,FALSE,4,0,,"Grasses, Herb Litter","Grasses, Herb Litter","Shrubs, Herb Litter",Herb Litter,Herb Litter,0,0,1,0,2,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,SOUTH,20m,9/6/2014,>3m,FALSE,FALSE,3,0,,Herb Litter,"Grasses, Herb Litter",Herb Litter,Herb Litter,"Trees, Herb Litter",0,1,0,0,1,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,SOUTH,25m,9/6/2014,1-2m,FALSE,TRUE,0,0,,"Shrubs, Herb Litter","Shrubs, Herb Litter","Shrubs, Herb Litter","Shrubs, Herb Litter",Herb Litter,0,0,4,0,0,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,WEST,5m,9/6/2014,>3m,FALSE,TRUE,1,0,,"Shrubs, Herb Litter","Shrubs, Herb Litter","Shrubs, Herb Litter","Shrubs, Grasses, Herb Litter","Shrubs, Herb Litter",0,0,5,0,1,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,WEST,10m,9/6/2014,>3m,FALSE,FALSE,1,0,,Herb Litter,"Grasses, Herb Litter","Trees, Herb Litter",Herb Litter,"Trees, Herb Litter",0,2,0,0,1,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,WEST,15m,9/6/2014,10-50cm,TRUE,TRUE,5,0,,Herb Litter,Bare,Herb Litter,Herb Litter,Bare,2,0,0,0,0,0,3,0,0
+100 NY 172,erastusngaruka@gmail.com,WEST,20m,9/6/2014,>3m,FALSE,FALSE,2,0,,"Grasses, Herb Litter",Herb Litter,Herb Litter,Herb Litter,Herb Litter,0,0,0,0,1,0,5,0,0
+100 NY 172,erastusngaruka@gmail.com,WEST,25m,9/6/2014,1-2m,FALSE,TRUE,0,0,,"Shrubs, Herb Litter","Shrubs, Herb Litter",Herb Litter,Herb Litter,Herb Litter,0,0,2,0,0,0,5,0,0

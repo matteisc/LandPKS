@@ -1,0 +1,10 @@
+;$Id$
+
+name = APEX Project Util
+description = APEX Project Util
+package = APEX_PROJECT
+core = 7.x
+files[] = apex_util_supporting.module
+
+;dependencies[] = autoload
+;php = 5.2  	

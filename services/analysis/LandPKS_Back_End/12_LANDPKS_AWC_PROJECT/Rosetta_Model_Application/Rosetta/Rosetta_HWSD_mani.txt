@@ -1,0 +1,4 @@
+sam_id          layer_id    hz_tp   hz_bt   sand_tot    silt_tot    clay_tot    bulk_dens   tot_C   w3cld   w15ad
+
+13431                top        0      30       78.0         4.0        18.0         1.49    -9.9    -9.9    -9.9
+13431                sub       30     100       69.0         5.0        26.0         1.42    -9.9    -9.9    -9.9

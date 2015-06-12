@@ -1,0 +1,10 @@
+;$Id$
+
+name = APIs Function for Mobile Application
+description = APIs Function for Mobile Application
+package = APEX_PROJECT
+core = 7.x
+files[] = apex_api_mobile_application.module
+
+;dependencies[] = autoload
+;php = 5.2  	
