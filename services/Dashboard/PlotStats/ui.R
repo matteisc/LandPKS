@@ -1,11 +1,9 @@
 ## Author: Nasim Gh. 
 ## email: n-ghazan@nmsu.edu
-## 6/24/2015
+## 6/30/2015
 
 library(shiny)
 source('helpers.R')
-
-
 
 shinyUI(pageWithSidebar(
   # Title of the application
@@ -21,9 +19,15 @@ shinyUI(pageWithSidebar(
 
     tabPanel("Select date",
              br(),
-             actionButton("selectAllMonth", "Select All"),
-             actionButton("deselectAllMonth", "Deselect All"),
-             uiOutput("MonthList"))
+             dateRangeInput("dates", label = h3("Date range"),
+                            min = as.Date(minDate, "%Y-%m-%d") ,
+                            max = as.Date(maxDate, "%Y-%m-%d"),
+                            start = as.Date(minDate, "%Y-%m-%d"),
+                            end = as.Date(maxDate, "%Y-%m-%d")),
+             sliderInput("count", "Number of uploaded plots per user/month",
+                         minCount, maxCount, c(minCount, maxCount), step = 1)
+             
+             )
     ) ,width = 2),
   
   mainPanel(
@@ -31,3 +35,4 @@ shinyUI(pageWithSidebar(
     htmlOutput ("chart1")
   )
 ))
+
