@@ -40,7 +40,15 @@ json_data <- json_data$items
 json_data["value"] <-1
 
 json_data$shortdate <- strftime(json_data$modifiedDate, format="%Y/%m")
-#json_data$shortdate <- as.Date(paste0(json_data$shortdate,"/01"))
+
+
+minDate <- min(json_data$modifiedDate)
+maxDate <- max(json_data$modifiedDate)
+
+tmp_agg_data <- aggregate(json_data$value , list(user = json_data$recorderName, time = json_data$shortdate), sum)
+
+minCount<- min(tmp_agg_data$x)
+maxCount<- max(tmp_agg_data$x)
 
 
 userNames <- unique(json_data$recorderName)
@@ -49,20 +57,31 @@ userNames <- sort(userNames)
 json_agg_data <- aggregate(json_data$value , list(user = json_data$recorderName, time = json_data$shortdate), sum)
 
 months<- unique(json_agg_data$time)
-#months<- substring(months,first = 0, last = 7)
 
-
-getUserData<-function (userList,monthList){  
-  userData <- json_agg_data[json_agg_data$user %in% userList & json_agg_data$time %in% monthList,]
+getUserData<-function (userList,dates,count){  
+  start <- dates[1]
+  end <- dates[2]
+  
+  min <- count[1]
+  max <- count[2]
+  
+  userData <-json_data[json_data$modifiedDate <= end & json_data$modifiedDate >= start,]
+  userData <- userData[userData$recorderName  %in% userList ,]
+  
   if(nrow(userData) ==0 ) return (NULL)
+  
+  userData <- aggregate(userData$value , list(user = userData$recorderName, time = userData$shortdate), sum)
+  
+  userData <- userData[userData$x <= max & userData$x >= min  ,]
+  
+  if(nrow(userData) ==0 ) return (NULL)
+  
   dates<- unique(userData$time)
   emails<- unique(userData$user)
   data <- data.frame(matrix(ncol = length(dates)+1, nrow = length(emails)))
   names(data)[1] <- "recorder" 
   for(i in 1:(length(dates))+1){
     d = dates[i-1]
-    #y = as.POSIXlt(d)$year + 1900
-    #names(data)[i] <-  paste(months(d),y)
     
     y = unlist(strsplit(d,"/"))[1]
     m = month.abb[as.numeric(unlist(strsplit(d,"/"))[2])]
