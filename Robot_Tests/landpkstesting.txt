@@ -1,0 +1,284 @@
+*** Settings ***
+Suite Teardown
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           Collections
+Library           String
+Library           OperatingSystem
+
+*** Variables ***
+${LandInfo}       http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[0]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+@{Version}        ${EMPTY}
+@{name}           umakanth60    umakanth61    umakanth62    umakanth63    umakanth64    umakanth65    umakanth66
+...               umakanth67    umakanth68
+@{recordername}    umakanth@gmail.com    hfsjkhf
+@{Testplot}       True
+@{organization}    test
+@{latitude}       0.41332212276756763
+@{longitude}      36.90203824080527
+@{city}           Africa
+@{modified_date}    06/06/2014
+@{land_cover}     tree cover, >25% canopy
+@{grazed}         True
+@{flooding}       True
+@{slope}          moderate (0-2%)
+@{slope_shape}    LINEAR,CONVEX
+@{rock_fragment_for_soil_horizon_1}    0-15%    test
+@{rock_fragment_for_soil_horizon_2}    15-35%    test
+@{rock_fragment_for_soil_horizon_3}    0-15%    test
+@{rock_fragment_for_soil_horizon_4}    ${EMPTY}
+@{rock_fragment_for_soil_horizon_5}    ${EMPTY}
+@{rock_fragment_for_soil_horizon_6}    ${EMPTY}
+@{rock_fragment_for_soil_horizon_7}    ${EMPTY}
+@{color_for_soil_horizon_1}    ${EMPTY}
+@{color_for_soil_horizon_2}    ${EMPTY}
+@{color_for_soil_horizon_3}    ${EMPTY}
+@{color_for_soil_horizon_4}    ${EMPTY}
+@{color_for_soil_horizon_5}    ${EMPTY}
+@{color_for_soil_horizon_6}    ${EMPTY}
+@{texture_for_soil_horizon_1}    SAND    test
+@{texture_for_soil_horizon_2}    SAND    test
+@{texture_for_soil_horizon_3}    SAND    test
+@{texture_for_soil_horizon_4}    ${EMPTY}
+@{texture_for_soil_horizon_5}    ${EMPTY}
+@{texture_for_soil_horizon_6}    ${EMPTY}
+@{texture_for_soil_horizon_7}    ${EMPTY}
+@{surface_cracking}    True
+@{surface_salt}    True
+@{soil_pit_photo_url}    ${EMPTY}
+@{soil_samples_photo_url}    Libraries\Pictures\1.png
+@{landscape_north_photo_url}    ${EMPTY}
+@{landscape_east_photo_url}    ${EMPTY}
+@{landscape_south_photo_url}    ${EMPTY}
+@{landscape_west_photo_url}    ${EMPTY}
+${result}         ${EMPTY}
+${results}        {"status": 1, "name": "umakanth16", "object": "LANDINFO", "recorder_name": "umakanth@gmail.com", "detail": "LandInfo plot is created and predicted data is ready", "version": 0.1, "id": 2685}
+${Value1}         u'status': 1
+${Value2}         u'object': u'LANDINFO'
+${Error for existing record}    {"error": "[Recorder_name + name] pair is existed in system. Please select another "}
+${Landinfo1}      http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=&recorder_name=&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing one field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing one more mandatory field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[0]&recorder_name=&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing Action field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=&object=landinfo&name=@{name}[0]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing Object field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=&name=@{name}[0]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing Latitude field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[1]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing Longitude field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[1]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing Slope Field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[1]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing Slope_shape field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[1]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing Surface_salt field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[1]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing Surface_cracking field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[6]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Invalid Photo URL}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[2]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Invalid data field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[1]&recorder_name=@{recordername}[1]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing API Version}    http://128.123.177.21:8080/query?version=&action=put&object=landinfo&name=@{name}[3]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Invalid or missing action or object field}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=&object=&name=@{name}[1]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${invalid or missing test_plot}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[7]&recorder_name=@{recordername}[0]&test_plot=&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Missing data in rock_fragment_for_soil_horizon}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[4]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=&rock_fragment_for_soil_horizon_2=&rock_fragment_for_soil_horizon_3=&rock_fragment_for_soil_horizon_4=&rock_fragment_for_soil_horizon_5=&rock_fragment_for_soil_horizon_6=&rock_fragment_for_soil_horizon_7=&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Wrong data in rock_fragment_for_soil_horizon}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[5]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[1]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[1]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[1]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+${Wrong data format in texture_for_soil_horizon}    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[5]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[1]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[1]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[1]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+
+*** Test Cases ***
+Put new record in landinfo
+    [Tags]    put
+    Create Session    land    http://128.123.177.21:8080/query?version=@{Version}[0]&action=put&object=landinfo&name=@{name}[0]&recorder_name=@{recordername}[0]&test_plot=@{Testplot}[0]&organization=@{organization}[0]&latitude=@{latitude}[0]&longitude=@{longitude}[0]&city=@{city}[0]&modified_date=@{modified_date}[0]&land_cover=@{land_cover}[0]&grazed=@{grazed}[0]&flooding=@{flooding}[0]&slope=@{slope}[0]&slope_shape=@{slope_shape}[0]&rock_fragment_for_soil_horizon_1=@{rock_fragment_for_soil_horizon_1}[0]&rock_fragment_for_soil_horizon_2=@{rock_fragment_for_soil_horizon_2}[0]&rock_fragment_for_soil_horizon_3=@{rock_fragment_for_soil_horizon_3}[0]&rock_fragment_for_soil_horizon_4=@{rock_fragment_for_soil_horizon_4}[0]&rock_fragment_for_soil_horizon_5=@{rock_fragment_for_soil_horizon_5}[0]&rock_fragment_for_soil_horizon_6=@{rock_fragment_for_soil_horizon_6}[0]&rock_fragment_for_soil_horizon_7=@{rock_fragment_for_soil_horizon_7}[0]&color_for_soil_horizon_1=@{color_for_soil_horizon_1}[0]&color_for_soil_horizon_2=@{color_for_soil_horizon_2}[0]&color_for_soil_horizon_3=@{color_for_soil_horizon_3}[0]&color_for_soil_horizon_4=@{color_for_soil_horizon_4}[0]&color_for_soil_horizon_5=@{color_for_soil_horizon_5}[0]&color_for_soil_horizon_6=@{color_for_soil_horizon_6}[0]&texture_for_soil_horizon_1=@{texture_for_soil_horizon_1}[0]&texture_for_soil_horizon_2=@{texture_for_soil_horizon_2}[0]&texture_for_soil_horizon_3=@{texture_for_soil_horizon_3}[0]&texture_for_soil_horizon_4=@{texture_for_soil_horizon_4}[0]&texture_for_soil_horizon_5=@{texture_for_soil_horizon_5}[0]&texture_for_soil_horizon_6=@{texture_for_soil_horizon_6}[0]&texture_for_soil_horizon_7=@{texture_for_soil_horizon_7}[0]&surface_cracking=@{surface_cracking}[0]&surface_salt=@{surface_salt}[0]&soil_pit_photo_url=@{soil_pit_photo_url}[0]&soil_samples_photo_url=@{soil_samples_photo_url}[0]&landscape_north_photo_url=@{landscape_north_photo_url}[0]&landscape_east_photo_url=@{landscape_east_photo_url}[0]&landscape_south_photo_url=@{landscape_south_photo_url}[0]&landscape_west_photo_url=@{landscape_west_photo_url}[0]
+    ${result}=    Put Request    land    /put
+    Should Contain    ${result.content}    "object": "LANDINFO"
+    Should Contain    ${result.content}    "status": 1
+    Should Contain    ${result.content}    "name": "@{name}[0]"
+
+Check Existing Name in landinfo
+    [Tags]    puts
+    Create Session    landinfo    ${LandInfo}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    ${Error for existing record}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing two mandatory fields
+    [Tags]    missing values
+    Create Session    landinfo    ${Landinfo1}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing name field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing name field
+    [Tags]    missing one value
+    Create Session    landinfo    ${Missing one field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing name field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing recorder_name field
+    [Tags]    Missing one more mandatory field
+    Create Session    landinfo    ${Missing one more mandatory field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing recorder_name field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing action field
+    [Tags]    Missing action field
+    Create Session    landinfo    ${Missing Action field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing action field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing object field
+    [Tags]    Missing object field
+    Create Session    landinfo    ${Missing Object field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing object field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing Latitude field
+    [Tags]    Missing Latitude field
+    Create Session    landinfo    ${Missing Latitude field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing latitude field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing Longitude value
+    [Tags]    Missing Longitude value
+    Create Session    landinfo    ${Missing Longitude field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing longitude field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing Latitude with new name field
+    [Tags]    Missing Latitude with new name field
+    Create Session    landinfo    ${Missing Latitude field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing latitude field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing Longitude field with new name
+    [Tags]    Missing Longitude field with new name
+    Create Session    landinfo    ${Missing Longitude field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing longitude field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing Slope Field
+    [Tags]    Missing Slope Field
+    Create Session    landinfo    ${Missing Slope Field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing slope field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing Slope_shape field
+    [Tags]    Missing Slope_shape field
+    Create Session    landinfo    ${Missing Slope_shape field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing slope_shape field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing surface_salt field
+    [Tags]    Missing surface_salt field
+    Create Session    landinfo    ${Missing Surface_salt field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing surface_salt field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing Surface_Cracking field
+    [Tags]    Missing Surface_Cracking field
+    Create Session    landinfo    ${Missing Surface_cracking field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing surface_cracking field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Invalid Photo URL provided
+    [Tags]    Invalid Photo URL provided
+    Create Session    landinfo    ${Invalid Photo URL}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error": "Invalid Photo URL"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Invalid Data field
+    [Tags]    Invalid Data field
+    Create Session    landinfo    ${Invalid data field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error":"Invalid data field."}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing API Version
+    [Tags]    Missing API Version
+    Create Session    landinfo    ${Missing API Version}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error":"Please specify API version."}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Invalid or missing action or object field
+    [Tags]    Invalid or missing action or object field
+    Create Session    landinfo    ${Invalid or missing action or object field}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error":"Invalid or missing action or/and object field."}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Invalid or missing test_plot field
+    [Tags]    Invalid or missing test_plot field
+    Create Session    landinfo    ${invalid or missing test_plot}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error":"Invalid or missing test_plot field."}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Missing data in rock_fragment_for_soil_horizon
+    [Tags]    Missing data in rock_fragment_for_soil_horizon
+    Create Session    landinfo    ${Missing data in rock_fragment_for_soil_horizon}
+    ${result}=    Put Request    landinfo    /put
+    Should Contain    ${result.content}    {"error":"Wrong data in rock_fragment_for_soil_horizon_i field."}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Wrong Data in rock_fragment_for_soil_horizon
+    [Tags]    Wrong Data in rock_fragment_for_soil_horizon
+    Create Session    land    ${Wrong data in rock_fragment_for_soil_horizon}
+    ${result}=    Put Request    land    /put
+    Should Contain    ${result.content}    {"error": "Wrong data in rock_fragment_for_soil_horizon_1 field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+
+Wrong data format in texture_for_soil_horizon
+    [Tags]    Wrong data format in texture_for_soil_horizon
+    Create Session    land    ${Wrong data format in texture_for_soil_horizon}
+    ${result}=    Put Request    land    /put
+    Should Contain    ${result.content}    {"error": "Wrong data format in texture_for_soil_horizon_1 field"}
+    Should Not Contain    ${result.content}    "object": "LANDINFO"
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"

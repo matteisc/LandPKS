@@ -1,0 +1,222 @@
+*** Settings ***
+Suite Teardown    Delete All Sessions
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           Collections
+Library           String
+Library           OperatingSystem
+
+*** Variables ***
+@{Version}        ${EMPTY}
+@{name}           umakanth44    umakanth43    umakanth62    umakanth63    umakanth64    umakanth65    umakanth66
+...               umakanth67    umakanth68
+@{recordername}    umakanth@gmail.com    hfsjkhf
+@{Transect}       west    south    north    east    4.5    \
+@{Segment}        5m    10m    15m    20m    25m    \    4.5
+@{Canopy_height}    <10cm    10-50cm    50cm-1m    1-2m    2-3m    >3m    ${EMPTY}
+...               4.5
+@{canopy_gap}     True    False    test
+@{basal_gap}      True    False    test
+@{species_density}    123    456    789    143
+${Landcoverurl}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+@{sticksegment}    Trees    Bare    Bare    Annuals,Herb Litter,Wood Litter    Rock,Sub-shrubs,Perennial grasses
+${Missing name field}    http://128.123.177.21:8080/query?action=put&object=landcover&name=&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing Recorder name}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing name and recorder name}    http://128.123.177.21:8080/query?action=put&object=landcover&name=&recorder_name=&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing action field}    http://128.123.177.21:8080/query?action=&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing object field}    http://128.123.177.21:8080/query?action=put&object=&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing action and object field}    http://128.123.177.21:8080/query?action=&object=&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing Transect field}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[5]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Wrong data in transect field}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[4]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing Segment field}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[5]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Wrong data in segment field}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[6]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Canopy height missing}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Wrong canopy height}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[7]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing canopy gap}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[2]&canopy_gap=&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Invalid canopy gap}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[2]&canopy_gap=@{canopy_gap}[2]&basal_gap=@{basal_gap}[0]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing basal gap}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Wrong Basal_gap}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[2]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${Missing species field}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[1]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=&species_2_density=&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+
+*** Test Cases ***
+Put new record in landcover
+    [Tags]    put
+    Create Session    landcover    ${Landcoverurl}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    "recorder_name": "@{recordername}[0]"
+    Should Contain    ${result.content}    "status": 1
+    Should Contain    ${result.content}    "name": "@{name}[0]"
+    Should Contain    ${result.content}    "landinfo_plot_id"
+    Should Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing name field
+    [Tags]    Missing name field
+    Create Session    landcover    ${Missing name field}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalide or missing name field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing Recorder name field
+    Create Session    landcover    ${Missing Recorder name}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalide or missing recorder_name field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing name and Recorder name
+    Create Session    landcover    ${Missing name and recorder name}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalide or missing name field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing action field
+    Create Session    landcover    ${Missing action field}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing action field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing Object Field
+    Create Session    landcover    ${Missing object field}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing object field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing action and object field
+    Create Session    landcover    ${Missing action and object field}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalid or missing object field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing Transect field
+    Create Session    landcover    ${Missing Transect field}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalide or missing transect field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Wrong format in Transect field
+    Create Session    landcover    ${Wrong data in transect field}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Wrong format transect, only accept WEST, NORTH, SOUTH, EAST"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing Segment field
+    Create Session    landcover    ${Missing Segment field}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalide or missing segment field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Wrong data in segment field
+    Create Session    landcover    ${Wrong data in segment field}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Wrong format segment, only accept 5m, 10m, 15m, 20m and 25m"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Canopy height missing
+    Create Session    landcover    ${Canopy height missing}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalide or missing canopy_height field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Wrong Canopy height
+    Create Session    landcover    ${Wrong canopy height}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Wrong format canopy_height, only accept <10cm, 10-50cm, 50cm-1m, 1-2m, 2-3m and >3m"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing Canopy gap field
+    Create Session    landcover    ${Missing canopy gap}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalide or missing canopy_gap field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Invalid canopy gap
+    Create Session    landcover    ${Invalid canopy gap}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Wrong format canopy_gap, only accept TRUE or FALSE"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing basal gap field
+    Create Session    landcover    ${Missing basal gap}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Invalide or missing basal_gap field"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Wrong Basal gap field
+    Create Session    landcover    ${Wrong Basal_gap}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Wrong format basal_gap, only accept TRUE or FALSE"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
+
+Missing Species density fields
+    Create Session    landcover    ${Missing species field}
+    ${result}=    Put Request    landcover    /put
+    Should Contain    ${result.content}    {"error": "Wrong format basal_gap, only accept TRUE or FALSE"}
+    Should Not Contain    ${result.content}    "status": 1
+    Should Not Contain    ${result.content}    "name": "@{name}[0]"
+    Should Not Contain    ${result.content}    "landinfo_plot_id"
+    Should Not Contain    ${result.content}    "detail": "LandCover Record is created"
+    Should Not Contain    ${result.content}    "object": "LANDCOVER"
