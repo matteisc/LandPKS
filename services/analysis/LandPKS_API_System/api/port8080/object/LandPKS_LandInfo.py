@@ -1,0 +1,22 @@
+'''
+Created on Jun 16, 2015
+
+@author: thnguyen
+'''
+TEXTURE_SOIL_SET = set(['SAND','LOAMY SAND','SANDY LOAM','LOAM','SILT LOAM','SILT','SANDY CLAY LOAM','CLAY LOAM','SILTY CLAY LOAM','SILTY CLAY','SANDY CLAY','CLAY','',' '])
+LAND_INFO_DISPLAY_SET = set(['PREDICTION','GEOSPATIAL_DATA','ANALYTIC_DATA_SOIL','CLIMATE'])
+ROCK_FRAGMENT_SOIL_SET = set(['0-15%','15-35%','35-60%','>60%','',' '])
+
+PARAMS_ACTION = 'action'
+PARAMS_OBJECT = 'object'
+PARAMS_DELIMITER = 'delimiter'
+PARAMS_DISPLAY = 'display'
+PARAMS_ID = 'id'
+PARAMS_RECORDER_NAME = 'recorder_name'
+PARAMS_NAME = 'name'
+PARAMS_MIN_LAT = 'minlat'
+PARAMS_MIN_LONG = 'minlong'
+PARAMS_MAX_LAT = 'maxlat'
+PARAMS_MAX_LONG = 'maxlong'
+PARAMS_BEFORE_DATE = 'before_date'
+PARAMS_AFTER_DATE = 'after_date'
