@@ -19,17 +19,13 @@ import time
 import datetime
 
 from auth import AuthController, require, member_of, name_is, check_credentials
-SESSION_KEY = '_cp_username'
+
 
 CURRENT_VERSION = 0.1
 '''
 Configuration
 '''
-ACCESS_LOG_CHERRYPY_8080 = "C:/xampp/htdocs/LandPKS_API_System/api/port8080=cherrypd_server+cherrypy_framework/log/%s_8080_access_log.log" %(str(datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d')))
-ERROR_LOG_CHERRYPY_8080 = "C:/xampp/htdocs/LandPKS_API_System/api/port8080=cherrypd_server+cherrypy_framework/log/%s_8080_error_log.log" %(str(datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d')))
 
-
-CORE_BACK_END_MAIN_LANPKS = "C:/xampp/htdocs/APEX/Python_APEX/1_CONTROLLER_PROJECT/"
 def prepare_response(data,format="JSON"):
     return "Da converted"
 def return_response_error(code,type,mess,format="JSON"):
