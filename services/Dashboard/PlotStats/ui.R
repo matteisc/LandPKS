@@ -3,12 +3,11 @@
 ## 6/30/2015
 
 library(shiny)
-source('helpers.R')
 
 shinyUI(pageWithSidebar(
   # Title of the application
   headerPanel("Plot user data"),
-  
+ 
   sidebarPanel(
     tabsetPanel(id = "tabPanel1",
       tabPanel("Select user",
@@ -32,7 +31,9 @@ shinyUI(pageWithSidebar(
   
   mainPanel(
     br(),
-    htmlOutput ("chart1")
+    htmlOutput ("chart1"),
+    br(),
+    br(),
+    verbatimTextOutput("stats")
   )
 ))
-

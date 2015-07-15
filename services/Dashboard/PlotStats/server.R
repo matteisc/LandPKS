@@ -14,11 +14,11 @@ shinyServer(function(input, output,session) {
   
   output$UserList <- renderUI({  
     
-    checkboxGroupInput("checkGroup", 
-                       label = h5("Usernames:"), 
-                       choices = userNames ,
-                       selected = NULL)
-    
+    div(style='height:500px;  overflow: scroll'  
+            ,checkboxGroupInput("checkGroup", 
+                               label = h5("Usernames:"), 
+                               choices = userNames ,
+                               selected = userNames))      
   })
   
   observe({
@@ -57,4 +57,14 @@ shinyServer(function(input, output,session) {
     gvisColumnChart(UserData)
 
   })
+  
+  
+    output$stats <- renderText({
+      paste("Plot Statistics (user/month): ", "",
+            paste("Mean : ",round(mean(json_agg_data$x),digits = 2)),
+            paste("Median : ", median(json_agg_data$x)),
+            paste("min : ", min(json_agg_data$x)),
+            paste("Max : ", max(json_agg_data$x)),sep="\n")
+      })
+  
 }) 

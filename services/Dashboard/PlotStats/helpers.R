@@ -4,6 +4,7 @@
 
 #install.packages("jsonlite", repos="http://cran.r-project.org")
 #install.packages('googleVis')
+
 library(jsonlite)
 library(googleVis)
 library(httr)
@@ -38,6 +39,7 @@ json_data<-content(req,as = "text")
 json_data <- fromJSON(json_data )
 json_data <- json_data$items
 json_data["value"] <-1
+
 
 json_data$shortdate <- strftime(json_data$modifiedDate, format="%Y/%m")
 
