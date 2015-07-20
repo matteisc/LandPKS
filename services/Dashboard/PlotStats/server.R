@@ -60,11 +60,13 @@ shinyServer(function(input, output,session) {
   
   
     output$stats <- renderText({
+      paste(input$checkGroup,input$dates,input$count)
+      
       paste("Plot Statistics (user/month): ", "",
-            paste("Mean : ",round(mean(json_agg_data$x),digits = 2)),
-            paste("Median : ", median(json_agg_data$x)),
-            paste("min : ", min(json_agg_data$x)),
-            paste("Max : ", max(json_agg_data$x)),sep="\n")
+            paste("Mean : ",statMean),
+            paste("Median : ", statMedian),
+            paste("min : ", statMin),
+            paste("Max : ", statMax),sep="\n")
       })
   
 }) 

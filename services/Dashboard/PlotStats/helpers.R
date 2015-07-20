@@ -32,6 +32,11 @@ req <- GET("https://silicon-bivouac-496.appspot.com/_ah/api/plotendpoint/v1/plot
 stop_for_status(req)
 json_data<-content(req,as = "text")
 
+statMean <<- 0
+statMedian <<- 0
+statMin <<- 0
+statMax <<- 0
+
 ### reading from static file
 # json_file <- "data/plotList.json"
 # json_data <- readChar(json_file, file.info(json_file)$size)
@@ -61,6 +66,11 @@ json_agg_data <- aggregate(json_data$value , list(user = json_data$recorderName,
 months<- unique(json_agg_data$time)
 
 getUserData<-function (userList,dates,count){  
+  statMean <<- 0
+  statMedian <<- 0
+  statMin <<- 0
+  statMax <<- 0  
+  
   start <- dates[1]
   end <- dates[2]
   
@@ -77,6 +87,8 @@ getUserData<-function (userList,dates,count){
   userData <- userData[userData$x <= max & userData$x >= min  ,]
   
   if(nrow(userData) ==0 ) return (NULL)
+  
+  updateStats(userData)
   
   dates<- unique(userData$time)
   emails<- unique(userData$user)
@@ -108,6 +120,13 @@ getUserData<-function (userList,dates,count){
   return (data)
 }
 
+updateStats<- function (userData){
+  
+  statMean <<- round(mean(userData$x),digits = 2)
+  statMedian <<- median(userData$x)
+  statMin <<- min(userData$x)
+  statMax <<- max(userData$x)
+}
 # getTransposeData<-function (userList){
 #   data<- getUserData(userList)
 #   data<- as.data.frame(t(data))
