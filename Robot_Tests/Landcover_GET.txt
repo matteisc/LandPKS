@@ -1,0 +1,278 @@
+*** Settings ***
+Suite Teardown    Delete All Sessions
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           Collections
+Library           String
+Library           OperatingSystem
+Library           HttpLibrary
+Resource          Get Method Variables list.txt
+
+*** Test Cases ***
+GetLandcoverbyRecordername
+    [Tags]    GetLandcoverbyRecordername
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landcover&recorder_name=@{recorder_name}[0]&name=@{name}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+    Should Contain    ${result.content}    \ \ \ "recorder_name": "kshamathe77@gmail.com",
+    Should Contain    ${result.content}    \ \ \ "date": "0",
+    Should Contain    ${result.content}    \ \ \ "transect": []
+
+GetLandcoverbyOwners
+    [Tags]    GetLandcoverbyOwners
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landcover&recorder_name=@{recorder_name}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    "name": "kshamathe77@gmail.com-Got-Pen Amweenye Control-Nangolo Dhamutenya",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "kshamathe77@gmail.com",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "date": "2015-06-23 12:48:33",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "transect": [
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "direction": "WEST",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "segment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "range": "10m",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "time": "2015-06-23 12:48:33",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "canopy_height": "1-2m",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "canopy_gap": "FALSE",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "basal_gap": "TRUE",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_1_density": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_2_density": 2,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_list": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "stick_segment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "0": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Trees"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "1": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Herb Litter, Wood litter"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "2": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 2,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Perennial grasses, Annuals"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "3": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 3,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Herb Litter, Wood Litter, Rock"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "4": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 4,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Rock"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "summary": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "bare_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "trees_total": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "shrubs_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "sub_shrubs_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "perennial_grasses_total": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "annuals_total": 2,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "herb_litter_total": 2,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "wood_litter_total": 2,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "rock_total": 2
+
+GetLandcoverAfterDate
+    [Tags]    GetLandcoverAfterDate
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landcover&after_date=@{afterdate}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    "name": "umakanth110",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "umakanth@gmail.com",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "date": "2015-07-10 16:17:07",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "transect": [
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "direction": "SOUTH",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "segment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "range": "10m",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "time": "2015-07-10 16:17:07",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "canopy_height": "10-50cm",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "canopy_gap": "TRUE",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "basal_gap": "TRUE",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_1_density": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_2_density": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_list": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "stick_segment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "0": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Trees"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "1": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "2": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 2,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "3": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 3,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Annuals,Herb Litter,Wood Litter"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "4": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 4,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Rock,Sub-shrubs,Perennial grasses"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "summary": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "bare_total": 2,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "trees_total": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "shrubs_total": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "sub_shrubs_total": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "perennial_grasses_total": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "annuals_total": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "herb_litter_total": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "wood_litter_total": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "rock_total": 1
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+
+GetLandcoverBeforeDate
+    [Tags]    GetLandcoverBeforeDate
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landcover&before_date=@{beforedate}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    "name": "doug@douglasmeredith.net-test01",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "doug@douglasmeredith.net",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "date": "2015-05-28 22:55:52",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "transect": [
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "direction": "WEST",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "segment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "range": "25m",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "time": "2015-05-28 22:55:52",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "canopy_height": "<10cm",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "canopy_gap": "True",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "basal_gap": "True",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_1_density": 3,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_2_density": 3,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_list": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "stick_segment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "0": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "1": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "2": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 2,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "3": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 3,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "4": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 4,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "summary": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "bare_total": 5,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "trees_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "shrubs_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "sub_shrubs_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "perennial_grasses_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "annuals_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "herb_litter_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "wood_litter_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "rock_total": 0
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+
+GetLandcoverBetweenDates
+    [Tags]    GetLandcoverBetweenDates
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landcover&before_date=@{beforedate}[0]&after_date=@{afterdate}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    "name": "doug@douglasmeredith.net-test01",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "doug@douglasmeredith.net",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "date": "2015-05-28 22:55:52",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "transect": [
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "direction": "WEST",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "segment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "range": "25m",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "time": "2015-05-28 22:55:52",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "canopy_height": "<10cm",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "canopy_gap": "True",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "basal_gap": "True",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_1_density": 3,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_2_density": 3,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "species_list": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "stick_segment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "0": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "1": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 1,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "2": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 2,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "3": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 3,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "4": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "index": 4,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "cover": "Bare"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "summary": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "bare_total": 5,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "trees_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "shrubs_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "sub_shrubs_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "perennial_grasses_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "annuals_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "herb_litter_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "wood_litter_total": 0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "rock_total": 0
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+
+Missing filtering recorder_name landcover
+    [Tags]    Missing filtering recorder_name landcover
+    Create Session    landinfo    http://128.123.177.21:8080/query?action=get&object=landcover&recorder_name=&name=@{name}[0]&version=@{Version}[0]
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing filtering recorder_name"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing filtering name landcover
+    [Tags]    Missing filtering name landcover
+    Create Session    landinfo    http://128.123.177.21:8080/query?action=get&object=landcover&recorder_name=@{recorder_name}[0]&name=&version=@{Version}[0]
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing filtering name"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing or invalid filtering before_date landcover
+    [Tags]    Missing or invalid filtering before_date landcover
+    Create Session    landinfo    http://128.123.177.21:8080/query?action=get&object=landcover&before_date=&version=@{Version}[0]
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing or invalid filtering before date"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing or invalid filtering after_date landcover
+    [Tags]    Missing or invalid filtering after_date landcover
+    Create Session    landinfo    http://128.123.177.21:8080/query?action=get&object=landcover&after_date=&version=@{Version}[0]
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing or invalid filtering after_date"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Date format is not correct YYYY-MM-DD landcover
+    [Tags]    Data Format is not correct yyyy-mm-dd landcover
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landcover&after_date=@{afterdate}[1]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    {"error": "Data Format is not correct yyyy-mm-dd"}
+    Should not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "umakanth110",
+    Should not Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "umakanth@gmail.com",
+
+FilternotSupported landcover
+    [Tags]    FilternotSupported landcover
+    Create Session    landinfo    http://128.123.177.21:8080/query?action=get&object=landcover&version=@{Version}[0]
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "GET Method has not supported these filtering parameters yet"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
