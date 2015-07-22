@@ -1,6 +1,5 @@
 ## Author: Nasim Gh. 
 ## email: n-ghazan@nmsu.edu
-## 6/30/2015
 
 library(shiny)
 

@@ -1,7 +1,5 @@
 ## Author: Nasim Gh. 
 ## email: n-ghazan@nmsu.edu
-## 6/30/2015
-
 
 # server.R
 source('helpers.R')
@@ -43,30 +41,27 @@ shinyServer(function(input, output,session) {
 
   ###########################
 
-  output$chart1 <- renderGvis({
-  
-    shiny::validate(need(input$checkGroup , 'Check at least one userName!' ))    
-    #shiny::validate(need(input$checkMonthGroup , 'Check at least one date!' )) 
-    shiny::validate(need(input$dates[2] > input$dates[1], "end date should be after start date"))
-
+  selectedPlot <- reactive({
+    shiny::validate(need(input$checkGroup , 'Check at least one userName!' ))     
+    shiny::validate(need(input$dates[2] >= input$dates[1], "end date should be after start date"))
+    
     UserData<-getUserData(input$checkGroup,input$dates,input$count)
     
     shiny::validate(need(UserData , 'No data to display!' ))  
-
+    UserData
     
-    gvisColumnChart(UserData)
+  })
+  
+  output$chart1 <- renderGvis({
+   
+    gvisColumnChart(selectedPlot())
 
   })
   
   
     output$stats <- renderText({
-      paste(input$checkGroup,input$dates,input$count)
-      
-      paste("Plot Statistics (user/month): ", "",
-            paste("Mean : ",statMean),
-            paste("Median : ", statMedian),
-            paste("min : ", statMin),
-            paste("Max : ", statMax),sep="\n")
+      selectedPlot()
+      updateStats()
       })
   
 }) 
