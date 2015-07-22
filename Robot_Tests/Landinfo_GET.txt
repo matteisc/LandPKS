@@ -1,0 +1,294 @@
+*** Settings ***
+Suite Teardown    Delete All Sessions
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           Collections
+Library           String
+Library           OperatingSystem
+Library           HttpLibrary
+Resource          Get Method Variables list.txt
+Library           DateTime
+
+*** Variables ***
+
+*** Test Cases ***
+GetLandinfoByID
+    [Tags]    get
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landinfo&id=@{id}[1]&display=@{set of display data}[4]&delimiter=@{delimiter}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    [
+    Should Contain    ${result.content}    \ \ \ {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "kshamathe77@gmail.com",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "test_plot": "TRUE",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "organization": "C.A.N",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "latitude": -18.167439345270395,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "longitude": 15.64202120527625,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "city": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "land_cover": "cropland",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "grazed": "false",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "slope": "flat (0-2%)",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "slope_shape": "LINEAR,LINEAR",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "rock_fragment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_1": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_2": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_3": "0-15%",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_4": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_5": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_6": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_7": ""
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "color": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_1": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_2": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_3": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_4": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_5": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_6": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_7": "null"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "texture": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_1": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_2": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_3": "LOAMY SAND",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_4": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_5": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_6": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_7": ""
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "surface_cracking": "false",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "surface_salt": "false",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "soil_pit_photo_url": "http://lh3.googleusercontent.com/BQ9SGnUzwCW1P6E_6vG9WmXabsXFW2BmI7qx2YCrwy45X0T-Ut5TOG_TK2aKRTE5PKoRBAufOZvAVHjYqdv9avbE4AQt1_qzYlE",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "soil_samples_photo_url": "http://lh3.googleusercontent.com/eDVf4iFZaWXlufY3Bb6z4-31gR0ZTt5g-FfVLwDfK3JAdKdnGABfVHZDeAqFv77Cf75Xi7y-llPGZlp7GnVkpjIboRdVE9F2BtA",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "landscape_north_photo_url": "http://lh3.googleusercontent.com/eGbth4w8hvHYORaP7YZqrY1tvKSX_-AkLWUtzoihcouI6CTa8SW08dkOUAe9RxIrK1oDDw9DJXJtZT26W3JgiixEbFzRE5Q8M94",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "landscape_east_photo_url": "http://lh3.googleusercontent.com/MVqkPiXCAMU5ZLL7b8t3qJ3le-iNayFF_rEZbTrxkP1c1PbrnUTjaJvyv70fPHIB1PW17iKOMQA86-rbwIXbAg8u4b-3D2qjwQ",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "landscape_south_photo_url": "http://lh3.googleusercontent.com/c3ElLCX0HCF1UD-6YEPARiIf4N2DUEm6Lo7-webTstCBzYYVj1EXUGP1j5BsZvghn2S2iDgGaqhIeJmKstLd9b4AUjiV6GYH2A",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "landscape_west_photo_url": "http://lh3.googleusercontent.com/muw3drBFGrxXtaorJrBBSpcRgHXMgiCDQ8ZOXyMsyo2KVSUiilk5EEq2rDvXDgO_Ig23-vnA8y_EKczoj1uQcpm4kqSSLCsuSw",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "insert_normal_time": "2015-05-26 10:51:33",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "ip_address": "107.178.195.236",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "climate": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "precipitation": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "january": 99.667442,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "february": 101.481392,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "march": 83.393021,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "april": 24.758139,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "may": 0.75814,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "june": 0.737209,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "july": 0.0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "august": 0.0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "september": 0.851163,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "october": 10.923256,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "november": 31.953489,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "december": 56.332558
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "average_temperature": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "january": 25.372726,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "february": 24.642424,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "march": 23.384848,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "april": 23.027273,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "may": 19.827272,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "june": 17.006062,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "july": 16.751514,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "august": 19.236364,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "september": 23.075758,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "october": 25.503031,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "november": 25.854546,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "december": 25.730303
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "max_temperature": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "january": 31.921211,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "february": 30.727272,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "march": 28.79394,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "april": 30.218182,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "may": 28.433332,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "june": 26.193939,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "july": 26.318182,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "august": 29.112122,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "september": 32.745453,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "october": 34.054546,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "november": 33.515152,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "december": 33.10606
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "min_temperature": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "january": 18.872726,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "february": 18.612122,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "march": 18.042423,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "april": 15.878788,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "may": 11.254545,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "june": 7.878788,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "july": 7.242424,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "august": 9.40606,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "september": 13.454545,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "october": 17.006062,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "november": 18.242424,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "december": 18.415152
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ }
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ }
+    Should Contain    ${result.content}    \ \ \ }
+    Should Contain    ${result.content}    ]
+
+GetLandinfobyName
+    [Tags]    GetLandinfobyName
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landinfo&recorder_name=@{recorder_name}[0]&name=@{name}[0]&display=@{set of display data}[4]&delimiter=@{delimiter}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+GetLandinfobyOwners
+    [Tags]    GetLandinfobyOwners
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landinfo&recorder_name=@{recorder_name}[0]&display=@{set of display data}[4]&delimiter=@{delimiter}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "kshamathe77@gmail.com",
+
+GetLandinfobyRegion
+    [Tags]    GetLandinfobyRegion
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landinfo&minlat=@{latitude}[0]&minlong=@{longtitude}[0]&maxlat=@{latitude}[1]&maxlong=@{longtitude}[1]&display=@{set of display data}[4]&delimiter=@{delimiter}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    [
+
+GetLandinfoRegionOwners
+    [Tags]    GetLandinfoRegionOwners
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landinfo&recorder_name=@{recorder_name}[0]&minlat=@{latitude}[0]&minlong=@{longtitude}[0]&maxlat=@{latitude}[0]&maxlong=@{longtitude}[0]&display=@{set of display data}[4]&delimiter=@{delimiter}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "kshamathe77@gmail.com",
+
+GetLandinfoAfterDate
+    [Tags]    GetLandinfoAfterDate
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landinfo&after_date=@{afterdate}[0]&display=@{set of display data}[4]&delimiter=@{delimiter}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    "id": 2750,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "name": "umakanth110",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "umakanth@gmail.com",
+
+GetLandinfoBeforeDate
+    [Tags]    GetLandinfoBeforeDate
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landinfo&before_date=@{beforedate}[0]&display=@{set of display data}[4]&delimiter=@{delimiter}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    "id": 2656,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "name": "arni.ekayanti@gmail.com-01",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "arni.ekayanti@gmail.com",
+
+GetLandinfoBetweenDates
+    [Tags]    GetLandinfoBetweenDates
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landinfo&before_date=@{beforedate}[0]&after_date=@{afterdate}[0]&display=@{set of display data}[4]&delimiter=@{delimiter}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    "id": 2656,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "name": "arni.ekayanti@gmail.com-01",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "arni.ekayanti@gmail.com",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "test_plot": "TRUE",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "organization": "UH",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "latitude": -5.187376607455918,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "longitude": 119.40706723492559,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "city": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "land_cover": "garden/mixed",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "grazed": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "slope": "flat (0-2%)",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "slope_shape": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "rock_fragment": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_1": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_2": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_3": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_4": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_5": "",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_6": "0-15%",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_7": ""
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "color": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_1": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_2": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_3": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_4": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_5": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_6": "null",
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "soil_horizon_7": "null"
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ },
+
+Missing filtering ID or IDs
+    [Tags]    Missing filtering ID or IDs
+    Create Session    landinfo    ${Missing filtering ID or IDs}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing filtering ID or IDs"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing filtering recorder_name
+    [Tags]    Missing filtering recorder_name
+    Create Session    landinfo    ${Missing filtering recorder_name}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing filtering recorder_name"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing filtering name
+    [Tags]    Missing filtering name
+    Create Session    landinfo    ${Missing filtering name}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing filtering name"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing or invalid filtering minlat
+    [Tags]    Missing or invalid filtering minlat
+    Create Session    landinfo    ${Missing or invalid filtering minlat}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing or invalid filtering minlat (minimum latitude)"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing or invalid filtering minlong
+    [Tags]    Missing or invalid filtering minlong
+    Create Session    landinfo    ${Missing or invalid filtering minlong}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing or invalid filtering minlong (minimum longitude)"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing or invalid filtering maxlat
+    [Tags]    Missing or invalid filtering maxlat
+    Create Session    landinfo    ${Missing or invalid filtering maxlat}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing or invalid filtering maxlat (maximum latitude)"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing or invalid filtering maxlong
+    [Tags]    Missing or invalid filtering maxlong
+    Create Session    landinfo    ${Missing or invalid filtering maxlong}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing or invalid filtering maxlong (maximum longitude)"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing or invalid filtering before_date
+    [Tags]    Missing or invalid filtering before_date
+    Create Session    landinfo    ${Missing or invalid filtering before_date}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing or invalid filtering before_date"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Missing or invalid filtering after_date
+    [Tags]    Missing or invalid filtering after_date
+    Create Session    landinfo    ${Missing or invalid filtering after_date}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Missing or invalid filtering after_date"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+FilternotSupported
+    [Tags]    FilternotSupported
+    Create Session    landinfo    ${InvalidFilter}
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "GET Method has not supported these filtering parameters yet"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "id": 2584,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "kshamathe77@gmail.com-Kleopas Abiatar NSCA-Oponona",
+
+Date format is not correct YYYY-MM-DD
+    [Tags]    Data Format is not correct yyyy-mm-dd
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=landinfo&after_date=@{afterdate}[1]&display=@{set of display data}[4]&delimiter=@{delimiter}[0]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    {"error": "Data Format is not correct yyyy-mm-dd"}
+    Should not Contain    ${result.content}    \ \ \ \ \ \ \ "name": "umakanth110",
+    Should not Contain    ${result.content}    \ \ \ \ \ \ \ "recorder_name": "umakanth@gmail.com",
