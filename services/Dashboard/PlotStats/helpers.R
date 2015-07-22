@@ -113,7 +113,7 @@ getUserData<-function (userList,dates,count){
 
 updateStats<- function (){
   statMean <- round(mean(userData$x),digits = 2)
-  statMedian <- median(userData$x)git';';sc
+  statMedian <- median(userData$x)
   statMin <- min(userData$x)
   statMax <- max(userData$x)
   
