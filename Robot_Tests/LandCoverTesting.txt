@@ -8,10 +8,10 @@ Library           OperatingSystem
 
 *** Variables ***
 @{Version}        ${EMPTY}
-@{name}           umakanth44    umakanth43    umakanth62    umakanth63    umakanth64    umakanth65    umakanth66
-...               umakanth67    umakanth68
+@{name}           umakanth105    umakanth110    umakanth103    umakanth104    umakanth105    umakanth106    umakanth107
+...               umakanth108    umakanth109
 @{recordername}    umakanth@gmail.com    hfsjkhf
-@{Transect}       west    south    north    east    4.5    \
+@{Transect}       west    south    north    east    4.5    ${EMPTY}
 @{Segment}        5m    10m    15m    20m    25m    \    4.5
 @{Canopy_height}    <10cm    10-50cm    50cm-1m    1-2m    2-3m    >3m    ${EMPTY}
 ...               4.5
@@ -37,12 +37,14 @@ ${Invalid canopy gap}    http://128.123.177.21:8080/query?action=put&object=land
 ${Missing basal gap}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
 ${Wrong Basal_gap}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[0]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[2]&species_1_density=@{species_density}[0]&species_2_density=@{species_density}[1]&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
 ${Missing species field}    http://128.123.177.21:8080/query?action=put&object=landcover&name=@{name}[1]&recorder_name=@{recorderName}[0]&transect=@{Transect}[1]&segment=@{Segment}[1]&canopy_height=@{Canopy_height}[1]&canopy_gap=@{canopy_gap}[0]&basal_gap=@{basal_gap}[0]&species_1_density=&species_2_density=&stick_segment_0=@{sticksegment}[0]&stick_segment_1=@{sticksegment}[1]&stick_segment_2=@{sticksegment}[2]&stick_segment_3=@{sticksegment}[3]&stick_segment_4=@{sticksegment}[4]&
+${authkey}        session_id=d1057549a2ed6f19f2845fc5d4d813f655447620
 
 *** Test Cases ***
 Put new record in landcover
     [Tags]    put
     Create Session    landcover    ${Landcoverurl}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    "recorder_name": "@{recordername}[0]"
     Should Contain    ${result.content}    "status": 1
     Should Contain    ${result.content}    "name": "@{name}[0]"
@@ -53,8 +55,9 @@ Put new record in landcover
 Missing name field
     [Tags]    Missing name field
     Create Session    landcover    ${Missing name field}
-    ${result}=    Put Request    landcover    /put
-    Should Contain    ${result.content}    {"error": "Invalide or missing name field"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalid or missing name field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "landinfo_plot_id"
@@ -63,8 +66,9 @@ Missing name field
 
 Missing Recorder name field
     Create Session    landcover    ${Missing Recorder name}
-    ${result}=    Put Request    landcover    /put
-    Should Contain    ${result.content}    {"error": "Invalide or missing recorder_name field"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalid or missing recorder_name field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "landinfo_plot_id"
@@ -73,8 +77,9 @@ Missing Recorder name field
 
 Missing name and Recorder name
     Create Session    landcover    ${Missing name and recorder name}
-    ${result}=    Put Request    landcover    /put
-    Should Contain    ${result.content}    {"error": "Invalide or missing name field"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalid or missing name field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "landinfo_plot_id"
@@ -83,7 +88,8 @@ Missing name and Recorder name
 
 Missing action field
     Create Session    landcover    ${Missing action field}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Invalid or missing action field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
@@ -93,7 +99,8 @@ Missing action field
 
 Missing Object Field
     Create Session    landcover    ${Missing object field}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Invalid or missing object field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
@@ -103,7 +110,8 @@ Missing Object Field
 
 Missing action and object field
     Create Session    landcover    ${Missing action and object field}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Invalid or missing object field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
@@ -113,8 +121,9 @@ Missing action and object field
 
 Missing Transect field
     Create Session    landcover    ${Missing Transect field}
-    ${result}=    Put Request    landcover    /put
-    Should Contain    ${result.content}    {"error": "Invalide or missing transect field"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalid or missing transect field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "landinfo_plot_id"
@@ -123,7 +132,8 @@ Missing Transect field
 
 Wrong format in Transect field
     Create Session    landcover    ${Wrong data in transect field}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Wrong format transect, only accept WEST, NORTH, SOUTH, EAST"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
@@ -133,8 +143,9 @@ Wrong format in Transect field
 
 Missing Segment field
     Create Session    landcover    ${Missing Segment field}
-    ${result}=    Put Request    landcover    /put
-    Should Contain    ${result.content}    {"error": "Invalide or missing segment field"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalid or missing segment field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "landinfo_plot_id"
@@ -143,7 +154,8 @@ Missing Segment field
 
 Wrong data in segment field
     Create Session    landcover    ${Wrong data in segment field}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Wrong format segment, only accept 5m, 10m, 15m, 20m and 25m"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
@@ -153,8 +165,9 @@ Wrong data in segment field
 
 Canopy height missing
     Create Session    landcover    ${Canopy height missing}
-    ${result}=    Put Request    landcover    /put
-    Should Contain    ${result.content}    {"error": "Invalide or missing canopy_height field"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalid or missing canopy_height field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "landinfo_plot_id"
@@ -163,7 +176,8 @@ Canopy height missing
 
 Wrong Canopy height
     Create Session    landcover    ${Wrong canopy height}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Wrong format canopy_height, only accept <10cm, 10-50cm, 50cm-1m, 1-2m, 2-3m and >3m"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
@@ -173,8 +187,9 @@ Wrong Canopy height
 
 Missing Canopy gap field
     Create Session    landcover    ${Missing canopy gap}
-    ${result}=    Put Request    landcover    /put
-    Should Contain    ${result.content}    {"error": "Invalide or missing canopy_gap field"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalid or missing canopy_gap field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "landinfo_plot_id"
@@ -183,7 +198,8 @@ Missing Canopy gap field
 
 Invalid canopy gap
     Create Session    landcover    ${Invalid canopy gap}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Wrong format canopy_gap, only accept TRUE or FALSE"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
@@ -193,7 +209,8 @@ Invalid canopy gap
 
 Missing basal gap field
     Create Session    landcover    ${Missing basal gap}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Invalide or missing basal_gap field"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
@@ -203,7 +220,8 @@ Missing basal gap field
 
 Wrong Basal gap field
     Create Session    landcover    ${Wrong Basal_gap}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Wrong format basal_gap, only accept TRUE or FALSE"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
@@ -213,7 +231,8 @@ Wrong Basal gap field
 
 Missing Species density fields
     Create Session    landcover    ${Missing species field}
-    ${result}=    Put Request    landcover    /put
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Put Request    landcover    /put    headers=${headers}
     Should Contain    ${result.content}    {"error": "Wrong format basal_gap, only accept TRUE or FALSE"}
     Should Not Contain    ${result.content}    "status": 1
     Should Not Contain    ${result.content}    "name": "@{name}[0]"

@@ -8,10 +8,10 @@ Library           OperatingSystem
 
 *** Variables ***
 ${URL}            http://128.123.177.21:8080/query?action=delete&object=landinfo&id=@{id}[0]&version=
-@{id}             2681    2738
+@{id}             2689    2738
 ${LandCoverURL}    http://128.123.177.21:8080/query?action=delete&object=landcover&recorder_name=@{recorder_name}[0]&name=@{name}[0]&version=
 @{recorder_name}    umakanth@gmail.com    umakanth@gmail.com
-@{name}           umakanth60    umakanth8
+@{name}           umakanth45    umakanth20
 ${Missing Action}    http://128.123.177.21:8080/query?action=&object=landcover&recorder_name=@{recorder_name}[0]&name=@{name}[0]&version=
 ${Missing Object}    http://128.123.177.21:8080/query?action=delete&object=&recorder_name=@{recorder_name}[0]&name=@{name}[0]&version=
 ${Missing Recorder name}    http://128.123.177.21:8080/query?action=delete&object=landcover&recorder_name=&name=@{name}[0]&version=
@@ -20,12 +20,14 @@ ${Missing name and recorder field}    http://128.123.177.21:8080/query?action=de
 ${Missing Id in LandInfo}    http://128.123.177.21:8080/query?action=delete&object=landinfo&id=&version=
 ${Recorder name and name pair not exists}    http://128.123.177.21:8080/query?action=delete&object=landcover&recorder_name=@{recorder_name}[1]&name=@{name}[1]&version=
 ${Invalid ID}     http://128.123.177.21:8080/query?action=delete&object=landinfo&id=@{id}[1]&version=
+${authkey}        session_id=5833d51c55479224e31443bda6177349496d164f
 
 *** Test Cases ***
 Delete from LandInfo
     [Tags]    puts
     Create Session    landinfo    ${URL}
-    ${result}=    Delete Request    landinfo    /delete
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landinfo    /delete    headers=${headers}
     Should Contain    ${result.content}    "object": "LANDINFO"
     Should Contain    ${result.content}    "id": "@{id}[0]"
     Should Contain    ${result.content}    "status": "deleted"
@@ -33,7 +35,8 @@ Delete from LandInfo
 Delete from LandCover
     [Tags]    Delete from LandCover
     Create Session    landcover    ${LandCoverURL}
-    ${result}=    Delete Request    landcover    /delete
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landcover    /delete    headers=${headers}
     Should Contain    ${result.content}    "object": "LANDCOVER"
     Should Contain    ${result.content}    "name": "@{name}[0]"
     Should Contain    ${result.content}    "status": "deleted"
@@ -42,7 +45,8 @@ Delete from LandCover
 Invalid or missing Action Field
     [Tags]    Invalid or missing Action Field
     Create Session    landcover    ${Missing Action}
-    ${result}=    Delete Request    landcover    /delete
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landcover    /delete    headers=${headers}
     Should Contain    ${result.content}    {"error": "Invalid or missing action field"}
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "status": "deleted"
@@ -51,7 +55,8 @@ Invalid or missing Action Field
 Invalid or Object missing
     [Tags]    Invalid or Object missing
     Create Session    landcover    ${Missing Object}
-    ${result}=    Delete Request    landcover    /delete
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landcover    /delete    headers=${headers}
     Should Contain    ${result.content}    {"error": "Invalid or missing object field"}
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "status": "deleted"
@@ -60,8 +65,9 @@ Invalid or Object missing
 Missing Recorder name field
     [Tags]    Missing Recorder name field
     Create Session    landcover    ${Missing Recorder name}
-    ${result}=    Delete Request    landcover    /delete
-    Should Contain    ${result.content}    {"error": "Invalide or missing ID field or Couple (Recorder_name and name)"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landcover    /delete    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalide or missing ID field or (Recorder_name and name) pair"}
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "status": "deleted"
     Should Not Contain    ${result.content}    "recorder_name": "@{recorder_name}[0]"
@@ -69,8 +75,9 @@ Missing Recorder name field
 Missing name field
     [Tags]    Missing name field
     Create Session    landcover    ${Missing name field}
-    ${result}=    Delete Request    landcover    /delete
-    Should Contain    ${result.content}    {"error": "Invalide or missing ID field or Couple (Recorder_name and name)"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landcover    /delete    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalide or missing ID field or (Recorder_name and name) pair"}
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "status": "deleted"
     Should Not Contain    ${result.content}    "recorder_name": "@{recorder_name}[0]"
@@ -78,8 +85,9 @@ Missing name field
 Missing name and Recorder name fields
     [Tags]    Missing name and Recorder name fields
     Create Session    landcover    ${Missing name and recorder field}
-    ${result}=    Delete Request    landcover    /delete
-    Should Contain    ${result.content}    {"error": "Invalide or missing ID field or Couple (Recorder_name and name)"}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landcover    /delete    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalide or missing ID field or (Recorder_name and name) pair"}
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "status": "deleted"
     Should Not Contain    ${result.content}    "recorder_name": "@{recorder_name}[0]"
@@ -87,8 +95,9 @@ Missing name and Recorder name fields
 Missing ID in Landinfo
     [Tags]    Missing ID in Landinfo
     Create Session    landcover    ${Missing name and recorder field}
-    ${result}=    Delete Request    landcover    /delete
-    Should Contain    ${result.content}    {"error": "Invalid or missing ID field."}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landcover    /delete    headers=${headers}
+    Should Contain    ${result.content}    {"error": "Invalide or missing ID field or (Recorder_name and name) pair"}
     Should Not Contain    ${result.content}    "object": "LANDINFO"
     Should Not Contain    ${result.content}    "id": "@{id}[0]"
     Should Not Contain    ${result.content}    "status": "deleted"
@@ -96,8 +105,9 @@ Missing ID in Landinfo
 Recorder name and name pair not exist in landcover
     [Tags]    Recorder name and name pair not exist in landcover
     Create Session    landcover    ${Recorder name and name pair not exists}
-    ${result}=    Delete Request    landcover    /delete
-    Should Contain    ${result.content}    {"error": "Plot with [Recorder_name and name] pair is not existed or has been deleted."}
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landcover    /delete    headers=${headers}
+    Should Contain    ${result.content}    {"error": "LandCover with (Recorder_name and name) pair has been deleted already or does not exist in System"}
     Should Not Contain    ${result.content}    "name": "@{name}[0]"
     Should Not Contain    ${result.content}    "status": "deleted"
     Should Not Contain    ${result.content}    "recorder_name": "@{recorder_name}[0]"
@@ -105,7 +115,8 @@ Recorder name and name pair not exist in landcover
 Id is not in Landinfo
     [Tags]    Id is not in Landinfo
     Create Session    landcover    ${Invalid ID}
-    ${result}=    Delete Request    landcover    /delete
+    ${headers}=    Create Dictionary    Cookie    ${authkey}
+    ${result}=    Delete Request    landcover    /delete    headers=${headers}
     Should Contain    ${result.content}    {"error": "ID 2738 is not existed or has been deleted"}
     Should Not Contain    ${result.content}    "object": "LANDINFO"
     Should Not Contain    ${result.content}    "id": "@{id}[0]"
