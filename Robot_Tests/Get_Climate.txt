@@ -1,0 +1,116 @@
+*** Settings ***
+Suite Teardown    Delete All Sessions
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           Collections
+Library           String
+Library           OperatingSystem
+Library           HttpLibrary
+Resource          Get Method Variables list.txt
+
+*** Test Cases ***
+GetClimate
+    [Tags]    GetClimate
+    Create Session    land    http://128.123.177.21:8080/query?action=get&object=climate&latitude=@{latitude}[0]&longitude=@{longtitude}[0]&data_source=@{DataSource}[1]&version=@{Version}[0]
+    ${result}=    Get Request    land    /get
+    Should Contain    ${result.content}    {
+    Should Contain    ${result.content}    \ \ \ "longitude": 15.64202120527625,
+    Should Contain    ${result.content}    \ \ \ "latitude": -18.167439345270395,
+    Should Contain    ${result.content}    \ \ \ "data_source": "WORLD_CLIM",
+    Should Contain    ${result.content}    \ \ \ "climate": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "precipitation": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "january": 99.66744232177734,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "february": 101.48139190673828,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "march": 83.39302062988281,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "april": 24.75813865661621,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "may": 0.7581395506858826,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "june": 0.7372093200683594,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "july": 0.0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "august": 0.0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "september": 0.8511627912521362,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "october": 10.923255920410156,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "november": 31.953489303588867,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "december": 56.332557678222656,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "annual": 410.8558080792427
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "average_temperature": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "january": 25.372726440429688,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "february": 24.642423629760742,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "march": 23.38484764099121,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "april": 23.027273178100586,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "may": 19.827272415161133,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "june": 17.006061553955078,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "july": 16.751514434814453,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "august": 19.236364364624023,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "september": 23.07575798034668,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "october": 25.50303077697754,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "november": 25.85454559326172,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "december": 25.730302810668945
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "max_temperature": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "january": 31.92121124267578,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "february": 30.727272033691406,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "march": 28.7939395904541,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "april": 30.218181610107422,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "may": 28.433332443237305,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "june": 26.193939208984375,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "july": 26.31818199157715,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "august": 29.11212158203125,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "september": 32.745452880859375,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "october": 34.05454635620117,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "november": 33.51515197753906,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "december": 33.10606002807617
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ },
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "min_temperature": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "january": 18.872726440429688,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "february": 18.61212158203125,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "march": 18.042423248291016,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "april": 15.878787994384766,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "may": 11.254545211791992,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "june": 7.878787994384766,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "july": 7.242424488067627,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "august": 9.406060218811035,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "september": 13.454545021057129,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "october": 17.006061553955078,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "november": 18.24242401123047,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ \ \ \ \ "december": 18.415151596069336
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ }
+    Should Contain    ${result.content}    \ \ \ },
+    Should Contain    ${result.content}    \ \ \ "geospatial_data": {
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "gdal_elevation": 1088.0,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "gdal_aridity_index": 0.22550000000000001,
+    Should Contain    ${result.content}    \ \ \ \ \ \ \ "gdal_fao_lgp": "60-89"
+    Should Contain    ${result.content}    \ \ \ }
+    Should Contain    ${result.content}    }
+
+Missing or invalid filtering longtitude climate
+    [Tags]    Missing or invalid filtering longtitude climate
+    Create Session    landinfo    http://128.123.177.21:8080/query?action=get&object=climate&latitude=@{latitude}[0]&longitude=&data_source=@{DataSource}[1]&version=@{Version}[0]
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Invalid or missing longitude field"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "longitude": 15.64202120527625,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "latitude": -18.167439345270395,
+
+Missing or invalid filtering latitude climate
+    [Tags]    Missing or invalid filtering latitude climate
+    Create Session    landinfo    http://128.123.177.21:8080/query?action=get&object=climate&latitude=&longitude=@{longtitude}[0]&data_source=@{DataSource}[1]&version=@{Version}[0]
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Invalid or missing latitude field"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "longitude": 15.64202120527625,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "latitude": -18.167439345270395,
+
+Missing or invalid action field climate
+    [Tags]    Missing or invalid action field climate
+    Create Session    landinfo    http://128.123.177.21:8080/query?action=&object=climate&latitude=&longitude=@{longtitude}[0]&data_source=@{DataSource}[1]&version=@{Version}[0]
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Invalid or missing action field"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "longitude": 15.64202120527625,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "latitude": -18.167439345270395,
+
+Missing or invalid object field climate
+    [Tags]    Missing or invalid object field climate
+    Create Session    landinfo    http://128.123.177.21:8080/query?action=get&object=&latitude=@{latitude}[0]&longitude=@{longtitude}[0]&data_source=@{DataSource}[1]&version=@{Version}[0]
+    ${result}=    Get Request    landinfo    /get
+    Should Contain    ${result.content}    {"error": "Invalid or missing object field"}
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "longitude": 15.64202120527625,
+    Should Not Contain    ${result.content}    \ \ \ \ \ \ \ "latitude": -18.167439345270395,
