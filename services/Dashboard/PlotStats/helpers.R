@@ -46,23 +46,27 @@ json_data$shortdate <- strftime(json_data$modifiedDate, format="%Y/%m")
 minDate <- min(json_data$modifiedDate)
 maxDate <- max(json_data$modifiedDate)
 
-tmp_agg_data <- aggregate(json_data$value , list(user = json_data$recorderName, time = json_data$shortdate), sum)
-
-minCount<- min(tmp_agg_data$x)
-maxCount<- max(tmp_agg_data$x)
-
-
 userNames <- unique(json_data$recorderName)
 userNames <- sort(userNames)
 
+orgNames <- unique(json_data$organization)
+orgNames <- sort(orgNames)
+
 json_agg_data <- aggregate(json_data$value , list(user = json_data$recorderName, time = json_data$shortdate), sum)
 
-months<- unique(json_agg_data$time)
+json_org_agg_data <- aggregate(json_data$value , list(org = json_data$organization, time = json_data$shortdate), sum)
+
+
+minCount<- min(json_agg_data$x)
+maxCount<- max(json_agg_data$x)
+
+minOrgCount<- min(json_org_agg_data$x)
+maxOrgCount<- max(json_org_agg_data$x)
 
 userData <<- NULL
+orgData <<- NULL
 
 getUserData<-function (userList,dates,count){  
- 
   
   start <- dates[1]
   end <- dates[2]
@@ -111,6 +115,58 @@ getUserData<-function (userList,dates,count){
   return (data)
 }
 
+
+
+getOrgData<-function (orgList,dates,count){  
+  
+  start <- dates[1]
+  end <- dates[2]
+  
+  min <- count[1]
+  max <- count[2]
+  
+  orgData <<-json_data[json_data$modifiedDate <= end & json_data$modifiedDate >= start,]
+  orgData <<- orgData[orgData$organization  %in% orgList ,]
+  
+  if(nrow(orgData) ==0 ) return (NULL)
+  
+  orgData <<- aggregate(orgData$value , list(org = orgData$organization, time = orgData$shortdate), sum)
+  
+  orgData <<- orgData[orgData$x <= max & orgData$x >= min  ,]
+  
+  if(nrow(orgData) ==0 ) return (NULL)
+  
+  dates<- unique(orgData$time)
+  orgs<- unique(orgData$org)
+  data <- data.frame(matrix(ncol = length(dates)+1, nrow = length(orgs)))
+  names(data)[1] <- "organization" 
+  for(i in 1:(length(dates))+1){
+    d = dates[i-1]
+    
+    y = unlist(strsplit(d,"/"))[1]
+    m = month.abb[as.numeric(unlist(strsplit(d,"/"))[2])]
+    names(data)[i] <-  paste(m,y)
+    
+  }
+  
+  for(i in 1: length(orgs)){
+    data[i,1] <- orgs[i]
+    for(j in 1:(length(dates))+1){
+      count<-  orgData[orgData$org == orgs[i] & orgData$time == dates[j-1],3]
+      if(length(count) == 0)
+        count <- 0
+      data[i,j] <- count
+    }
+  }
+  
+  data <- cbind(data,sum=rowSums(data[2:ncol(data)]))
+  data <- data[order(-data$sum),]
+  data$sum<-NULL
+  
+  return (data)
+}
+
+
 updateStats<- function (){
   statMean <- round(mean(userData$x),digits = 2)
   statMedian <- median(userData$x)
@@ -120,10 +176,23 @@ updateStats<- function (){
   return       (paste("Plot Statistics (user/month): ", "",
                      paste("Mean : ",statMean),
                      paste("Median : ", statMedian),
-                     paste("min : ", statMin),
+                     paste("Min : ", statMin),
                      paste("Max : ", statMax),sep="\n"))
 }
 
+
+updateOrgStats<- function (){
+  statMean <- round(mean(orgData$x),digits = 2)
+  statMedian <- median(orgData$x)
+  statMin <- min(orgData$x)
+  statMax <- max(orgData$x)
+  
+  return       (paste("Plot Statistics (org/month): ", "",
+                      paste("Mean : ",statMean),
+                      paste("Median : ", statMedian),
+                      paste("Min : ", statMin),
+                      paste("Max : ", statMax),sep="\n"))
+}
 
 # getTransposeData<-function (userList){
 #   data<- getUserData(userList)

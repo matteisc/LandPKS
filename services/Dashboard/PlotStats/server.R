@@ -6,8 +6,7 @@ source('helpers.R')
 library(shiny)
 library(googleVis)
 
-
-shinyServer(function(input, output,session) {
+server<-function(input, output,session) {
 
   
   output$UserList <- renderUI({  
@@ -33,6 +32,36 @@ shinyServer(function(input, output,session) {
     {
       updateCheckboxGroupInput( session, "checkGroup", 
                                 choices = userNames ,
+                                selected = NULL  ) 
+    }
+    
+  })
+  
+  
+  #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  output$OrgList <- renderUI({  
+    
+    div(style='height:500px;  overflow: scroll'  
+        ,checkboxGroupInput("checkGroupOrg", 
+                            label = h5("Organizations:"), 
+                            choices = orgNames ,
+                            selected = orgNames))      
+  })
+  
+  observe({
+    if (input$selectAllOrg){
+      
+      updateCheckboxGroupInput( session, "checkGroupOrg", 
+                                choices = orgNames ,
+                                selected = orgNames) 
+    }
+  })
+  
+  observe({
+    if(input$deselectAllOrg)
+    {
+      updateCheckboxGroupInput( session, "checkGroupOrg", 
+                                choices = orgNames ,
                                 selected = NULL  ) 
     }
     
@@ -64,4 +93,32 @@ shinyServer(function(input, output,session) {
       updateStats()
       })
   
-}) 
+  #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  selectedPlotOrg <- reactive({
+    shiny::validate(need(input$checkGroupOrg , 'Check at least one organization!' ))     
+    shiny::validate(need(input$dates[2] >= input$dates[1], "end date should be after start date"))
+    
+    OrgData<-getOrgData(input$checkGroupOrg,input$datesOrg,input$countOrg)
+    
+    shiny::validate(need(OrgData , 'No data to display!' ))  
+    OrgData
+    
+  })
+  
+  output$chartOrg <- renderGvis({
+    
+    gvisColumnChart(selectedPlotOrg())
+    
+  })
+  
+  
+  output$orgStats <- renderText({
+    selectedPlotOrg()
+    updateOrgStats()
+  })
+  
+  ####################################
+  output$tbl <- renderDataTable(json_data[, -which(names(json_data) %in% c("value","shortdate"))], options = list(pageLength = 10))
+  
+  
+}
