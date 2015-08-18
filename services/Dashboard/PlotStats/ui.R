@@ -10,8 +10,8 @@ dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("User/Plot chart", tabName = "userPlot", icon = icon("bar-chart")),
-      menuItem("Organization/Plot chart", tabName = "orgPlot", icon = icon("bar-chart"), badgeLabel = "new", badgeColor = "green"),
-      menuItem("Data Table", tabName = "dataTable", icon = icon("table"), badgeLabel = "new", badgeColor = "green")
+      menuItem("Organization/Plot chart", tabName = "orgPlot", icon = icon("bar-chart")),
+      menuItem("Data Table", tabName = "dataTable", icon = icon("table"))
       
       )
     ),
