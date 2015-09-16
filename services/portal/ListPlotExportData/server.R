@@ -6,12 +6,40 @@ source('helpers.R')
 library(shiny)
 library(googleVis)
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output,session) {
+
+  updateData<- function(){
+
+    recorder <-""
+    searchStr = parseQueryString(session$clientData$url_search)
+
+    print(searchStr)
+    if( ("recorderName" %in% names(searchStr) == F) || is.null(searchStr["recorderName"]) )
+      {
+      recorder = "all"
+    }
+    else
+     {
+       recorder <- searchStr["recorderName"]
+     } 
+    print(recorder)
+    
+#     shiny::validate(
+#       need("recorderName" %in% names(searchStr) ,'Unavailable1')
+#       #,
+#      # need(searchStr["recorderName"] != "" ,'Unavailable2')
+#     )
+    
+    updateRequestedData(recorder)
+  }
   
-  output$downloadData <- downloadHandler(
+  output$downloadData <- downloadHandler(  
     filename = function() { paste('Export_LandInfo_Data', '.csv', sep='') },
     content = function(file) {
-      write.csv(csv_data, file,row.names=FALSE,quote=TRUE,na="",qmethod='escape')
+      updateData()
+      req_data$recName <- NULL
+      write.csv(req_data, file,row.names=FALSE,quote=TRUE,na="",qmethod='escape')
     }
   )
 })
+

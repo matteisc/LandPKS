@@ -58,6 +58,19 @@ unlistCol<- function(col){
 }
 
 
+###########
+updateRequestedData<-function(recorder){
+  req_data <<-csv_data
+  print(recorder)
+  if(recorder !="all"){
+    req_data <<- req_data[req_data$recName==recorder ,]
+  }
+  
+ # req_data$recName <- NULL#req_data [,-which(names(req_data) %in% c("recName"))]     
+}
+
+
+
 # 1. Find OAuth settings for google:
 #    https://developers.google.com/accounts/docs/OAuth2InstalledApp
 oauth_endpoints("google")
@@ -89,7 +102,7 @@ json_data$obscRecorderName <- obscureEmail(json_data$recorderName)
 json_data$grazingLst <- unlistCol(json_data$grazing)
 
 csv_data <- subset(json_data, select = c(
-  name,obscRecorderName, testPlot, latitude,	longitude, modifiedDate,	landCover,	grazed,	grazingLst,	flooding,	slope,	slopeShape,	bedrockDepth,	stoppedDiggingDepth,	
+  name,recorderName, obscRecorderName, testPlot, latitude,	longitude, modifiedDate,	landCover,	grazed,	grazingLst,	flooding,	slope,	slopeShape,	bedrockDepth,	stoppedDiggingDepth,	
   rockFragmentForSoilHorizon1,
   rockFragmentForSoilHorizon2,	
   rockFragmentForSoilHorizon3,
@@ -124,7 +137,7 @@ csv_data <- cbind(csv_data,json_data[ c(
   'gdalAridityIndex')])
   
   
-colnames(csv_data) <- c("name","RecorderName","test_plot","latitude","longitude","modified_date","land_cover","grazed","grazing","flooding","slope","slope_shape","bedrock_depth","stopped_digging_depth",
+colnames(csv_data) <- c("name","recName","RecorderName","test_plot","latitude","longitude","modified_date","land_cover","grazed","grazing","flooding","slope","slope_shape","bedrock_depth","stopped_digging_depth",
 "rock_fragment_for_soil_horizon_1","rock_fragment_for_soil_horizon_2","rock_fragment_for_soil_horizon_3","rock_fragment_for_soil_horizon_4","rock_fragment_for_soil_horizon_5","rock_fragment_for_soil_horizon_6","rock_fragment_for_soil_horizon_7",
 "texture_for_soil_horizon_1","texture_for_soil_horizon_2","texture_for_soil_horizon_3","texture_for_soil_horizon_4","texture_for_soil_horizon_5","texture_for_soil_horizon_6","texture_for_soil_horizon_7",
 "surface_cracking","surface_salt",
@@ -134,4 +147,4 @@ colnames(csv_data) <- c("name","RecorderName","test_plot","latitude","longitude"
 "precipitation_January (mm)","precipitation_February (mm)","precipitation_March (mm)","precipitation_April (mm)","precipitation_May (mm)","precipitation_June (mm)","precipitation_July (mm)","precipitation_August (mm)","precipitation_September (mm)","precipitation_October (mm)","precipitation_November (mm)","precipitation_December (mm)",
 "precipitation_annual (mm)","soil_profile_AWC (cm)","Elevation (m)"," FAO Length of Growing Period (days/year)","Aridity Index")
 
-
+req_data <-csv_data
