@@ -11,7 +11,25 @@ shinyServer(function(input, output,session) {
 
   
   output$downloadData <- downloadHandler(  
-    filename = function() { paste('Export_LandInfo_Data', '.csv', sep='') },
+    filename = function() { 
+      if(input$dataType == "LandInfo"){
+        paste('Export_LandInfo_Data', '.csv', sep='') 
+      }
+      else if(input$dataType == "LandCover")
+       {
+        paste('Export_LandCover_Data', '.csv', sep='') 
+      }
+      else if(input$dataType == "Methadata for LandInfo" )
+      {
+        paste('Export_METADATA_LandInfo', '.csv', sep='') 
+      }
+      else if(input$dataType == "Methadata for LandCover" )
+      {
+        paste('Export_METADATA_LandCover', '.csv', sep='') 
+      }
+      else
+        "dummy.csv"
+      },
     content = function(file) {     
       req_data <- updateData()
       req_data$recName <- NULL

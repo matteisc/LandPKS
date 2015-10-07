@@ -8,6 +8,7 @@ library(jsonlite)
 library(googleVis)
 library(httr)
 library(shiny)
+library(plyr)
 source('Auth.R')#contains key and secret
 
 
@@ -72,7 +73,114 @@ unlistCol<- function(col){
   return (df)
 }
 
+#Reads land cover data for recorder name
+#############################
+getLandCoverData<- function(recorder){
 
+  recorderRep <- sub("@", "%40", recorder)
+  
+  request <- GET(paste0("https://silicon-bivouac-496.appspot.com/_ah/api/transectendpoint/v1/transect?otherUser=",recorderRep),
+             config(token = google_token))
+  stop_for_status(request)
+  cover_data<-content(request,as = "text")
+  
+  cover_data <- fromJSON(cover_data)
+  cover_data <- cover_data$items
+  
+  if(is.null(cover_data))
+  {
+    return (NULL)
+  }
+  
+  cover_data<- getCoverData(recorder,cover_data)
+  
+  print(paste(recorder,nrow(cover_data),"*****",ncol(cover_data)))
+
+  return (cover_data)
+  
+}
+
+
+###########################
+### returns the column value in df and null if not included
+getColumn<-function(df, colname){
+  if(colname %in% names(df)){
+    return (df[,colname])
+  } else {
+    return ("")
+  }
+}
+
+
+#############################
+##reads the landCover data from GAE and return in format
+getCoverData<-function(userName,items){
+  
+  result <<-  data.frame(matrix(ncol = 23, nrow = 0))
+  
+  colnames(result) <- c("name", "date",  "transect",  "segment"	,"canopy_height",	"canopy_gap",	"basal_gap",	
+                        "stick_segment_1","stick_segment_2",	"stick_segment_3",	"stick_segment_4",	"stick_segment_5",
+                        "plot_total_species_1_density"  ,"plot_total_species_2_density" ,
+                        "bare_total",  "trees_total",	"shrubs_total",	"sub_shrubs_total",	"perennial_grasses_total",	"annuals_total"	,"herb_litter_total",	"wood_litter_total",	"rock_total"
+                        )
+  
+  coverList<- c("Bare","Trees","Shrubs","Sub-shrubs","Perennial grasses","Annuals","Herb litter","Wood litter","Rock")
+  
+  for(i in 1:nrow(items)){ 
+    item<- items[i,]
+    name = gsub(paste0(userName,"-"),"",item["siteID"])
+    recorder_name = userName
+    transect = item["direction"]
+    segments<- as.data.frame(item$segments)
+
+    for( i in 1:nrow(segments)){
+      segment <- segments[i,]
+      
+      #print(names(segment))
+      mySegment = getColumn(segment,"range")
+      date = getColumn(segment,"date")
+      canopy_height = getColumn(segment,"canopyHeight")
+      canopy_gap = getColumn(segment,"canopyGap")
+      basal_gap = getColumn(segment,"basalGap")
+      species_1_density = getColumn(segment,"species1Density")
+      species_2_density = getColumn(segment,"species2Density")
+        
+      stick_segment_0 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[1])],collapse = ", ")
+      stick_segment_1 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[2])],collapse = ", ")
+      stick_segment_2 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[3])],collapse = ", ")
+      stick_segment_3 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[4])],collapse = ", ")
+      stick_segment_4 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[5])],collapse = ", ")
+      
+      covers <-  do.call(rbind,segment$stickSegments[[1]]$covers)
+      
+      bare_total <- length(covers[covers[,1]==TRUE,1])
+      trees_total<- length(covers[covers[,2]==TRUE,2])
+      shrubs_total<- length(covers[covers[,3]==TRUE,3])
+      sub_shrubs_total<- length(covers[covers[,4]==TRUE,4])
+      perennial_grasses_total<- length(covers[covers[,5]==TRUE,5])
+      annuals_total<- length(covers[covers[,6]==TRUE,6])
+      herb_litter_total<- length(covers[covers[,7]==TRUE,7])
+      wood_litter_total<- length(covers[covers[,8]==TRUE,8])
+      rock_total<- length(covers[covers[,9]==TRUE,9])
+     
+      
+    new_row <- c(name,date,transect, mySegment,canopy_height,canopy_gap,
+                basal_gap,stick_segment_0,stick_segment_1,stick_segment_2,stick_segment_3,stick_segment_4,species_1_density,species_2_density,
+                bare_total,  trees_total,	shrubs_total,	sub_shrubs_total,	perennial_grasses_total,	annuals_total,	herb_litter_total,	wood_litter_total,	rock_total    )
+      
+    new_row<- as.data.frame(new_row)
+    colnames(new_row) <- colnames(result)
+    result<- rbind(result,new_row)
+
+    }
+  } 
+  
+  return (result)
+  
+}
+
+
+#reads list of plots from GAE
 ###################################
 getPlotListData<-function(){
   # 4. Use API
@@ -142,18 +250,51 @@ getPlotListData<-function(){
 ###########
 updateRequestedData<-function(recorder,dataType){
   
-  print(recorder)
   
-  if(dataType == "LandInfo"){
-    
-    req_data <-getPlotListData()
-    
+  if(dataType == "Methadata for LandInfo" )
+  {
+    return (read.csv("./Export_METADATA_LandInfo.csv"))
+  }
+  if(dataType =="Methadata for LandCover")
+  { 
+    return (read.csv("./Export_METADATA_LandCover.csv"))   
+  }
+          
+  plotData <-getPlotListData()
+  
+  if(dataType == "LandInfo"){ 
     if(recorder !="all"){
-      req_data <- req_data[req_data$recName==recorder ,]
+      plotData <- plotData[plotData$recName==recorder ,]
     }
     
-    return (req_data)
+    return (plotData)
   }
+  
+  if(dataType == "LandCover"){
+    if(recorder =="all"){
+      recorder<-  unique(plotData$recName)
+    }
+    
+    coverData <- NULL
+    for(rec in recorder){
+      data <- getLandCoverData(rec)
+      
+      if(!is.null(data)){
+        
+      if(is.null (coverData )){
+        
+        coverData = data
+      }
+      else
+        coverData <- rbind.fill(data,coverData)
+    
+      }
+    }
+    
+    return (coverData)
+  }
+  
+  
   
   return (NULL)
   # req_data$recName <- NULL#req_data [,-which(names(req_data) %in% c("recName"))]     
