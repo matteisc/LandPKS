@@ -1,0 +1,2 @@
+This is a dashboard for admins to be able to see landInfo data and compare them based on user or organization.
+There is also a datatable section that displays raw data and user can sort, filter and page the data shown in charts.
