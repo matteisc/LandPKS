@@ -1,0 +1,2 @@
+This app has a few different chart types to display landCover data. The data should be sent to the app as a link to a csv file with specific format and in a parameter called : "CSV_URL"
+It used to be accesible via a button in the old portal website.
