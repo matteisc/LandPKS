@@ -112,16 +112,60 @@ getColumn<-function(df, colname){
 }
 
 
+##Calculates and addes the formulas at the end of csv file
+#############################
+calcFormulas<-function(df){
+  names<- unique(df$name)
+     
+  for(i in 1:length(names) ){
+    rowNo <- (i-1)*20 +1
+    plot <-subset(df,name == names[i])
+    
+    plot_total_bare_ground <- sum( plot$bare_total)
+    df[rowNo, "plot_total_cover"] <- 100 - plot_total_bare_ground
+    df[rowNo, "plot_total_bare_ground"]<- plot_total_bare_ground
+    df[rowNo, "plot_total_foliar_cover"] <- sum( plot$trees_total + plot$shrubs_total + plot$sub_shrubs_total + plot$perennial_grasses_total + plot$annuals_total )
+
+    df[rowNo,"plot_total_plant_cover/composition_tree"] <- sum(plot$trees_total)
+    df[rowNo,"plot_total_plant_cover/composition_shrub"]<- sum(plot$shrubs_total)
+    df[rowNo,"plot_total_plant_cover/composition_sub_shrub"] <- sum(plot$sub_shrubs_total)
+    df[rowNo,"plot_total_plant_cover/composition_perennial_grasses"] <-  sum(plot$perennial_grasses_total)
+    df[rowNo,"plot_total_plant_cover/composition_annuals"] <-  sum(plot$annuals_total)
+    df[rowNo,"plot_total_plant_cover/composition_herb_litter"] <- sum(plot$herb_litter_total)
+    df[rowNo,"plot_total_plant_cover/composition_wood_litter"] <- sum(plot$wood_litter_total)
+    df[rowNo,"plot_total_plant_cover/composition_rock"] <- sum(plot$rock_total)
+    
+    
+    df[rowNo,"plot_total_canopy_height_smaller_10_cm"] <- nrow(subset(plot,canopy_height=="<10cm")) *5
+    df[rowNo,"plot_total_canopy_height_10_50_cm"] <- nrow(subset(plot,canopy_height=="10-50cm")) *5
+    df[rowNo,"plot_total_canopy_height_50cm_1m"]	<- nrow(subset(plot,canopy_height=="50cm-1m")) *5
+    df[rowNo,"plot_total_canopy_height_1m_2m"]	<- nrow(subset(plot,canopy_height=="1-2m")) *5
+    df[rowNo,"plot_total_canopy_height_2m_3m"]	<- nrow(subset(plot,canopy_height=="2-3m")) *5
+    df[rowNo,"plot_total_canopy_height_greater_3m"] <- nrow(subset(plot,canopy_height==">3m")) *5
+    
+    df[rowNo,"plot_total_canopy_gap_percentage"] <- sum(plot$canopy_gap)*5 
+    df[rowNo,"plot_total_basal_gap_percentage"] <- sum(plot$basal_gap)*5
+    
+  }
+  return (df)
+}
+
 #############################
 ##reads the landCover data from GAE and return in format
 getCoverData<-function(userName,items){
   
-  result <<-  data.frame(matrix(ncol = 23, nrow = 0))
+  result <<-  data.frame(matrix(ncol = 48, nrow = 0))
   
   colnames(result) <- c("name", "date",  "transect",  "segment"	,"canopy_height",	"canopy_gap",	"basal_gap",	
                         "stick_segment_1","stick_segment_2",	"stick_segment_3",	"stick_segment_4",	"stick_segment_5",
-                        "plot_total_species_1_density"  ,"plot_total_species_2_density" ,
-                        "bare_total",  "trees_total",	"shrubs_total",	"sub_shrubs_total",	"perennial_grasses_total",	"annuals_total"	,"herb_litter_total",	"wood_litter_total",	"rock_total"
+                        "dominant_woody_species","dominant_nonwoody_species",
+                        "bare_total",  "trees_total",	"shrubs_total",	"sub_shrubs_total",	"perennial_grasses_total",	"annuals_total"	,"herb_litter_total",	"wood_litter_total",	"rock_total",
+                        "plot_total_cover",  "plot_total_bare_ground",	"plot_total_foliar_cover",
+                        "plot_total_plant_cover/composition_tree",	"plot_total_plant_cover/composition_shrub",	"plot_total_plant_cover/composition_sub_shrub",	"plot_total_plant_cover/composition_perennial_grasses",	"plot_total_plant_cover/composition_annuals","plot_total_plant_cover/composition_herb_litter",	"plot_total_plant_cover/composition_wood_litter",	"plot_total_plant_cover/composition_rock"	,
+                        "plot_total_canopy_height_smaller_10_cm",	"plot_total_canopy_height_10_50_cm",	"plot_total_canopy_height_50cm_1m",	"plot_total_canopy_height_1m_2m",	"plot_total_canopy_height_2m_3m",	"plot_total_canopy_height_greater_3m"	,
+                        "plot_total_canopy_gap_percentage"	,"plot_total_basal_gap_percentage",
+                        "species_of_interest_1", "species_of_interest_1_count", "species_of_interest_1_density",
+                        "species_of_interest_2", "species_of_interest_2_count", "species_of_interest_2_density"
                         )
   
   coverList<- c("Bare","Trees","Shrubs","Sub-shrubs","Perennial grasses","Annuals","Herb litter","Wood litter","Rock")
@@ -131,51 +175,64 @@ getCoverData<-function(userName,items){
     name = gsub(paste0(userName,"-"),"",item["siteID"])
     recorder_name = userName
     transect = item["direction"]
+    
+    dominant_woody_species  = getColumn(item, "dominantWoodySpecies")
+    dominant_nonwoody_species= getColumn(item, "dominantNonwoodySpecies")    
+    
+    speciesOfInterest1 = getColumn(item, "speciesOfInterest1")
+    speciesOfInterest2 = getColumn(item, "speciesOfInterest2")
+    
     segments<- as.data.frame(item$segments)
 
-    for( i in 1:nrow(segments)){
-      segment <- segments[i,]
+    for( j in 1:nrow(segments)){
+      segment <- segments[j,]   
+      rowNo <- j +(i-1)*5
       
-      #print(names(segment))
-      mySegment = getColumn(segment,"range")
-      date = getColumn(segment,"date")
-      canopy_height = getColumn(segment,"canopyHeight")
-      canopy_gap = getColumn(segment,"canopyGap")
-      basal_gap = getColumn(segment,"basalGap")
-      species_1_density = getColumn(segment,"species1Density")
-      species_2_density = getColumn(segment,"species2Density")
+      result[rowNo,"name"] <- name
+      result[rowNo,"date"] = getColumn(segment,"date")
+      result[rowNo,"transect"]<- transect
+         
+      result[rowNo,"segment"] = getColumn(segment,"range")
+      
+      result[rowNo,"canopy_height"] = getColumn(segment,"canopyHeight")
+      result[rowNo,"canopy_gap"] = getColumn(segment,"canopyGap")
+      result[rowNo,"basal_gap"] = getColumn(segment,"basalGap")
         
-      stick_segment_0 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[1])],collapse = ", ")
-      stick_segment_1 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[2])],collapse = ", ")
-      stick_segment_2 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[3])],collapse = ", ")
-      stick_segment_3 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[4])],collapse = ", ")
-      stick_segment_4 = paste(coverList [unlist(segment$stickSegments[[1]]$covers[5])],collapse = ", ")
+      result[rowNo,"stick_segment_1"] = paste(coverList [unlist(segment$stickSegments[[1]]$covers[1])],collapse = ", ")
+      result[rowNo,"stick_segment_2"] = paste(coverList [unlist(segment$stickSegments[[1]]$covers[2])],collapse = ", ")
+      result[rowNo,"stick_segment_3"] = paste(coverList [unlist(segment$stickSegments[[1]]$covers[3])],collapse = ", ")
+      result[rowNo,"stick_segment_4"] = paste(coverList [unlist(segment$stickSegments[[1]]$covers[4])],collapse = ", ")
+      result[rowNo,"stick_segment_5"] = paste(coverList [unlist(segment$stickSegments[[1]]$covers[5])],collapse = ", ")
+      
+      result[rowNo,"dominant_woody_species"] = dominant_woody_species  
+      result[rowNo,"dominant_nonwoody_species"] = dominant_nonwoody_species
+      
       
       covers <-  do.call(rbind,segment$stickSegments[[1]]$covers)
       
-      bare_total <- length(covers[covers[,1]==TRUE,1])
-      trees_total<- length(covers[covers[,2]==TRUE,2])
-      shrubs_total<- length(covers[covers[,3]==TRUE,3])
-      sub_shrubs_total<- length(covers[covers[,4]==TRUE,4])
-      perennial_grasses_total<- length(covers[covers[,5]==TRUE,5])
-      annuals_total<- length(covers[covers[,6]==TRUE,6])
-      herb_litter_total<- length(covers[covers[,7]==TRUE,7])
-      wood_litter_total<- length(covers[covers[,8]==TRUE,8])
-      rock_total<- length(covers[covers[,9]==TRUE,9])
+      result[rowNo,"bare_total"] <- length(covers[covers[,1]==TRUE,1])
+      result[rowNo,"trees_total"]<- length(covers[covers[,2]==TRUE,2])
+      result[rowNo,"shrubs_total"]<- length(covers[covers[,3]==TRUE,3])
+      result[rowNo,"sub_shrubs_total"]<- length(covers[covers[,4]==TRUE,4])
+      result[rowNo,"perennial_grasses_total"]<- length(covers[covers[,5]==TRUE,5])
+      result[rowNo,"annuals_total"]<- length(covers[covers[,6]==TRUE,6])
+      result[rowNo,"herb_litter_total"] <- length(covers[covers[,7]==TRUE,7])
+      result[rowNo,"wood_litter_total"]<- length(covers[covers[,8]==TRUE,8])
+      result[rowNo,"rock_total"]<- length(covers[covers[,9]==TRUE,9])
      
       
-    new_row <- c(name,date,transect, mySegment,canopy_height,canopy_gap,
-                basal_gap,stick_segment_0,stick_segment_1,stick_segment_2,stick_segment_3,stick_segment_4,species_1_density,species_2_density,
-                bare_total,  trees_total,	shrubs_total,	sub_shrubs_total,	perennial_grasses_total,	annuals_total,	herb_litter_total,	wood_litter_total,	rock_total    )
-      
-    new_row<- as.data.frame(new_row)
-    colnames(new_row) <- colnames(result)
-    result<- rbind(result,new_row)
+      result[rowNo,"species_of_interest_1"] = speciesOfInterest1
+      result[rowNo,"species_of_interest_1_count"] = getColumn(segment,"speciesOfInterest1Count")
+      result[rowNo,"species_of_interest_1_density"] = getColumn(segment,"species1Density")
+   
+      result[rowNo,"species_of_interest_2"] = speciesOfInterest2
+      result[rowNo,"species_of_interest_2_count"] = getColumn(segment,"speciesOfInterest2Count")
+      result[rowNo,"species_of_interest_2_density"] = getColumn(segment,"species2Density")
 
     }
   } 
   
-  return (result)
+  return (calcFormulas(result))
   
 }
 
