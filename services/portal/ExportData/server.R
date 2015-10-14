@@ -19,11 +19,11 @@ shinyServer(function(input, output,session) {
        {
         paste('Export_LandCover_Data', '.csv', sep='') 
       }
-      else if(input$dataType == "Methadata for LandInfo" )
+      else if(input$dataType == "Metadata for LandInfo" )
       {
         paste('Export_METADATA_LandInfo', '.csv', sep='') 
       }
-      else if(input$dataType == "Methadata for LandCover" )
+      else if(input$dataType == "Metadata for LandCover" )
       {
         paste('Export_METADATA_LandCover', '.csv', sep='') 
       }

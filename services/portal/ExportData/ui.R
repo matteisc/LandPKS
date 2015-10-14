@@ -19,7 +19,7 @@ shinyUI(fluidPage(
   
   checkboxInput("exportAll", label = h6("Export ALL plots in the database (download may take several minutes)"), value = FALSE),
   selectInput("dataType", label = h5("Type of Data Export"), 
-              choices = list("LandInfo" , "LandCover" , "Methadata for LandInfo" , "Methadata for LandCover" ), 
+              choices = list("LandInfo" , "LandCover" , "Metadata for LandInfo" , "Metadata for LandCover" ), 
               selected = "LandInfo"),
   
   downloadButton('downloadData', 'Export')
