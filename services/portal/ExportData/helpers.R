@@ -308,11 +308,11 @@ getPlotListData<-function(){
 updateRequestedData<-function(recorder,dataType){
   
   
-  if(dataType == "Methadata for LandInfo" )
+  if(dataType == "Metadata for LandInfo" )
   {
     return (read.csv("./Export_METADATA_LandInfo.csv"))
   }
-  if(dataType =="Methadata for LandCover")
+  if(dataType =="Metadata for LandCover")
   { 
     return (read.csv("./Export_METADATA_LandCover.csv"))   
   }
