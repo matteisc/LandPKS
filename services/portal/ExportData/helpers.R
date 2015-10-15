@@ -143,8 +143,8 @@ calcFormulas<-function(df){
     df[rowNo,"plot_total_canopy_height_2m_3m"]	<- nrow(subset(plot,canopy_height=="2-3m")) *5
     df[rowNo,"plot_total_canopy_height_greater_3m"] <- nrow(subset(plot,canopy_height==">3m")) *5
     
-    df[rowNo,"plot_total_canopy_gap_percentage"] <- sum(plot$canopy_gap)*5 
-    df[rowNo,"plot_total_basal_gap_percentage"] <- sum(plot$basal_gap)*5
+    df[rowNo,"plot_total_canopy_gap_percentage"] <- sum(as.logical(plot$canopy_gap))*5 
+    df[rowNo,"plot_total_basal_gap_percentage"] <- sum(as.logical(plot$basal_gap))*5
     
   }
   return (df)
