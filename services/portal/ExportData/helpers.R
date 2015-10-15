@@ -156,9 +156,10 @@ getCoverData<-function(userName,items){
   
   result <<-  data.frame(matrix(ncol = 48, nrow = 0))
   
-  colnames(result) <- c("name", "date",  "transect",  "segment"	,"canopy_height",	"canopy_gap",	"basal_gap",	
-                        "stick_segment_1","stick_segment_2",	"stick_segment_3",	"stick_segment_4",	"stick_segment_5",
+  colnames(result) <- c("name", "date", 
                         "dominant_woody_species","dominant_nonwoody_species",
+                        "transect",  "segment"	,"canopy_height",	"canopy_gap",	"basal_gap",	
+                        "stick_segment_1","stick_segment_2",	"stick_segment_3",	"stick_segment_4",	"stick_segment_5",
                         "bare_total",  "trees_total",	"shrubs_total",	"sub_shrubs_total",	"perennial_grasses_total",	"annuals_total"	,"herb_litter_total",	"wood_litter_total",	"rock_total",
                         "plot_total_cover",  "plot_total_bare_ground",	"plot_total_foliar_cover",
                         "plot_total_plant_cover/composition_tree",	"plot_total_plant_cover/composition_shrub",	"plot_total_plant_cover/composition_sub_shrub",	"plot_total_plant_cover/composition_perennial_grasses",	"plot_total_plant_cover/composition_annuals","plot_total_plant_cover/composition_herb_litter",	"plot_total_plant_cover/composition_wood_litter",	"plot_total_plant_cover/composition_rock"	,
@@ -190,6 +191,10 @@ getCoverData<-function(userName,items){
       
       result[rowNo,"name"] <- name
       result[rowNo,"date"] = getColumn(segment,"date")
+      
+      result[rowNo,"dominant_woody_species"] = dominant_woody_species  
+      result[rowNo,"dominant_nonwoody_species"] = dominant_nonwoody_species
+      
       result[rowNo,"transect"]<- transect
          
       result[rowNo,"segment"] = getColumn(segment,"range")
@@ -203,9 +208,6 @@ getCoverData<-function(userName,items){
       result[rowNo,"stick_segment_3"] = paste(coverList [unlist(segment$stickSegments[[1]]$covers[3])],collapse = ", ")
       result[rowNo,"stick_segment_4"] = paste(coverList [unlist(segment$stickSegments[[1]]$covers[4])],collapse = ", ")
       result[rowNo,"stick_segment_5"] = paste(coverList [unlist(segment$stickSegments[[1]]$covers[5])],collapse = ", ")
-      
-      result[rowNo,"dominant_woody_species"] = dominant_woody_species  
-      result[rowNo,"dominant_nonwoody_species"] = dominant_nonwoody_species
       
       
       covers <-  do.call(rbind,segment$stickSegments[[1]]$covers)
