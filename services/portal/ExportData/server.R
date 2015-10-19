@@ -8,7 +8,6 @@ library(googleVis)
 
 shinyServer(function(input, output,session) {
 
-
   
   output$downloadData <- downloadHandler(  
     filename = function() { 
@@ -37,6 +36,9 @@ shinyServer(function(input, output,session) {
     }
   )
   
+  isValidEmail <- function(x) {
+    grepl("\\<[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\>", as.character(x), ignore.case=TRUE)
+  }
   
   updateData<- function(){
     
@@ -48,7 +50,14 @@ shinyServer(function(input, output,session) {
     }
     else
     {
-      recorder <- input$recorder
+      if(isValidEmail(input$recorder)){
+        recorder <- input$recorder  
+      }
+      else
+      {
+        stop("Please enter a valid email address!")
+      }
+      
     } 
     
     return (updateRequestedData(recorder,input$dataType))

@@ -1,14 +1,14 @@
 COLUMN,HEADER,DESCRIPTION
 A,name,Name of the plot where data was collected
 B,date,Time stamp for successful upload of data collected
-C,dominant_woody_species,
-D,dominant_nonwoody_species,
+C,dominant_woody_species,Dominant woody species observed for the plot
+D,dominant_nonwoody_species,Dominant nonwoody species observed for the plot
 E,transect,"Direction of transect recorded (N, S, E, W)"
 F,segment,Segment of each transect where observations are recorded (5 segments recorded every 5 meters of each transect)
 G,canopy_height,Header for each height class for vegetation height observations for each segment
 H,canopy_gap,"Observed canopy gaps >1m; TRUE = canopy gap present, FALSE = no canopy gap present "
 I,basal_gap,"Observed basal gaps >1m; TRUE = basal gap present, FALSE = no basal gap present "
-J,stick_sgement_1,All observed cover elements at segment 1 of the respective transect
+J,stick_segment_1,All observed cover elements at segment 1 of the respective transect
 K,stick_segment_2,All observed cover elements at segment 2 of the respective transect
 L,stick_segment_3,All observed cover elements at segment 3 of the respective transect
 M,stick_segment_4,All observed cover elements at segment 4 of the respective transect
