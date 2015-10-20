@@ -1,4 +1,4 @@
-﻿# Author : Thanh Nguyen
+# Author : Thanh Nguyen
 # 05/23/2014
 # ?/usr/local/bin
 __version__ = "1"
@@ -394,12 +394,12 @@ def get_data_from_apex_ouput_file(APEX_OUTPUT_FILE, index_sa, index_corn, type):
     
 def save_gdal_data():
        #Insert GDAL data
-       TIF_DIR = "E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
+       TIF_DIR = "D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
        #--------------------------------------------------------------------------------
        tif_slate_weather = 'SLATE_Weather/tif/SLATE_raster1.tif'
        slate_weather_data = int(support_CONTROLLER.getRasterValue_ThanhNH_Float(TIF_DIR + tif_slate_weather, X_Coor, Y_Coor))
        #--------------------------------------------------------------------------------   
-       country_code_data = country_identify = support_CONTROLLER.getRasterValue_ThanhNH("E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X_Coor, Y_Coor) 
+       country_code_data = country_identify = support_CONTROLLER.getRasterValue_ThanhNH("D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X_Coor, Y_Coor) 
        #--------------------------------------------------------------------------------
        tif_annual_precipitation = 'annual_precipitation/annual_precip.tif'
        anual_precipitation_data = support_CONTROLLER.getRasterValue_ThanhNH_Float(TIF_DIR + tif_annual_precipitation , X_Coor, Y_Coor)
@@ -590,6 +590,10 @@ def save_gdal_data():
        afsis_topog_sca_data = support_CONTROLLER.getRasterValue_ThanhNH_Float(TIF_DIR + 'GLOBAL_GIS_DATA/AFRICA_SIS_SCA_MOSAIC/AFSIS_SCA.tif' , X_Coor, Y_Coor)
        if (afsis_topog_sca_data == -1 or afsis_topog_sca_data == '-1' or afsis_topog_sca_data == -1.0 or afsis_topog_sca_data == '-1.0'):
            afsis_topog_sca_data = -999
+       #--------------------------------------------------------------------------------    
+       landcover_glc30m_africa_mosaic = int(support_CONTROLLER.getRasterValue_ThanhNH_Float(TIF_DIR + 'GLOBAL_GIS_DATA/AFRICA_GLC30m_AfricaMosaic_GCS/Africa_GLC30m.tif' , X_Coor, Y_Coor))
+       if (landcover_glc30m_africa_mosaic == -1 or landcover_glc30m_africa_mosaic == '-1' or landcover_glc30m_africa_mosaic == -1.0 or landcover_glc30m_africa_mosaic == '-1.0'):
+           landcover_glc30m_africa_mosaic = -999
                           
        #support_CONTROLLER.insert_gdal_data_to_store( slate_weather_data, hwsd_soil_texture_data,aspect_data, dem_data, slope_data, country_code_data, elevation_data, soil_depth_data,wind_data_1, wind_data_2, wind_data_3, wind_data_4, wind_data_5, wind_data_6, wind_data_7,wind_data_8, wind_data_9, wind_data_10, wind_data_11, wind_data_12,anual_precipotation_data,worldkgeiger_climate_zone_data,fao_lgp_data,geaisga_data,slope_map_world_grid_data,physiographic_landform_units_world_grid_data,mean_potential_incoming_solar_radiation_world_grid_data,twiser3a_saga_wetness_index_world_grid_data,opisre3a_saga_openess_index_world_grid_data)
        support_CONTROLLER.insert_gdal_data_to_store(ID,RECORD_NAME, Y_Coor, X_Coor, country_code_data, slate_weather_data,anual_precipitation_data,gdd_data,aridity_index_data ,worldkgeiger_climate_zone_data,fao_lgp_data,
@@ -599,7 +603,7 @@ def save_gdal_data():
                                                     topog_topog_israd_global_data,landcover_modis_2001_data,landcover_modis_2002_data,landcover_modis_2004_data,landcover_modis_2010_data,landcover_modis_2011_data,
                                                     landcover_modis_2012_data,landcover_cult_gaez_data,landcover_irrcult_gaez_data,landcover_grass_gaez_data,landcover_protect_gaez_data,landcover_agnprotect_gaez_data,
                                                     vegind_modis_evi_m_data,vegind_modis_evi_sd_data,vegind_modis_lai_m_data,vegind_modis_lai_sd_data,manage_cerealsuit_low_gaez_data,manage_cerealsuit_hight_gaez_data,
-                                                    pop_density_data,afsis_topog_dem_data,afsis_topog_twi_data,afsis_topog_sca_data)    
+                                                    pop_density_data,afsis_topog_dem_data,afsis_topog_twi_data,afsis_topog_sca_data,landcover_glc30m_africa_mosaic)    
        
        
        
@@ -653,20 +657,22 @@ def save_gdal_data():
     
 def main():
     if (ACTION_FLAG == 1):
-       country_identify = support_CONTROLLER.getRasterValue_ThanhNH("E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X_Coor, Y_Coor)
+       country_identify = support_CONTROLLER.getRasterValue_ThanhNH("D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X_Coor, Y_Coor)
        print "Decide contry " + str(country_identify)
        if (country_identify != 209 and country_identify != 228 and country_identify != 223 and country_identify != 205 and str(country_identify) != "209" and str(country_identify) != "228" and str(country_identify) != "223" and str(country_identify) != "205"):
              ##########INSERT GDAL DATA########################
              save_gdal_data()    
              ##################################################
              ########AWC PROJECT###############################
-             model_path = "C:/xampp/htdocs/APEX/Python_APEX/3_WISE_SOL_PROJECT/Rosetta_Model_Application/Rosetta"
-             os.system("cd C:/xampp/htdocs/APEX/Python_APEX/12_LANDPKS_AWC_PROJECT/ && python Run_main_AWC.py -run -x %f -y %f -model C:/xampp/htdocs/APEX/Python_APEX/3_WISE_SOL_PROJECT/Rosetta_Model_Application/Rosetta -ID %s" % (X_Coor, Y_Coor, ID))
+             model_path = "C:/xampp/htdocs/APEX/Python_APEX/3_WISE_SOL_PROJECT_REAL_TIME/Rosetta_Model_Application/Rosetta"
+             os.system("cd C:/xampp/htdocs/APEX/Python_APEX/12_LANDPKS_AWC_PROJECT/ && python Run_main_AWC.py -run -x %f -y %f -model C:/xampp/htdocs/APEX/Python_APEX/3_WISE_SOL_PROJECT_REAL_TIME/Rosetta_Model_Application/Rosetta -ID %s" % (X_Coor, Y_Coor, ID))
              ##################################################
              ########CLIMATE PROJECT###############################
-             os.system("cd C:/xampp/htdocs/APEX/Python_APEX/14_CLIMATE_SUMMARY_PROJECT/ && python Run_main_Climate_Summary.py -run -x %f -y %f -name %s -ID %s -tif %s" % (X_Coor, Y_Coor, RECORD_NAME ,ID, "E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"))
+             os.system("cd C:/xampp/htdocs/APEX/Python_APEX/14_CLIMATE_SUMMARY_PROJECT/ && python Run_main_Climate_Summary.py -run -x %f -y %f -name %s -ID %s -tif %s" % (X_Coor, Y_Coor, RECORD_NAME ,ID, "D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"))
+             #######ISRIC SIMILARITY PROJECT##################
              print "ERROR[100]:LOCATION_IS_NOT_SUPPORTED"
-             sys.exit()
+             sys.exit() 
+       
        ##########INSERT GDAL DATA########################
        save_gdal_data()    
        ##################################################
@@ -674,9 +680,11 @@ def main():
        model_path = "C:/xampp/htdocs/APEX/Python_APEX/3_WISE_SOL_PROJECT/Rosetta_Model_Application/Rosetta"
        os.system("cd C:/xampp/htdocs/APEX/Python_APEX/12_LANDPKS_AWC_PROJECT/ && python Run_main_AWC.py -run -x %f -y %f -model C:/xampp/htdocs/APEX/Python_APEX/3_WISE_SOL_PROJECT/Rosetta_Model_Application/Rosetta -ID %s" % (X_Coor, Y_Coor, ID))
        ##################################################
-       ########CLIMATE PROJECT###############################
-       os.system("cd C:/xampp/htdocs/APEX/Python_APEX/14_CLIMATE_SUMMARY_PROJECT/ && python Run_main_Climate_Summary.py -run -x %f -y %f -name %s -ID %s -tif %s" % (X_Coor, Y_Coor, RECORD_NAME ,ID, "E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"))        
-
+       ########CLIMATE PROJECT##########################
+       os.system("cd C:/xampp/htdocs/APEX/Python_APEX/14_CLIMATE_SUMMARY_PROJECT/ && python Run_main_Climate_Summary.py -run -x %f -y %f -name %s -ID %s -tif %s" % (X_Coor, Y_Coor, RECORD_NAME ,ID, "D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"))
+       ########ISRIC SIMILARITY PROJECT#################
+       
+       
        print("-PREPROCESSING 1: Create Folders Copy All Static Files to Runtime Folder--")
        checkFolderAndCreateEnvironment()
        print("-PRERPOCESSING 2: Run Script Python")
@@ -757,7 +765,7 @@ def main():
        else:
            print ("===[Error] : Error, please recheck")
            
-       
+              
     elif (ACTION_FLAG == 0):
        clean_all_data_in_server()
        sys.exit("===All data files and folder are removed======")
