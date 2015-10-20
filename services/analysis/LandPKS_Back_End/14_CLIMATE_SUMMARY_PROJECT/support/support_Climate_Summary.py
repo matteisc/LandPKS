@@ -1,4 +1,4 @@
-﻿# Author : Thanh Nguyen
+# Author : Thanh Nguyen
 # 05/23/2014
 # ?/usr/local/bin
 __version__ = "1"
@@ -85,7 +85,7 @@ def insert_climate_summary_data_output(record_id, record_name, Y, X, climate_pre
        cur.execute(query)
        db.commit()
        
-       climate_min_temp_jan = climate_min_temp_list[0] 
+       climate_min_temp_jan = climate_min_temp_list[0]
        climate_min_temp_feb = climate_min_temp_list[1]
        climate_min_temp_mar = climate_min_temp_list[2]
        climate_min_temp_apr = climate_min_temp_list[3]
