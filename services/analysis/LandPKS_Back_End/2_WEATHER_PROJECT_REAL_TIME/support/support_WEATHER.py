@@ -44,7 +44,7 @@ def getRasterValue_ThanhNH(srcfile, mx, my):
     except Exception,err:
         return -1
 def get_elevation(X,Y):
-    return  getRasterValue_ThanhNH_Float("D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_elevation, X, Y);   
+    return  getRasterValue_ThanhNH_Float("E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_elevation, X, Y);   
 def check_exit_record(ID, dly_file_name):
    try:
        import MySQLdb
@@ -115,7 +115,7 @@ def get_coordinate_follow_dly_file_name(str_dly_file_name):
     finally:
         db.close() 
 def get_country_code_for_finding_closest_station(X,Y):  
-    country_identify = getRasterValue_ThanhNH("D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X, Y)
+    country_identify = getRasterValue_ThanhNH("E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X, Y)
     if (country_identify == 209 or country_identify == "209"):  # Kenya
         return "KE"
     elif (country_identify == 228 or str(country_identify) == '228'):
