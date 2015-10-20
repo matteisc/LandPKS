@@ -21,6 +21,7 @@ LASTEST_VERSION_API = 0.1
 class LandPKS_API(object):
     _cp_config = {
         'tools.sessions.on': True,
+        'tools.sessions.httponly':True,
         'tools.auth.on': True
     }    
     auth = AuthController()
@@ -49,13 +50,22 @@ class LandPKS_API(object):
     #publci /query
     query.exposed = True
 
+def CORS():
+    cherrypy.response.headers["Access-Control-Allow-Origin"] = "*"
 if __name__ == '__main__':
+    cherrypy.tools.CORS = cherrypy.Tool("before_finalize",CORS)
     #Configure Server
     cherrypy.config.update({'server.socket_host': '0.0.0.0',
                             'server.socket_port': 8080,
                             'log.error_file':ERROR_LOG_CHERRYPY_8080,
                             'log.access_file':ACCESS_LOG_CHERRYPY_8080
                           })
+    conf = {
+             '/':{
+                'tools.CORS.on': True
+             }
+    }
+    #cherrypy.config.update(conf)
     #Starting Server
     cherrypy.quickstart(LandPKS_API())
     #cherrypy.engine.start()
