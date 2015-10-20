@@ -1,4 +1,4 @@
-﻿# Author : Thanh Nguyen
+# Author : Thanh Nguyen
 # 05/23/2014
 # ?/usr/local/bin
 __version__ = "1"
@@ -153,6 +153,93 @@ def get_values_texture_for_soil_horizon(ID):
         print err
         db.close()
         return None
+def get_list_value_of_rock_fragment(ID):
+     try: 
+         
+        try:
+            import MySQLdb
+            db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="", db="apex")
+        except:
+            sys.exit("Please install MySQLLib for Python or Database raised error") 
+         
+        cur = db.cursor()
+        sql = "SELECT rock_fragment_for_soil_horizon_1,rock_fragment_for_soil_horizon_2,rock_fragment_for_soil_horizon_3,rock_fragment_for_soil_horizon_4,rock_fragment_for_soil_horizon_5,rock_fragment_for_soil_horizon_6,rock_fragment_for_soil_horizon_7 FROM landpks_input_data WHERE ID = %s" %(str(ID))
+        
+        cur.execute(sql)
+        results = cur.fetchall()
+        list_records = []
+        rock_fragment_for_soil_horizon_0 = ""
+        rock_fragment_for_soil_horizon_1 = ""
+        rock_fragment_for_soil_horizon_2 = ""
+        rock_fragment_for_soil_horizon_3 = ""
+        rock_fragment_for_soil_horizon_4 = ""
+        rock_fragment_for_soil_horizon_5 = ""
+        rock_fragment_for_soil_horizon_6 = ""
+        
+        for row in results :
+            if (row[0] is not None):
+                rock_fragment_for_soil_horizon_0 = row[0]
+            else:
+                rock_fragment_for_soil_horizon_0 = None
+                
+            if (row[1] is not None):
+                rock_fragment_for_soil_horizon_1 = row[1]
+            else:
+                rock_fragment_for_soil_horizon_1 = None
+            
+            if (row[2] is not None):
+                rock_fragment_for_soil_horizon_2 = row[2]
+            else:
+                rock_fragment_for_soil_horizon_2 = None
+            
+            if (row[3] is not None):
+                rock_fragment_for_soil_horizon_3 = row[3]
+            else:
+                rock_fragment_for_soil_horizon_3 = None
+            
+            if (row[4] is not None):
+                rock_fragment_for_soil_horizon_4 = row[4]
+            else:
+                rock_fragment_for_soil_horizon_4 = None
+            
+            if (row[5] is not None):
+                rock_fragment_for_soil_horizon_5 = row[5]
+            else:
+                rock_fragment_for_soil_horizon_5 = None  
+                
+            if (row[6] is not None):
+                rock_fragment_for_soil_horizon_6 = row[6]
+            else:
+                rock_fragment_for_soil_horizon_6 = None
+                       
+            break
+         
+        rock_0 = get_rock_value(rock_fragment_for_soil_horizon_0)
+        rock_1 = get_rock_value(rock_fragment_for_soil_horizon_1)
+        rock_2 = get_rock_value(rock_fragment_for_soil_horizon_2)
+        rock_3 = get_rock_value(rock_fragment_for_soil_horizon_3)
+        rock_4 = get_rock_value(rock_fragment_for_soil_horizon_4)
+        rock_5 = get_rock_value(rock_fragment_for_soil_horizon_5)
+        rock_6 = get_rock_value(rock_fragment_for_soil_horizon_6)
+        entry_records = [rock_0,rock_1,rock_2,rock_3,rock_4,rock_5,rock_6]
+        
+        return entry_records
+     except Exception,err:
+        print err
+        return None
+def get_rock_value(text_rock_value):
+    if (text_rock_value is None or text_rock_value == ""):
+        return 0
+    if (text_rock_value.strip() == "0-15%"):
+        return 0
+    elif (text_rock_value.strip() == "15-35%"):
+        return 0.25
+    elif (text_rock_value.strip() == "35-60%"):
+        return 0.475
+    elif (text_rock_value.strip() == ">60%"):
+        return 0.75
+    else:
+        return 0
 def insert_rosetta_value_awc_output(record_id, record_name, Y, X, FIELD_CAPACITY_LIST, WILTING_POINT_LIST, 
                                    ORIGINAL_AWC_LIST, CENTIMETER_AWC_LIST, soil_profile_awc):
      try:    
