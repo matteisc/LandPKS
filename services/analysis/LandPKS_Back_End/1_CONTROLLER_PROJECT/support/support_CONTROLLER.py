@@ -1,4 +1,4 @@
-﻿# Author : Thanh Nguyen
+# Author : Thanh Nguyen
 # 05/23/2014
 # ?/usr/local/bin
 __version__ = "1"
@@ -66,7 +66,7 @@ def insert_gdal_data_to_store(record_id, record_name, Y, X, country_code_data, c
                               landcover_modis_2001_data,landcover_modis_2002_data,landcover_modis_2004_data,landcover_modis_2010_data,landcover_modis_2011_data,landcover_modis_2012_data,
                               landcover_cult_gaez_data,landcover_irrcult_gaez_data,landcover_grass_gaez_data,landcover_protect_gaez_data,landcover_agnprotect_gaez_data,
                               vegind_modis_evi_m_data,vegind_modis_evi_sd_data,vegind_modis_lai_m_data,vegind_modis_lai_sd_data,manage_cerealsuit_low_gaez_data,manage_cerealsuit_hight_gaez_data,
-                              pop_density_data,afsis_topog_dem_data,afsis_topog_twi_data,afsis_topog_sca_data):
+                              pop_density_data,afsis_topog_dem_data,afsis_topog_twi_data,afsis_topog_sca_data,landcover_glc30m_africa_mosaic):
     try:
         
        try:
@@ -152,8 +152,9 @@ def insert_gdal_data_to_store(record_id, record_name, Y, X, country_code_data, c
        str_afsis_topog_dem_data = (str(afsis_topog_dem_data)).strip()
        str_afsis_topog_twi_data = (str(afsis_topog_twi_data)).strip()
        str_afsis_topog_sca_data = (str(afsis_topog_sca_data)).strip()
+       str_landcover_glc30m_africa_mosaic = (str(landcover_glc30m_africa_mosaic)).strip()
        
-       query = "INSERT INTO landpks_gdal_data_global_level (record_id,plot_id,record_name,latitude,longitude,country_code_data,clim_slate_weather_data,clim_precipitation_data,clim_gdd,clim_aridity_index,clim_kopgeiger,clim_fao_lgp,clim_modis_evapotrans,clim_precip_novdecjan,clim_precip_febmarapr,clim_precip_mayjunjul,clim_precip_augsepoct,clim_wind_data_1,clim_wind_data_2,clim_wind_data_3,clim_wind_data_4,clim_wind_data_5,clim_wind_data_6,clim_wind_data_7,clim_wind_data_8,clim_wind_data_9,clim_wind_data_10,clim_wind_data_11,clim_wind_data_12,soil_hwsd_data,soil_depth_gaez,soil_textclass_gaez,soil_fert_gaez,soil_workab_gaez,soil_toxic_gaez,topog_elevation,topog_aspect,topog_geolage,topog_dem_global,topog_dem_old,topog_slope_global,topog_landform_global,topog_twi_global,topog_topi_global,topog_israd_global,landcover_modis_2001,landcover_modis_2002,landcover_modis_2004,landcover_modis_2010,landcover_modis_2011,landcover_modis_2012,landcover_cult_gaez,landcover_irrcult_gaez,landcover_grass_gaez,landcover_protect_gaez,landcover_agnprotect_gaez,vegind_modis_evi_m,vegind_modis_evi_sd,vegind_modis_lai_m,vegind_modis_lai_sd,manage_cerealsuit_low_gaez,manage_cerealsuit_hight_gaez,pop_density,afsis_topog_dem,afsis_topog_twi,afsis_topog_sca) VALUES (%s,%s,'%s',%s,%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" %(str_record_id, str_record_id, str_record_name, str_Y, str_X,
+       query = "INSERT INTO landpks_gdal_data_global_level (record_id,plot_id,record_name,latitude,longitude,country_code_data,clim_slate_weather_data,clim_precipitation_data,clim_gdd,clim_aridity_index,clim_kopgeiger,clim_fao_lgp,clim_modis_evapotrans,clim_precip_novdecjan,clim_precip_febmarapr,clim_precip_mayjunjul,clim_precip_augsepoct,clim_wind_data_1,clim_wind_data_2,clim_wind_data_3,clim_wind_data_4,clim_wind_data_5,clim_wind_data_6,clim_wind_data_7,clim_wind_data_8,clim_wind_data_9,clim_wind_data_10,clim_wind_data_11,clim_wind_data_12,soil_hwsd_data,soil_depth_gaez,soil_textclass_gaez,soil_fert_gaez,soil_workab_gaez,soil_toxic_gaez,topog_elevation,topog_aspect,topog_geolage,topog_dem_global,topog_dem_old,topog_slope_global,topog_landform_global,topog_twi_global,topog_topi_global,topog_israd_global,landcover_modis_2001,landcover_modis_2002,landcover_modis_2004,landcover_modis_2010,landcover_modis_2011,landcover_modis_2012,landcover_cult_gaez,landcover_irrcult_gaez,landcover_grass_gaez,landcover_protect_gaez,landcover_agnprotect_gaez,vegind_modis_evi_m,vegind_modis_evi_sd,vegind_modis_lai_m,vegind_modis_lai_sd,manage_cerealsuit_low_gaez,manage_cerealsuit_hight_gaez,pop_density,afsis_topog_dem,afsis_topog_twi,afsis_topog_sca,landcover_glc30m_africa_mosaic) VALUES (%s,%s,'%s',%s,%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" %(str_record_id, str_record_id, str_record_name, str_Y, str_X,
                str_country_code_data,str_slate_weather_data, str_clim_precipitation_data, str_clim_gdd, 
                str_clim_aridity_index, str_clim_kopgeiger, str_clim_fao_lgp, str_clim_MODIS_evapotrans_data,str_clim_precip_novdecjan_data,str_clim_precip_febmarapr_data,str_clim_precip_mayjunjul_data,str_clim_precip_augsepoct_data,str_wind_data_1,
                str_wind_data_2,str_wind_data_3,str_wind_data_4,str_wind_data_5,
@@ -163,7 +164,7 @@ def insert_gdal_data_to_store(record_id, record_name, Y, X, country_code_data, c
                str_landcover_modis_2001_data,str_landcover_modis_2002_data,str_landcover_modis_2004_data,str_landcover_modis_2010_data,str_landcover_modis_2011_data,str_landcover_modis_2012_data,
                str_landcover_cult_gaez_data,str_landcover_irrcult_gaez_data,str_landcover_grass_gaez_data,str_landcover_protect_gaez_data,str_landcover_agnprotect_gaez_data,
                str_vegind_modis_evi_m_data,str_vegind_modis_evi_sd_data,str_vegind_modis_lai_m_data,str_vegind_modis_lai_sd_data,str_manage_cerealsuit_low_gaez_data,str_manage_cerealsuit_hight_gaez_data,
-               str_pop_density_data,str_afsis_topog_dem_data,str_afsis_topog_twi_data,str_afsis_topog_sca_data)
+               str_pop_density_data,str_afsis_topog_dem_data,str_afsis_topog_twi_data,str_afsis_topog_sca_data,str_landcover_glc30m_africa_mosaic)
        
        
        #query = "INSERT INTO landpks_map_input_files (name,latitude,longitude,dly_file_name) VALUES ('%s',%s,%s,'%s')" %("FUCK",12.12,13.13,"FUCKKING")
