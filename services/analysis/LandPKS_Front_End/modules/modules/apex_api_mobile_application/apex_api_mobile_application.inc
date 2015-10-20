@@ -456,9 +456,9 @@ function insert_rhm_input_data_from_apps_to_server($name, $recorder_name, $trans
  * @param unknown_type $new_status
  */
 
-function insert_landpks_input_data_from_apps_to_server($name, $recorder_name, $organization, $latitude, $longitude, $city, $modified_date, 
-                                                       $land_cover, $grazed, $b_grazed, $flooding, $b_flooding, $slope, $slope_shape, $rock_fragment_for_soil_horizon_1, 
-                                                       $rock_fragment_for_soil_horizon_2, $rock_fragment_for_soil_horizon_3, $rock_fragment_for_soil_horizon_4, 
+function insert_landpks_input_data_from_apps_to_server($name, $recorder_name, $organization, $latitude, $longitude, $city, $notes ,$modified_date, 
+                                                       $land_cover, $grazed, $b_grazed, $grazing, $flooding, $b_flooding, $slope, $slope_shape, $bedrock_depth, $stopped_digging_depth, 
+                                                       $rock_fragment_for_soil_horizon_1,$rock_fragment_for_soil_horizon_2, $rock_fragment_for_soil_horizon_3, $rock_fragment_for_soil_horizon_4, 
                                                        $rock_fragment_for_soil_horizon_5, $rock_fragment_for_soil_horizon_6, $rock_fragment_for_soil_horizon_7 ,
                                                        $color_for_soil_horizon_1, $color_for_soil_horizon_2 , $color_for_soil_horizon_3, $color_for_soil_horizon_4, 
                                                        $color_for_soil_horizon_5, $color_for_soil_horizon_6, $color_for_soil_horizon_7 ,$texture_for_soil_horizon_1, 
@@ -480,14 +480,18 @@ function insert_landpks_input_data_from_apps_to_server($name, $recorder_name, $o
                      'latitude' => $latitude,
                      'longitude' => $longitude,
                      'city' => $city,
+                     'notes' => $notes,
                      'modified_date' => $modified_date,
                      'land_cover' => $land_cover,
                      'grazed' => $grazed,
                      'boolean_grazed' => $b_grazed,
+                     'grazing' => $grazing,
                      'flooding' => $flooding,
                      'boolean_flooding' => $b_flooding,
                      'slope' => $slope,
                      'slope_shape' => $slope_shape,
+                     'bedrock_depth' => $bedrock_depth,
+                     'stopped_digging_depth' => $stopped_digging_depth,    
                      'rock_fragment_for_soil_horizon_1' => $rock_fragment_for_soil_horizon_1,
                      'rock_fragment_for_soil_horizon_2' => $rock_fragment_for_soil_horizon_2,
                      'rock_fragment_for_soil_horizon_3' => $rock_fragment_for_soil_horizon_3,
@@ -534,8 +538,8 @@ function insert_landpks_input_data_from_apps_to_server($name, $recorder_name, $o
  * Enter description here ...
  * @param unknown_type $video_version_id
  */
-function check_exit_name($name){
-  $result = db_query("SELECT 1 as rs FROM landpks_input_data WHERE name ='" . trim($name) ."'");
+function check_exit_name($name,$recorder_name){
+  $result = db_query("SELECT 1 as rs FROM landpks_input_data WHERE name ='" . trim($name) ."' AND recorder_name = '" . trim($recorder_name) . "'");
   foreach ($result as $record){
     if ($record->rs == 1){
       return true;
@@ -1616,12 +1620,13 @@ function parseName($string){
  * GET List LandPKS Plot Information via CSV File
  */
 function get_list_LandPKS_record_information($record_name){
-  $sql = "SELECT ID, name, recorder_name, organization, latitude, longitude, city, modified_date, land_cover, grazed, flooding, slope, slope_shape,";
+  $sql = "SELECT ID, name, recorder_name, boolean_test_plot,organization, latitude, longitude, city, notes ,modified_date, land_cover, grazed, grazing,flooding, slope, slope_shape, bedrock_depth, stopped_digging_depth,";
   $sql .= " rock_fragment_for_soil_horizon_1, rock_fragment_for_soil_horizon_2, rock_fragment_for_soil_horizon_3,rock_fragment_for_soil_horizon_4,";
   $sql .= " rock_fragment_for_soil_horizon_5, rock_fragment_for_soil_horizon_6, rock_fragment_for_soil_horizon_7, color_for_soil_horizon_1, color_for_soil_horizon_2,";
   $sql .= " color_for_soil_horizon_3, color_for_soil_horizon_4, color_for_soil_horizon_5, color_for_soil_horizon_6, color_for_soil_horizon_7, texture_for_soil_horizon_1,";
   $sql .= " texture_for_soil_horizon_2, texture_for_soil_horizon_3, texture_for_soil_horizon_4, texture_for_soil_horizon_5, texture_for_soil_horizon_6, texture_for_soil_horizon_7,";
-  $sql .= " surface_cracking, surface_salt, insert_normal_time";
+  $sql .= " surface_cracking, surface_salt, insert_normal_time, soil_pit_photo_url, soil_samples_photo_url, landscape_north_photo_url, landscape_east_photo_url,";
+  $sql .= " landscape_south_photo_url, landscape_west_photo_url";
   $sql .= " FROM landpks_input_data";
   $sql .= " WHERE 1 = 1";
   $array_landpks = array();
@@ -1638,16 +1643,25 @@ function get_list_LandPKS_record_information($record_name){
     $array_landpks[$i]->ID = $record->ID;
     $array_landpks[$i]->name = parseName($record->name);
     $array_landpks[$i]->recorder_name = $record->recorder_name;
+    if ($record->boolean_test_plot == 1){
+      $array_landpks[$i]->test_plot = "TRUE";
+    } else {
+      $array_landpks[$i]->test_plot = "FALSE";
+    }
     $array_landpks[$i]->organization = $record->organization;
     $array_landpks[$i]->latitude = $record->latitude;
     $array_landpks[$i]->longitude = $record->longitude;
     $array_landpks[$i]->city = $record->city;
+    $array_landpks[$i]->notes = $record->notes;
     $array_landpks[$i]->modified_date = $record->modified_date;
     $array_landpks[$i]->land_cover = $record->land_cover;
     $array_landpks[$i]->grazed = $record->grazed;
+    $array_landpks[$i]->grazing = $record->grazing;
     $array_landpks[$i]->flooding = $record->flooding;
     $array_landpks[$i]->slope = $record->slope;
     $array_landpks[$i]->slope_shape = $record->slope_shape;
+    $array_landpks[$i]->bedrock_depth = $record->bedrock_depth;
+    $array_landpks[$i]->stopped_digging_depth = $record->stopped_digging_depth;
     $array_landpks[$i]->rock_fragment_for_soil_horizon_1 = $record->rock_fragment_for_soil_horizon_1;
     $array_landpks[$i]->rock_fragment_for_soil_horizon_2 = $record->rock_fragment_for_soil_horizon_2;
     $array_landpks[$i]->rock_fragment_for_soil_horizon_3 = $record->rock_fragment_for_soil_horizon_3;
@@ -1672,6 +1686,13 @@ function get_list_LandPKS_record_information($record_name){
     $array_landpks[$i]->insert_normal_time = $record->insert_normal_time;
     $array_landpks[$i]->surface_cracking = $record->surface_cracking;
     $array_landpks[$i]->surface_salt = $record->surface_salt;
+    $array_landpks[$i]->soil_pit_photo_url = $record->soil_pit_photo_url;
+    $array_landpks[$i]->soil_samples_photo_url = $record->soil_samples_photo_url;
+    $array_landpks[$i]->landscape_north_photo_url = $record->landscape_north_photo_url;
+    $array_landpks[$i]->landscape_east_photo_url = $record->landscape_east_photo_url;
+    $array_landpks[$i]->landscape_south_photo_url = $record->landscape_south_photo_url;
+    $array_landpks[$i]->landscape_west_photo_url = $record->landscape_west_photo_url;
+    
  
     $gdal_object = get_raw_output_data_NO_APEX_output($record->ID);
     $array_landpks[$i]->climate_max_temp_jan = $gdal_object->climate_max_temp_jan;
@@ -1733,7 +1754,7 @@ function get_list_LandPKS_record_information($record_name){
  * GET List RHM Plot information via CSV file
  */
 function get_list_RHM_record_information($record_name){
-  $sql = "SELECT ID, name, recorder_name, transect, segment, date, canopy_height, canopy_gap, basal_gap, species_1_density, species_2_density, species_list,";
+  $sql = "SELECT ID, name, recorder_name, transect, dominant_woody_species, dominant_nonwoody_species, species_of_interest_1, species_of_interest_2, segment, date, canopy_height, canopy_gap, basal_gap, species_1_density, species_2_density,species_of_interest_1_count,species_of_interest_2_count, species_list,";
   $sql .= " stick_segment_0, stick_segment_1, stick_segment_2, stick_segment_3, stick_segment_4, bare_total, trees_total, shrubs_total, sub_shrubs_total,";
   $sql .= " perennial_grasses_total, annuals_total, herb_litter_total, wood_litter_total, rock_total";
   $sql .= " FROM rhm_input_data";
@@ -1754,6 +1775,10 @@ function get_list_RHM_record_information($record_name){
     $array_rhm[$i]->name =  parseName($record->name);
     $array_rhm[$i]->recorder_name = $record->recorder_name;
     $array_rhm[$i]->transect = $record->transect;
+    $array_rhm[$i]->dominant_woody_species = $record->dominant_woody_species;
+    $array_rhm[$i]->dominant_nonwoody_species = $record->dominant_nonwoody_species;
+    $array_rhm[$i]->species_of_interest_1 = $record->species_of_interest_1;
+    $array_rhm[$i]->species_of_interest_2 = $record->species_of_interest_2;
     $array_rhm[$i]->segment = $record->segment;
     $array_rhm[$i]->date = $record->date;
     $array_rhm[$i]->canopy_height = $record->canopy_height;
@@ -1761,6 +1786,8 @@ function get_list_RHM_record_information($record_name){
     $array_rhm[$i]->basal_gap = $record->basal_gap;
     $array_rhm[$i]->species_1_density = $record->species_1_density;
     $array_rhm[$i]->species_2_density = $record->species_2_density;
+    $array_rhm[$i]->species_of_interest_1_count = $record->species_of_interest_1_count;
+    $array_rhm[$i]->species_of_interest_2_count = $record->species_of_interest_2_count;
     $array_rhm[$i]->species_list = $record->species_list;
     $array_rhm[$i]->stick_segment_0 = $record->stick_segment_0;
     $array_rhm[$i]->stick_segment_1 = $record->stick_segment_1;
