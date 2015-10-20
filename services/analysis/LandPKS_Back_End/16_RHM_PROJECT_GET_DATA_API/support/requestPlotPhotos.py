@@ -81,5 +81,5 @@ def getListPhotoUrls(date):
     getPlotData(date)
     return (result)
 
-#print getListPhotoUrls("20150513")
+#getListPhotoUrls("20150513")
 
