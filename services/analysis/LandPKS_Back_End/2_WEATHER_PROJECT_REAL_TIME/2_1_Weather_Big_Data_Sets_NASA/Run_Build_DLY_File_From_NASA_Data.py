@@ -15,17 +15,17 @@ Y_COOR= 0.0
 START_YEAR = 1980
 END_YEAR = 2010
 
-TIF_FOLDER_COMM = "D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
+TIF_FOLDER_COMM = "E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
 tif_slate_weather = 'SLATE_Weather/tif/SLATE_raster1.tif'
 
-ARMERRA_SOURCE_NC4_FILES = "D:\\ThanhNguyen_Working\\Python_APEX\\NASA_WEATHERE_DATASETS_AGMIP\\AGMERRA\\"
+ARMERRA_SOURCE_NC4_FILES = "E:\\ThanhNguyen_Working\\Python_APEX\\NASA_WEATHERE_DATASETS_AGMIP\\AGMERRA\\"
 POST_FIX_PRATE = "prate"
 POST_FIX_TMAX = "tmax"
 POST_FIX_TMIN = "tmin"
 POST_FIX_SRAD = "srad"
 POST_RELATIVE_HUMIDITY = "rhstmax"
 POST_FIX_WIND = "wndspd"
-PATH_DLY_FILE = "D:\\ThanhNguyen_Working\\Python_APEX\\NASA_WEATHERE_DATASETS_AGMIP\\FINAL_DLY_FILES\\"
+PATH_DLY_FILE = "E:\\ThanhNguyen_Working\\Python_APEX\\NASA_WEATHERE_DATASETS_AGMIP\\FINAL_DLY_FILES\\"
     
 if (sys.argv[1] == '-x') :
     if ((sys.argv[2] is not None) and (float(sys.argv[2]))):
