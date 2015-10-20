@@ -25,4 +25,4 @@ else:
    sys.exit("===[Error] : Not enough values")
 
 
-os.system("python Step_1_preprocessing_APEX_RUN_real_time.py -x %f -y %f -id %s -tif D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" %(X_COOR,Y_COOR,str(ID)))
+os.system("python Step_1_preprocessing_APEX_RUN_real_time.py -x %f -y %f -id %s -tif E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" %(X_COOR,Y_COOR,str(ID)))
