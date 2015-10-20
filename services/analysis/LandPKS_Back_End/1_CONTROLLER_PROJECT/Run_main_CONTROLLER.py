@@ -394,12 +394,12 @@ def get_data_from_apex_ouput_file(APEX_OUTPUT_FILE, index_sa, index_corn, type):
     
 def save_gdal_data():
        #Insert GDAL data
-       TIF_DIR = "D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
+       TIF_DIR = "E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
        #--------------------------------------------------------------------------------
        tif_slate_weather = 'SLATE_Weather/tif/SLATE_raster1.tif'
        slate_weather_data = int(support_CONTROLLER.getRasterValue_ThanhNH_Float(TIF_DIR + tif_slate_weather, X_Coor, Y_Coor))
        #--------------------------------------------------------------------------------   
-       country_code_data = country_identify = support_CONTROLLER.getRasterValue_ThanhNH("D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X_Coor, Y_Coor) 
+       country_code_data = country_identify = support_CONTROLLER.getRasterValue_ThanhNH("E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X_Coor, Y_Coor) 
        #--------------------------------------------------------------------------------
        tif_annual_precipitation = 'annual_precipitation/annual_precip.tif'
        anual_precipitation_data = support_CONTROLLER.getRasterValue_ThanhNH_Float(TIF_DIR + tif_annual_precipitation , X_Coor, Y_Coor)
@@ -657,7 +657,7 @@ def save_gdal_data():
     
 def main():
     if (ACTION_FLAG == 1):
-       country_identify = support_CONTROLLER.getRasterValue_ThanhNH("D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X_Coor, Y_Coor)
+       country_identify = support_CONTROLLER.getRasterValue_ThanhNH("E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/" + tif_countries, X_Coor, Y_Coor)
        print "Decide contry " + str(country_identify)
        if (country_identify != 209 and country_identify != 228 and country_identify != 223 and country_identify != 205 and str(country_identify) != "209" and str(country_identify) != "228" and str(country_identify) != "223" and str(country_identify) != "205"):
              ##########INSERT GDAL DATA########################
@@ -668,7 +668,7 @@ def main():
              os.system("cd C:/xampp/htdocs/APEX/Python_APEX/12_LANDPKS_AWC_PROJECT/ && python Run_main_AWC.py -run -x %f -y %f -model C:/xampp/htdocs/APEX/Python_APEX/3_WISE_SOL_PROJECT_REAL_TIME/Rosetta_Model_Application/Rosetta -ID %s" % (X_Coor, Y_Coor, ID))
              ##################################################
              ########CLIMATE PROJECT###############################
-             os.system("cd C:/xampp/htdocs/APEX/Python_APEX/14_CLIMATE_SUMMARY_PROJECT/ && python Run_main_Climate_Summary.py -run -x %f -y %f -name %s -ID %s -tif %s" % (X_Coor, Y_Coor, RECORD_NAME ,ID, "D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"))
+             os.system("cd C:/xampp/htdocs/APEX/Python_APEX/14_CLIMATE_SUMMARY_PROJECT/ && python Run_main_Climate_Summary.py -run -x %f -y %f -name %s -ID %s -tif %s" % (X_Coor, Y_Coor, RECORD_NAME ,ID, "E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"))
              #######ISRIC SIMILARITY PROJECT##################
              print "ERROR[100]:LOCATION_IS_NOT_SUPPORTED"
              sys.exit() 
@@ -681,7 +681,7 @@ def main():
        os.system("cd C:/xampp/htdocs/APEX/Python_APEX/12_LANDPKS_AWC_PROJECT/ && python Run_main_AWC.py -run -x %f -y %f -model C:/xampp/htdocs/APEX/Python_APEX/3_WISE_SOL_PROJECT/Rosetta_Model_Application/Rosetta -ID %s" % (X_Coor, Y_Coor, ID))
        ##################################################
        ########CLIMATE PROJECT##########################
-       os.system("cd C:/xampp/htdocs/APEX/Python_APEX/14_CLIMATE_SUMMARY_PROJECT/ && python Run_main_Climate_Summary.py -run -x %f -y %f -name %s -ID %s -tif %s" % (X_Coor, Y_Coor, RECORD_NAME ,ID, "D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"))
+       os.system("cd C:/xampp/htdocs/APEX/Python_APEX/14_CLIMATE_SUMMARY_PROJECT/ && python Run_main_Climate_Summary.py -run -x %f -y %f -name %s -ID %s -tif %s" % (X_Coor, Y_Coor, RECORD_NAME ,ID, "E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"))
        ########ISRIC SIMILARITY PROJECT#################
        
        
