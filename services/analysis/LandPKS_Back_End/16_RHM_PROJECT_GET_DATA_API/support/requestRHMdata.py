@@ -91,15 +91,64 @@ def buildRHMData(userName,data):
         name = item["siteID"]
         recorder_name = userName
         transect = item["direction"]
+        
+        try:
+           dominant_woody_species = item["dominantWoodySpecies"]
+        except:
+           dominant_woody_species = ""
+           
+        try:       
+           dominant_nonwoody_species = item["dominantNonwoodySpecies"]
+        except:
+           dominant_nonwoody_species = ""
+            
+        try:
+           species_of_interest_1 = item["speciesOfInterest1"]
+        except:
+           species_of_interest_1 = ""
+        try:    
+           species_of_interest_2 = item["speciesOfInterest2"]
+        except:
+           species_of_interest_2 = "" 
+        
+        
         for _segment in item["segments"]:
             segment = _segment["range"]
             date = _segment["date"]
-            canopy_height = _segment["canopyHeight"]
-            canopy_gap = _segment["canopyGap"]
-            basal_gap = _segment["basalGap"]
-            species_1_density = _segment["species1Density"]
-            species_2_density = _segment["species2Density"]
-
+            try:
+                canopy_height = _segment["canopyHeight"]
+            except:
+                canopy_height = ""
+            try:    
+                canopy_gap = _segment["canopyGap"]
+            except:
+                canopy_gap = "false"
+            
+            try:    
+                basal_gap = _segment["basalGap"]
+            except:
+                basal_gap = "false"
+           
+            try:
+                species_1_density = _segment["species1Density"]
+            except:
+                species_1_density = 0
+            
+            try:    
+                species_2_density = _segment["species2Density"]
+            except:
+                species_2_density = 0
+            
+            try:     
+                species_of_interest_1_count = _segment["speciesOfInterest1Count"]
+            except:
+                species_of_interest_1_count = 0
+            
+            try:    
+                species_of_interest_2_count = _segment["speciesOfInterest2Count"]
+            except:
+                species_of_interest_2_count = 0
+                
             stick_segment_0 = getSegmentStr(_segment["stickSegments"][0]["covers"])
             stick_segment_1 = getSegmentStr(_segment["stickSegments"][1]["covers"])
             stick_segment_2 = getSegmentStr(_segment["stickSegments"][2]["covers"])
@@ -107,11 +156,8 @@ def buildRHMData(userName,data):
             stick_segment_4 = getSegmentStr(_segment["stickSegments"][4]["covers"])
 
             global result 
-            result.append([name,recorder_name,transect, segment,date,canopy_height,canopy_gap,
-                   basal_gap,species_1_density,species_2_density,stick_segment_0,stick_segment_1,stick_segment_2,stick_segment_3,stick_segment_4])
-        
-    
-
+            result.append([name,recorder_name,transect,dominant_woody_species,dominant_nonwoody_species, species_of_interest_1, species_of_interest_2, segment,date,canopy_height,canopy_gap,
+                   basal_gap,species_1_density,species_2_density,species_of_interest_1_count,species_of_interest_2_count,stick_segment_0,stick_segment_1,stick_segment_2,stick_segment_3,stick_segment_4])
 def getListRHMdata(recorders,date):
     global result
     result = []
@@ -119,5 +165,4 @@ def getListRHMdata(recorders,date):
         getRHMdata(recorder,date)
     return result
 
-
-#getListRHMdata(['corwaal@gmail.com','ericha30@gmail.com'],"20100505")
+#print getListRHMdata(['adambeh1@gmail.com'],'20150325')
