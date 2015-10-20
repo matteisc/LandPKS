@@ -1,4 +1,4 @@
-﻿# Author : Thanh Nguyen
+﻿# Author : Thanh Nguyen 
 # 05/23/2014
 # ?/usr/local/bin
 __version__ = "1"
