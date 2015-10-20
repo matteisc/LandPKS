@@ -1,1 +1,1368 @@
-<?phpinclude_once 'apex_api_mobile_application.inc';include_once 'apex_api_mobile_application_defined.inc';/* * Implemetn hook_permission() */function apex_api_mobile_application_permission(){  return array(    'external device insert data from mobile to server' => array(          'title'=> t('external device insert data from mobile to server'),          'description' => t('external device insert data from mobile to server'),  ),    'external request export input data follow application' => array(          'title'=> t('external request export input data follow application'),          'description' => t('external request export input data follow application'),  ),  );}/** * NGUYEN HAI THANH * HOOK MENU */function apex_api_mobile_application_menu(){  $items = array();  $items[APEX_ADMIN_TOOL] = array(          'title' => 'LandPKS',          'description' => 'LandPKS.',          'page callback' => 'display_thanhnh_functions',          'access arguments' => array('access content'),          'type' => MENU_NORMAL_ITEM,  );  $items[APEX_ADMIN_TOOL_VIEW_DATA] = array(          'title' => 'LandPKS View Data',          'description' => 'LandPKS View Data.',          'page callback' => 'display_thanhnh_functions',          'access arguments' => array('access content'),          'type' => MENU_NORMAL_ITEM,  );  $items[APEX_ADMIN_TOOL_VIEW_DATA_INSERT_FROM_MOBILE_LANDPKS] = array(          'title' => 'LandPKS InputData From Mobile',          'description' => 'LandPKS InputData From Mobile.',          'page callback' => 'drupal_get_form',          'page arguments' => array('list_landpks_input_data_from_mobile_form',1),          'access arguments' => array('administer user'),          'type' => MENU_NORMAL_ITEM,  );  $items[APEX_ADMIN_TOOL_RUN_PYTHON_APEX] = array(          'title' => 'LandPKS Run Python Model',          'description' => 'LandPKS Run Python Model.',          'page callback' => 'drupal_get_form',          'page callback' => 'display_thanhnh_functions',          'access arguments' => array('access content'),          'type' => MENU_NORMAL_ITEM,  );  $items[APEX_APIS_INSERT_DATA_FROM_MOBILE] = array(        'title' => 'LandPKS APIs Insert Data',        'description' => 'LandPKS APIs Insert Data.',        'page callback' => 'api_insert_landpks_input_data_from_mobile_apps',        'access arguments' => array('external device insert data from mobile to server'),        'type' => MENU_CALLBACK,   );  $items[APEX_APIS_INSERT_DATA_FROM_MOBILE_RHM] = array(        'title' => 'RHM APIs Insert Data',        'description' => 'RHM APIs Insert Data.',        'page callback' => 'api_insert_rhm_input_data_from_mobile_apps',        'access arguments' => array('external device insert data from mobile to server'),        'type' => MENU_CALLBACK,   );    $items[APEX_APIS_TEST_SERVER] = array(        'title' => 'LandPKS APIs Test Server',        'description' => 'LandPKS APIs Test Server.',        'page callback' => 'api_test_landpks_server',        'access arguments' => array('external device insert data from mobile to server'),        'type' => MENU_CALLBACK,   );    $items[APEX_APIS_REQUEST_GDAL_DATA] = array(        'title' => 'GDAL APIs Request Data',        'description' => 'GDAL APIs Request Data.',        'page callback' => 'api_request_gdal_data_of_plot',        'access arguments' => array('external device insert data from mobile to server'),        'type' => MENU_CALLBACK,   );      $items[APEX_APIS_REQUEST_RHM_DATA] = array(        'title' => 'RHM APIs Request Data',        'description' => 'RHM APIs Request Data.',        'page callback' => 'api_request_rhm_plots_export_data',        'access arguments' => array('external request export input data follow application'),        'type' => MENU_CALLBACK,   );    $items[APEX_APIS_REQUEST_LANDPKS_DATA] = array(        'title' => 'LandPKS APIs Request Data',        'description' => 'LandPKS APIs Request Data.',        'page callback' => 'api_request_landpks_plots_export_data',        'access arguments' => array('external request export input data follow application'),        'type' => MENU_CALLBACK,   );  $items[APEX_FORM_REQUEST_EXPORT_INPUT_DATA] = array(          'title' => 'Request Data Export',          'description' => 'Request Data Export.',          'page callback' => 'drupal_get_form',          'page arguments' => array('form_request_export_data_for_rhm_landpks_application_form',1),          'access arguments' => array('external request export input data follow application'),          'type' => MENU_NORMAL_ITEM,  );    $items[APEX_FORM_REQUEST_EXPORT_INPUT_DATA_RESULT] = array(          'title' => 'Export Data',          'description' => 'Export Data.',          'page callback' => 'action_export_input_data_application',          'access arguments' => array('external request export input data follow application'),          'type' => MENU_CALLBACK,	);    return $items;}/*************************************************************************************************//**************************************HOOK FORM**************************************************//*************************************************************************************************/function form_request_export_data_for_rhm_landpks_application_form($form, &$form_state){   global $user;   $form['recorder_name'] = array(           '#type' => 'textfield',           '#description' => t('Input Recorder Name in plot you want to get'),           '#title' => t('Enter your recorder name :'),           '#default_value' => $user->mail,           '#size' => 50,           '#maxlength' => 250,   );      $form['data_export'] = array(           '#title' => t('<b>Export ALL plots in the database (download may take several minutes</b>)') ,           '#type' => 'checkbox',           '#description' => t(''),           '#default_value' => 0,           '#attributes' => array('onclick' => 'if (document.getElementById("edit-data-export").value == 0){             										document.getElementById("edit-data-export").value = 1;              										document.getElementsByClassName("form-item form-type-textfield form-item-recorder-name")[0].style.visibility = "visible";             										document.getElementById("edit-recorder-name").disabled = false;              										document.getElementById("edit-recorder-name").focus();             																						} else {													document.getElementById("edit-recorder-name").value = ""; 													document.getElementById("edit-data-export").value = 0; 													document.getElementById("edit-recorder-name").disabled = true;													document.getElementsByClassName("form-item form-type-textfield form-item-recorder-name")[0].style.visibility = "hidden";												}')   );      $options = array(      // 1 => 'ALL',       2 => 'LandInfo',       3 => 'LandCover',       4 => 'Metadata for LandInfo',       5 => 'Metadata for LandCover',   );   $form['application'] = array(       '#type' => 'select',       '#description' => t('Type of Data Export'),       '#default_value' => 3,       '#title' => t('Type of Data Export'),       '#options' => $options,       '#maxlength' => 80,       '#attributes' => array('onchange' => 'if (document.getElementById("edit-application").value == 3) {       												document.getElementById("edit-data-visualization").style.visibility = "visible"; 											 } else {											 		document.getElementById("edit-data-visualization").style.visibility = "hidden";}											 '),    );      $form['submit'] = array(      '#value' => t('Export'),      '#type' => 'submit',      '#title' => t('Export'),      '#submit' => array('form_request_export_data_for_rhm_landpks_application_form_submit'),   );      //if (isVisile($user)==true){     $form['data_visualization'] = array(        '#value' => t('Data Visualization'),        '#type' => 'submit',        '#title' => t('Data Visualization'),        '#submit' => array('form_request_export_data_for_rhm_landpks_application_form_submit_visualization'),     );   //}      return $form;}/** * NGUYEN HAI THANH * Enter description here ... * @param unknown_type $form * @param unknown_type $form_state */function form_request_export_data_for_rhm_landpks_application_form_submit_visualization(&$form, &$form_state){  global $user;   if (!$user->uid) {      drupal_set_message("This message is only visible for not-logged-in users.","error");      drupal_exit();  }     $recorder_name = $form_state['values']['recorder_name'];  if ($form_state['values']['data_export'] == 1){    $recorder_name = "";  }  /* Request to Google Server API to get newest recorders == call python code*/  if ($recorder_name <> "" && !isEmpty($recorder_name)){      $last_updated_date = "none";      call_Python_Sync_RHM_Data($recorder_name, $last_updated_date);  }  /* End */  $application = $form_state['values']['application'];  $data = get_list_RHM_record_information($recorder_name);  $csv_rul = save_to_csv_file($data,"abc");  $form_state['redirect'] = URL_SHINY_RHM_CHARTS . "CSV_URL=$csv_rul"; }/** * NGUYEN HAI THANH * Enter description here ... * @param unknown_type $form * @param unknown_type $form_state */function form_request_export_data_for_rhm_landpks_application_form_submit($form, &$form_state){    global $user;   if (!$user->uid) {      drupal_set_message("This message is only visible for not-logged-in users.","error");      drupal_exit();  }    $recorder_name = $form_state['values']['recorder_name'];  $application = $form_state['values']['application'];  if ($form_state['values']['data_export'] == 1){    $recorder_name = "";  }    /* Request to Google Server API to get newest recorders == call python code*/  if ($recorder_name <> "" && !isEmpty($recorder_name)){      $last_updated_date = "none";      call_Python_Sync_RHM_Data($recorder_name, $last_updated_date);  }  /* End */    $form_state['redirect'] = "admin/APEX/View_Data/data_export/result/" . $recorder_name . "/" . $application;}/** * NGUYEN HAI THANH * Enter description here ... */function action_export_input_data_application(){   $recorder_name = arg(5);   $application = arg(6);   if ($application == 1){      $file_name = "Export_LandCover_LandInfo_Data.csv";      export_landpks_records_data_by_CSV_file($recorder_name);      export_rhm_records_data_by_CSV_file($recorder_name,$file_name);       } else if ($application == 2){      export_landpks_records_data_by_CSV_file($recorder_name);   } else if ($application == 3){      $file_name = "Export_LandCover_Data.csv";      export_rhm_records_data_by_CSV_file($recorder_name,$file_name);   } else if ($application == 4) {      //export_gdal_data_by_CSV_file(null, null, $recorder_name, null);      /* Export metadata for LandInfo */      $file_name = "Export_METADATA_LandInfo.csv";      export_Metadata_by_CSV_file($recorder_name,$file_name,"LANDINFO");   } else if ($application == 5) {      /* Export metadata for LandCover */      $file_name = "Export_METADATA_LandCover.csv";      export_Metadata_by_CSV_file($recorder_name,$file_name,"LANDCOVER");   } }/*************************************************************************************************//**************************************HOOK FORM**************************************************//*************************************************************************************************/function api_test_landpks_server(){  echo "Server is OK";}function test(){  $dbName = $_SERVER["DOCUMENT_ROOT"] . DATABASE_PATH_FILE;  //echo $dbName;  if (!file_exists($dbName)){    return error_request_from_external_device(99, 'Database is not existed');  }  $db = new PDO("odbc:DRIVER={Microsoft Access Driver (*.mdb)}; DBQ=$dbName; Uid=; Pwd=;");  $sql  = "SELECT MU_GLOBAL FROM HWSD_DATA";  $result = $db->query($sql);  $row = $result->fetch();  return success_api();  $output = exec('cd Python_APEX && python C:\xampp\htdocs\APEX\Python_APEX\test.py');  $output = exec('python C:\xampp\htdocs\APEX\Python_APEX\6_OPERATIONS_PROJECT\main_OPERATION.py -rm');  echo $output;}/** * NGUYEN HAI THANH * Enter description here ... * @param unknown_type $form * @param unknown_type $form_state */function list_landpks_input_data_from_mobile_form($form, &$form_state){  /* Checking security */  global $user;  $admin = user_access('administer users');  if (!$admin){    drupal_goto('user');    drupal_session_destroy_uid($user->uid);  }  /* End Check */  $header = array(	        'name' => array('field' => 'name', 'data' => t('Name')),			'latitude' => array('field' => 'latitude', 'data' => t('Latitude')),		    'longitude' => array('field' => 'longitude', 'data' => t('Longitude')),		    'insert_normal_time' => array('field' => 'insert_normal_time', 'data' => t('Insert Time')),		    'ip_address' => array('field' => 'ip_address', 'data' => t('IP Address')),		    'view' => array('field' => 'view', 'data' => t('View')), 			    'edit' => array('field' => 'edit', 'data' => t('Edit')),			'run' => array('field' => 'run', 'data' => t('Run')),  );  $option = get_all_landpks_input_data_from_mobile_order_by(1);  $form['content_list_price_plan'] = array(	       '#type' => 'tableselect',		   '#options' => $option,           '#header' => $header,           '#empty' => t('There is no eligible data'),           '#caption' => t('Danh s&#225;ch nh&#243;m &#273;&#7875; ki&#7875;m so&#225;t'),  );  $form['back'] = array(	    '#type' => 'link',	    '#href' => '',		'#title' => t('Back and Cancel'),  );  return $form;}/** * NGUYEN HAI THANH */function api_request_landpks_plots_export_data(){try{    $export_type = $_GET['export_type'];    $export_type = trim($export_type);    if (isEmpty($export_type)){      return error_request_from_external_device("101", "Should be select exportation type");    }        if (strtoupper($export_type) == 'CSV'){        $record_name = $_GET['recorder_name'];      $record_name = trim($record_name);      $record_name = standard_string_prevent_sql_injection($record_name);      //echo "Boston - America";      export_landpks_records_data_by_CSV_file($record_name);    } else if (strtoupper($export_type) == 'JSON') {      /** Will be update later **/    } else {          }      } catch (Exception $ex){    return error_request_from_external_device('990', $ex->getMessage());  }}/* * NGUYEN HAI THANH */function api_request_rhm_plots_export_data(){  try{    $export_type = $_GET['export_type'];    $export_type = trim($export_type);    if (isEmpty($export_type)){      return error_request_from_external_device("101", "Should be select exportation type");    }        if (strtoupper($export_type) == 'CSV'){        $record_name = $_GET['recorder_name'];      $record_name = trim($record_name);      $record_name = standard_string_prevent_sql_injection($record_name);      $file_name = "Export_LandCover_Data.csv";      export_rhm_records_data_by_CSV_file($record_name,$file_name);    } else if (strtoupper($export_type) == 'JSON') {      /** Will be update later **/    } else {          }      } catch (Exception $ex){    return error_request_from_external_device('990', $ex->getMessage());  }}/** * NGUYEN HAI THANH * Enter description here ... */function api_request_gdal_data_of_plot(){  try{    $export_type = $_GET['export_type'];    $export_type = trim($export_type);    if (isEmpty($export_type)){      return error_request_from_external_device("101", "Should be select exportation type");    }        if (strtoupper($export_type) == 'CSV'){      $from_record_id = $_GET['from_record_id'];      $from_record_id = trim($from_record_id);      $from_record_id = standard_string_prevent_sql_injection($from_record_id);            $to_record_id = $_GET['to_record_id'];      $to_record_id = trim($to_record_id);      $to_record_id = standard_string_prevent_sql_injection($to_record_id);            $record_name = $_GET['record_name'];      $record_name = trim($record_name);      $record_name = standard_string_prevent_sql_injection($record_name);            $country_code = $_GET['country_code'];      $country_code = trim($country_code);      $country_code = standard_string_prevent_sql_injection($country_code);            export_gdal_data_by_CSV_file($from_record_id, $to_record_id, $record_name, $country_code);    } else if (strtoupper($export_type) == 'JSON') {      /** Will be update later **/    } else {          }      } catch (Exception $ex){    return error_request_from_external_device('990', $ex->getMessage());  }    }/** * NGUYEN HAI THANH * Enter description here ... * @param unknown_type $record_name */function export_landpks_records_data_by_CSV_file($record_name){  $data = get_list_LandPKS_record_information($record_name);  header("Content-type: application/csv");  header("Content-Disposition: attachment; filename=\"Export_LandInfo_Data.csv\"");  header("Pragma: no-cache");  header("Expires: 0");  $handle = fopen('php://output', 'w');  fputcsv($handle, array(       'name','latitude','longitude','modified_date','land_cover','grazed','flooding','slope','slope_shape',       'rock_fragment_for_soil_horizon_1','rock_fragment_for_soil_horizon_2','rock_fragment_for_soil_horizon_3','rock_fragment_for_soil_horizon_4',       'rock_fragment_for_soil_horizon_5','rock_fragment_for_soil_horizon_6','rock_fragment_for_soil_horizon_7',       'texture_for_soil_horizon_1','texture_for_soil_horizon_2','texture_for_soil_horizon_3','texture_for_soil_horizon_4','texture_for_soil_horizon_5',       'texture_for_soil_horizon_6','texture_for_soil_horizon_7','surface_cracking','surface_salt','max_temp_January (C)', 'max_temp_February (C)', 'max_temp_March (C)',       'max_temp_April (C)','max_temp_May (C)', 'max_temp_June (C)', 'max_temp_July (C)','max_temp_August (C)', 'max_temp_September (C)', 'max_temp_October (C)','max_temp_November (C)','max_temp_December (C)',       'min_temp_January (C)','min_temp_February (C)','min_temp_March (C)','min_temp_April (C)','min_temp_May (C)','min_temp_June (C)','min_temp_July (C)','min_temp_August (C)','min_temp_September (C)',       'min_temp_October (C)','min_temp_November (C)','min_temp_December (C)','precipitation_January (mm)','precipitation_February (mm)','precipitation_March (mm)','precipitation_April (mm)',       'precipitation_May (mm)','precipitation_June (mm)','precipitation_July (mm)','precipitation_August (mm)','precipitation_September (mm)','precipitation_October (mm)','precipitation_November (mm)','precipitation_December (mm)',       'precipitation_annual (mm)', 'soil_profile_AWC (cm)', 'Elevation (m)',' FAO Length of Growing Period (days/year)','Aridity Index'    ));  foreach ($data as $job) {        fputcsv($handle,array($job->name,$job->latitude,$job->longitude,$job->insert_normal_time,$job->land_cover,                              $job->grazed,$job->flooding,$job->slope,$job->slope_shape,$job->rock_fragment_for_soil_horizon_1,$job->rock_fragment_for_soil_horizon_2,                              $job->rock_fragment_for_soil_horizon_3,$job->rock_fragment_for_soil_horizon_4, $job->rock_fragment_for_soil_horizon_5, $job->rock_fragment_for_soil_horizon_6,$job->rock_fragment_for_soil_horizon_7,                              $job->texture_for_soil_horizon_1,                              $job->texture_for_soil_horizon_2, $job->texture_for_soil_horizon_3, $job->texture_for_soil_horizon_4, $job->texture_for_soil_horizon_5, $job->texture_for_soil_horizon_6, $job->texture_for_soil_horizon_7,                              $job->surface_cracking,$job->surface_salt,$job->climate_max_temp_jan,$job->climate_max_temp_feb,$job->climate_max_temp_mar,$job->climate_max_temp_apr,                              $job->climate_max_temp_may,$job->climate_max_temp_jun,$job->climate_max_temp_jul,$job->climate_max_temp_aug,$job->climate_max_temp_sep,$job->climate_max_temp_oct,                              $job->climate_max_temp_nov,$job->climate_max_temp_dec,$job->climate_min_temp_jan,$job->climate_min_temp_feb, $job->climate_min_temp_mar, $job->climate_min_temp_apr,                              $job->climate_min_temp_may,$job->climate_min_temp_jun,$job->climate_min_temp_jul,$job->climate_min_temp_aug,$job->climate_min_temp_sep,$job->climate_min_temp_oct,                              $job->climate_min_temp_nov,$job->climate_min_temp_dec,$job->climate_precip_jan,$job->climate_precip_feb,$job->climate_precip_mar,$job->climate_precip_apr,$job->climate_precip_may,                              $job->climate_precip_jun,$job->climate_precip_jul,$job->climate_precip_aug,$job->climate_precip_sep,$job->climate_precip_oct,$job->climate_precip_nov,$job->climate_precip_dec,                              $job->climate_precip_annual,$job->soil_profile_awc,$job->old_elevation,$job->fao_lgp_value,$job->aridity                        )               );  }  fclose($handle);}/** * Export Metadata RHM LandCover Application * Enter description here ... * @param unknown_type $record_name * @param unknown_type $file_name */function export_Metadata_by_CSV_file($record_name,$file_name,$application_name){  header("Content-type: application/csv");  header("Content-Disposition: attachment; filename=\"$file_name\"");  header("Pragma: no-cache");  header("Expires: 0");  $handle = fopen('php://output', 'w');  if ($application_name == "LANDCOVER"){    fputcsv($handle, array('COLUMN','HEADER','DESCRIPTION'));    fputcsv($handle, array('A','name','Name of the plot where data was collected'));    fputcsv($handle, array('B','transect','Direction of transect recorded (N, S, E, W)'));    fputcsv($handle, array('C','segment','Segment of each transect where observations are recorded (5 segments recorded every 5 meters of each transect)'));    fputcsv($handle, array('D','date','Time stamp for successful upload of data collected'));    fputcsv($handle, array('E','canopy_height','Header for each height class for vegetation height observations for each segment'));    fputcsv($handle, array('F','canopy_gap','Observed canopy gaps >1m; TRUE = canopy gap present, FALSE = no canopy gap present '));    fputcsv($handle, array('G','basal_gap','Observed basal gaps >1m; TRUE = basal gap present, FALSE = no basal gap present '));    fputcsv($handle, array('H','species_1_count','Observed count of species 1 (species determined by user on plot by plot basis)'));    fputcsv($handle, array('I','species_2_count','Observed count of species 2 (species determined by user on plot by plot basis)'));    fputcsv($handle, array('J','species_list','Documented species names of interest (determined by user)'));    fputcsv($handle, array('K','stick_sgement_1','All observed cover elements at segment 1 of the respective transect'));    fputcsv($handle, array('L','stick_segment_2','All observed cover elements at segment 2 of the respective transect'));    fputcsv($handle, array('M','stick_segment_3','All observed cover elements at segment 3 of the respective transect'));    fputcsv($handle, array('N','stick_segment_4','All observed cover elements at segment 4 of the respective transect'));    fputcsv($handle, array('O','stick_segment_5','All observed cover elements at segment 5 of the respective transect'));    fputcsv($handle, array('P','bare_total','Total count of all bare ground observations for the respective transect'));    fputcsv($handle, array('Q','trees_total','Total count of all trees observations for the respective transect'));    fputcsv($handle, array('R','shrubs_total','Total count of all shrubs observations for the respective transect'));    fputcsv($handle, array('S','sub_shrubs_total','Total count of all sub-shrubs observations for the respective transect'));    fputcsv($handle, array('T','perennial_grasses_total','Total count of all perennial grass observations for the respective transect'));    fputcsv($handle, array('U','annuals_total','Total count of all annual grasses and forbs observations for the respective transect'));    fputcsv($handle, array('V','herb_litter_total','Total count of all herbaceous litter observations for the respective transect'));    fputcsv($handle, array('W','wood_litter_total','Total count of all woody litter observations for the respective transect'));    fputcsv($handle, array('X','rock_total','Total count of all rock fragment observations for the respective transect'));    fputcsv($handle, array('Y','plot_total_cover','Percent of ground covered by plants, litter or rock (calculation = # points of any cover type/total number of points)'));    fputcsv($handle, array('Z','plot_total_bare_ground','Percent of ground not covered by plants, litter and rock (calculation = # points bare ground/total # points)'));    fputcsv($handle, array('AA','plot_total_foliar_cover','Percent cover of all plant elements combined (calculation = # points with any plant/total # points)'));    fputcsv($handle, array('AB','plot_total_plant_cover/composition_tree','Percent cover of trees (calculation = # points with trees/total # points)'));    fputcsv($handle, array('AC','plot_total_plant_cover/composition_shrub','Percent cover of shrubs (calculation = # points with shrubs/total # points)'));    fputcsv($handle, array('AD','plot_total_plant_cover/composition_sub_shrub','Percent cover of sub-shrubs (calculation = # points with sub-shrubs/total # points)'));    fputcsv($handle, array('AE','plot_total_plant_cover/composition_perennial_grasses','Percent cover of perennial grasses (calculation = # points with perennial /total # points)'));    fputcsv($handle, array('AF','plot_total_plant_cover/composition_annuals','Percent cover of annual grasses and forbs (calculation = # points with annual grasses and forbs/total # points)'));    fputcsv($handle, array('AG','plot_total_canopy_height_smaller_10_cm','Percent of plants in <10 cm height class (calculation = # points in <10cm height class/total # points)'));    fputcsv($handle, array('AH','plot_total_canopy_height_10_50_cm','Percent of plants in 10-50 cm height class (calculation = # points in 10-50 cm height class/total # points)'));    fputcsv($handle, array('AI','plot_total_canopy_height_50cm_1m','Percent of plants in 50cm-1m height class (calculation = # points in 50cm-1m height class/total # points)'));    fputcsv($handle, array('AJ','plot_total_canopy_height_1m_2m','Percent of plants in 1-2m height class (calculation = # points in 1-2m height class/total # points)'));    fputcsv($handle, array('AK','plot_total_canopy_height_2m_3m','Percent of plants in 2-3m height class (calculation = # points in 2-3m height class/total # points)'));    fputcsv($handle, array('AL','plot_total_canopy_height_greater_3m','Percent of plants in >3m height class (calculation = # points in >3m height class/total # points)'));    fputcsv($handle, array('AM','plot_total_canopy_gap_percentage','Percent of ground occurring in large gaps (>1m) between plant canopies (calculation = # points with canopy gap/total # points)'));    fputcsv($handle, array('AN','plot_total_basal_gap_percentage','Percent of ground occurring in large gaps (>1m) between plant bases (calculation = # points with basal gap/total # points)'));    fputcsv($handle, array('AO','plot_total_species_1_density','The number of individual plant species 1 per plot (calculated per m squared; calculation = # individual plants observed of the species of interest/per square m in the sample area)'));    fputcsv($handle, array('AP','plot_total_species_2_density','The number of individual plant species 2 per plot (calculated per m squared; calculation = # individual plants observed of the species of interest/per square m in the sample area)'));  } else if ($application_name == "LANDINFO"){    fputcsv($handle, array('COLUMN','HEADER','DESCRIPTION','EXTERNAL DATA SOURCES'));    fputcsv($handle, array('A','name','Name of the plot where data was collected'));    fputcsv($handle, array('B','latitude','Latitude of plot\'s geographic location in decimal degrees.'));    fputcsv($handle, array('C','longitude','Longitude of plot\'s geographic location in decimal degrees.'));    fputcsv($handle, array('D','modified_date','Time stamp for successful upload of data collected'));    fputcsv($handle, array('E','land_cover','Observed land cover. Land cover selections are a modified version of NRCS and WOCAT classes'));    fputcsv($handle, array('F','grazed','Local knowledge of grazing. TRUE = yes, this land has been grazed by livestock in the last year; FALSE = no, this land has not been grazed in the last year.'));    fputcsv($handle, array('G','flooding','Local knowledge of flooding. TRUE = yes, this land has flooded for more than 2 weeks in the last year; FALSE = no, this land has not been flooded for more than 2 weeks in the last year.'));    fputcsv($handle, array('H','slope','Slope in degrees. Option for either discrete value (using clinometer on phone) or slope classes (using icons on phone).'));    fputcsv($handle, array('I','slope_shape','Shape of both downslope and crosslope (linear, convex, concave)'));    fputcsv($handle, array('J - P','rock_fragment_for_soil_horizon','Percent of soil containing rock fragments (fragments > 5mm diameter)'));    fputcsv($handle, array('Q - W','texture_for_soil_horizon','Texture of soil for each layer. Soil texture determined by hand.'));    fputcsv($handle, array('X','surface_cracking','Deep, vertical cracks visible in the soil profile. TRUE = deep, vertical cracks visible; FALSE = no deep vertical cracks visible'));    fputcsv($handle, array('Y','surface_salt','Salt observed at the soil surface. TRUE = salt observed at the soil surface; FALSE = no salt observed at the soil surface'));    fputcsv($handle, array('Z - AK','max_temp_Month (C)','Maximum temperature (C) recorded for month k. A value of -999 indicates that these data are not available for this location.','All weather summary data (monthly max. temp., monthly min. temp, monthly precip., and annual precip.) are taken from the CRU TS dataset. The values provided by Land Info are average values for the time period of 1971-2013. The spatial resolution of the data is 0.5° x 0.5° (approx 55 km x 55 km near the equator). (datasets available at: http://www.cru.uea.ac.uk/cru/data/hrg/)'));    fputcsv($handle, array('AL - AW','min_temp_Month (C)','Minimum temperature(C) recorded for month k. A value of -999 indicates that these data are not available for this location.','All weather summary data (monthly max. temp., monthly min. temp, monthly precip., and annual precip.) are taken from the CRU TS dataset. The values provided by Land Info are average values for the time period of 1971-2013. The spatial resolution of the data is 0.5° x 0.5° (approx 55 km x 55 km near the equator). (datasets available at: http://www.cru.uea.ac.uk/cru/data/hrg/)'));    fputcsv($handle, array('AX - BI','precipitation_Month (mm)','Average recorded precipitation (mm) for month k. A value of -999 indicates that these data are not available for this location.','All weather summary data (monthly max. temp., monthly min. temp, monthly precip., and annual precip.) are taken from the CRU TS dataset. The values provided by Land Info are average values for the time period of 1971-2013. The spatial resolution of the data is 0.5° x 0.5° (approx 55 km x 55 km near the equator). (datasets available at: http://www.cru.uea.ac.uk/cru/data/hrg/)'));    fputcsv($handle, array('BJ','precipitation_annual (mm)','Average recorded precipitation (mm) for year. A value of -999 indicates that these data are not available for this location.','All weather summary data (monthly max. temp., monthly min. temp, monthly precip., and annual precip.) are taken from the CRU TS dataset. The values provided by Land Info are average values for the time period of 1971-2013. The spatial resolution of the data is 0.5° x 0.5° (approx 55 km x 55 km near the equator). (datasets available at: http://www.cru.uea.ac.uk/cru/data/hrg/)'));    fputcsv($handle, array('BK','soil_profile_AWC (cm)','Potential plant available water storage capacity in the recorded soil profile (cm). A value of -999 indicates that these data are not available for this location.','AWC  estimates were generated with the ROSETTA pedotransfer functions, using the user’s soil texture classes as inputs. Reference: Schaap MG, Leij FJ, van Genuchten MT. 2001. ROSETTA: A computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251: 163-176.'));    fputcsv($handle, array('BL','Elevation (m)','Elevation (m) of the recorded plot. A value of -999 indicates that these data are not available for this location.','The elevation estimate is from a 1 km grid from WorldClim. http://www.worldclim.org/current'));    fputcsv($handle, array('BM','FAO Length of Growing Period (days/year).','Length of growing period (LGP) is defined as the number of days during the year when average temperatures are greater than or equal to 5C (Tmean >=5 C) and precipitation plus moisture stored in the soil exceed half the potential evapotranspiration (P>0.5PET). A value of -999 indicates that these data are not available for this location.','The LGP data is from a 1 km grid produced by the FAO Global Agroecological Zones (GAEZ). http://gaez.fao.org/Main.html#'));    fputcsv($handle, array('BN','Aridity Index','Aridity index for the plot area. Aridity index is defined as the mean annual precipitation divided by mean annual evapotranspiration. A value of -999 indicates that these data are not available for this location.','The aridity index is from a 1 km resolution grid from the CGIAR consortium for spatial information. http://www.cgiar-csi.org/data/global-aridity-and-pet-database'));  }  fclose($handle);}/** * EXPORT RHM CSV FUNTION: * Enter description here ... * @param unknown_type $record_name */function export_rhm_records_data_by_CSV_file($record_name,$file_name){  $data = get_list_RHM_record_information($record_name);  /* Build CSV File in Sever */  /* End Build */  header("Content-type: application/csv");  header("Content-Disposition: attachment; filename=\"$file_name\"");  header("Pragma: no-cache");  header("Expires: 0");  $handle = fopen('php://output', 'w');  fputcsv($handle, array(       'name','transect','segment','date','canopy_height','canopy_gap','basal_gap','species_1_count','species_2_count','species_list',       'stick_segment_1','stick_segment_2','stick_segment_3','stick_segment_4','stick_segment_5','bare_total','trees_total','shrubs_total','sub_shrubs_total',       'perennial_grasses_total','annuals_total','herb_litter_total','wood_litter_total','rock_total','plot_total_cover','plot_total_bare_ground','plot_total_foliar_cover','plot_total_plant_cover/composition_tree',       'plot_total_plant_cover/composition_shrub','plot_total_plant_cover/composition_sub_shrub','plot_total_plant_cover/composition_perennial_grasses','plot_total_plant_cover/composition_annuals','plot_total_canopy_height_smaller_10_cm',       'plot_total_canopy_height_10_50_cm','plot_total_canopy_height_50cm_1m','plot_total_canopy_height_1m_2m','plot_total_canopy_height_2m_3m','plot_total_canopy_height_greater_3m','plot_total_canopy_gap_percentage','plot_total_basal_gap_percentage',       'plot_total_species_1_density','plot_total_species_2_density'     ));  foreach ($data as $job) {        fputcsv($handle,array($job->name,$job->transect,$job->segment,$job->date,$job->canopy_height,$job->canopy_gap,$job->basal_gap,                              $job->species_1_density,$job->species_2_density,$job->species_list,$job->stick_segment_0,$job->stick_segment_1,$job->stick_segment_2,                              $job->stick_segment_3,$job->stick_segment_4, $job->bare_total, $job->trees_total,$job->shrubs_total,$job->sub_shrubs_total,$job->perennial_grasses_total,                              $job->annuals_total,$job->herb_litter_total,$job->wood_litter_total,$job->rock_total,$job->veg_cover_percent,$job->bare_ground_1_percent,$job->foliar_cover,                              $job->tree,$job->shrubs,$job->sub_shrubs,$job->perennial_grasses,$job->annual,$job->canopy_height_smaller_10_cm,$job->canopy_height_10_50_cm,                              $job->canopy_height_50cm_1m,$job->canopy_height_1m_2m,$job->canopy_height_2m_3m,$job->canopy_height_greater_3m,$job->canopy_gap_percent,                              $job->basal_gap_percent,$job->species_1_density_percent,$job->species_2_density_percent                        )               );  }  fclose($handle);}/** * MAIN FUNCTION : Export GDAL Data to CSV File * Enter description here ... * @param unknown_type $from_record_id * @param unknown_type $to_record_id * @param unknown_type $record_name * @param unknown_type $country_code */function export_gdal_data_by_CSV_file($from_record_id,$to_record_id,$record_name,$country_code) {  $data = get_list_gdal_record_information($from_record_id, $to_record_id, $record_name, $country_code);  header("Content-type: application/csv");  header("Content-Disposition: attachment; filename=\"Jobs_".date('M-j-y', $from)."-".date('M-j-y', $to).".csv\"");  header("Pragma: no-cache");  header("Expires: 0");  $handle = fopen('php://output', 'w');  fputcsv($handle, array(        'ID','record_id','plot_id','record_name','latitude','longitude','country_code_data','country_name','clim_slate_weather_data','clim_precipitation_data','clim_gdd','clim_aridity_index',        'clim_kopgeiger','clim_kopgeiger_detail','clim_fao_lgp','clim_fao_lgp_detail','clim_modis_evapotrans','clim_precip_novdecjan','clim_precip_febmarapr','clim_precip_mayjunjul','clim_precip_augsepoct','clim_wind_data_1','clim_wind_data_2',        'clim_wind_data_3','clim_wind_data_4','clim_wind_data_5','clim_wind_data_6','clim_wind_data_7','clim_wind_data_8','clim_wind_data_9','clim_wind_data_10','clim_wind_data_11','clim_wind_data_12',        'soil_hwsd_data','soil_depth_gaez','soil_depth_gaez_detail','soil_textclass_gaez','soil_textclass_gaez_detail','soil_fert_gaez','soil_fert_gaez_detail','soil_workab_gaez','soil_workab_gaez_detail','soil_toxic_gaez','soil_toxic_gaez_detail','topog_elevation','topog_aspect','topog_geolage','topog_dem_global','topog_dem_old',        'topog_slope_global','topog_landform_global','topog_twi_global','topog_topi_global','topog_israd_global','landcover_modis_2001','landcover_modis_2001_detail','landcover_modis_2002','landcover_modis_2002_detail','landcover_modis_2004','landcover_modis_2004_detail','landcover_modis_2010','landcover_modis_2010_detail',        'landcover_modis_2011','landcover_modis_2011_detail','landcover_modis_2012','landcover_modis_2012_detail','landcover_cult_gaez','landcover_irrcult_gaez','landcover_grass_gaez','landcover_protect_gaez','landcover_protect_gaez_detail','landcover_agnprotect_gaez','landcover_agnprotect_gaez_detail','vegind_modis_evi_m',        'vegind_modis_evi_sd','vegind_modis_lai_m','vegind_modis_lai_sd','manage_cerealsuit_low_gaez','manage_cerealsuit_low_gaez_detail','manage_cerealsuit_hight_gaez','manage_cerealsuit_hight_gaez_detail','pop_density','afsis_topog_dem','afsis_topog_twi','afsis_topog_sca',        'country_name_2','slope_percentage','slope_reclassified','plane_curvature','profile_curvature','curvature','dem','aspect'            ));  foreach ($data as $job) {        fputcsv($handle,array($job->ID,$job->record_id,$job->plot_id,$job->record_name,$job->latitude,$job->longitude,                              $job->country_code_data,$job->country_name,$job->clim_slate_weather_data,$job->clim_precipitation_data,$job->clim_gdd,$job->clim_aridity_index,$job->clim_kopgeiger,$job->clim_kopgeiger_detail,$job->clim_fao_lgp,$job->clim_fao_lgp_detail                              ,$job->clim_modis_evapotrans,$job->clim_precip_novdecjan,$job->clim_precip_febmarapr,$job->clim_precip_mayjunjul,$job->clim_precip_augsepoct,$job->clim_wind_data_1                              ,$job->clim_wind_data_2,$job->clim_wind_data_3,$job->clim_wind_data_4,$job->clim_wind_data_5,$job->clim_wind_data_6,$job->clim_wind_data_7                              ,$job->clim_wind_data_8,$job->clim_wind_data_9,$job->clim_wind_data_10,$job->clim_wind_data_11,$job->clim_wind_data_12,$job->soil_hwsd_data,$job->soil_depth_gaez,$job->soil_depth_gaez_detail                              ,$job->soil_textclass_gaez,$job->soil_textclass_gaez_detail,$job->soil_fert_gaez,$job->soil_fert_gaez_detail,$job->soil_workab_gaez,$job->soil_workab_gaez_detail,$job->soil_toxic_gaez,$job->soil_toxic_gaez_detail,$job->topog_elevation,$job->topog_aspect,$job->topog_geolage,$job->topog_dem_global                              ,$job->topog_dem_old,$job->topog_slope_global,$job->topog_landform_global,$job->topog_twi_global,$job->topog_topi_global,$job->topog_israd_global,$job->landcover_modis_2001,$job->landcover_modis_2001_detail                              ,$job->landcover_modis_2002,$job->landcover_modis_2002_detail,$job->landcover_modis_2004,$job->landcover_modis_2004_detail,$job->landcover_modis_2010,$job->landcover_modis_2010_detail,$job->landcover_modis_2011,$job->landcover_modis_2011_detail,$job->landcover_modis_2012,$job->landcover_modis_2012_detail,$job->landcover_cult_gaez,$job->landcover_irrcult_gaez                              ,$job->landcover_grass_gaez,$job->landcover_protect_gaez,$job->landcover_protect_gaez_detail,$job->landcover_agnprotect_gaez,$job->landcover_agnprotect_gaez_detail,$job->vegind_modis_evi_m,$job->vegind_modis_evi_sd,$job->vegind_modis_lai_m,$job->vegind_modis_lai_sd                              ,$job->manage_cerealsuit_low_gaez,$job->manage_cerealsuit_low_gaez_detail,$job->manage_cerealsuit_hight_gaez,$job->manage_cerealsuit_hight_gaez_detail,$job->pop_density,$job->afsis_topog_dem,$job->afsis_topog_twi,$job->afsis_topog_sca                              ,$job->country_name_2,$job->slope_percentage,$job->slope_reclassified,$job->plane_curvature,$job->profile_curvature,$job->curvature,$job->dem,$job->aspect));  }  fclose($handle);}/** * NGUYEN HAI THANH * Enter description here ... */function api_insert_rhm_input_data_from_mobile_apps(){  try {    $name = $_GET['name'];    $name = trim($name);    if (isEmpty($name)){      return error_request_from_external_device("101", "Name must be not NULL");    }    $name = standard_string_prevent_sql_injection($name);    $recorder_name = $_GET['recorder_name'];    $recorder_name = trim($recorder_name);    if (isEmpty($name)){      return error_request_from_external_device("102", "Recorder name must be not NULL");    }    $recorder_name = standard_string_prevent_sql_injection($recorder_name);        $transect = $_GET['transect'];    $transect = trim($transect);    $transect = standard_string_prevent_sql_injection($transect);    $transect = standard_string_2($transect);    $transect = strtoupper($transect);        $segment = $_GET['segment'];    $segment = trim($segment);    $segment = standard_string_prevent_sql_injection($segment);    $segment = standard_string_2($segment);        $date = $_GET['date'];    $date = trim($date);    $date = standard_string_prevent_sql_injection($date);        $canopy_height = $_GET['canopy_height'];    $canopy_height = trim($canopy_height);    //$canopy_height = standard_string_prevent_sql_injection($canopy_height);    $canopy_height = standard_string_2($canopy_height);           $canopy_gap = $_GET['canopy_gap'];    $canopy_gap = trim($canopy_gap);    $canopy_gap = standard_string_prevent_sql_injection($canopy_gap);    $canopy_gap = standard_string_2($canopy_gap);    $canopy_gap = strtoupper($canopy_gap);        $basal_gap = $_GET['basal_gap'];    $basal_gap = trim($basal_gap);    $basal_gap = standard_string_prevent_sql_injection($basal_gap);    $basal_gap = standard_string_2($basal_gap);    $basal_gap = strtoupper(($basal_gap));        $species_1_density = $_GET['species_1_density'];    $species_1_density = trim($species_1_density);    if (!is_numeric($species_1_density)){      return error_request_from_external_device("107", "Species 1 Density must be NUMERIC");    }        $species_2_density = $_GET['species_2_density'];    $species_2_density = trim($species_2_density);    if (!is_numeric($species_2_density)){      return error_request_from_external_device("107", "Species 2 Density must be NUMERIC");    }            $species_list = $_GET['species_list'];    $species_list = trim($species_list);    $species_list = standard_string_prevent_sql_injection($species_list);    $species_list = standard_string_2($species_list);            $stick_segment_0 = $_GET['stick_segment_0'];    $stick_segment_0 = trim($stick_segment_0);    $stick_segment_0 = standard_string_prevent_sql_injection($stick_segment_0);    $stick_segment_0 = strtoupper($stick_segment_0);        $stick_segment_1 = $_GET['stick_segment_1'];    $stick_segment_1 = trim($stick_segment_1);    $stick_segment_1 = standard_string_prevent_sql_injection($stick_segment_1);    $stick_segment_1 = strtoupper($stick_segment_1);        $stick_segment_2 = $_GET['stick_segment_2'];    $stick_segment_2 = trim($stick_segment_2);    $stick_segment_2 = standard_string_prevent_sql_injection($stick_segment_2);    $stick_segment_2 = strtoupper($stick_segment_2);        $stick_segment_3 = $_GET['stick_segment_3'];    $stick_segment_3 = trim($stick_segment_3);    $stick_segment_3 = standard_string_prevent_sql_injection($stick_segment_3);    $stick_segment_3 = strtoupper($stick_segment_3);        $stick_segment_4 = $_GET['stick_segment_4'];    $stick_segment_4 = trim($stick_segment_4);    $stick_segment_4 = standard_string_prevent_sql_injection($stick_segment_4);    $stick_segment_4 = strtoupper($stick_segment_4);        $bare_total = $_GET['bare_total'];    $bare_total = trim($bare_total);    if (!is_numeric($bare_total)){      return error_request_from_external_device("107", "Bare_total must be NUMERIC");    }        $trees_total = $_GET['trees_total'];    $trees_total = trim($trees_total);    if (!is_numeric($trees_total)){      return error_request_from_external_device("107", "Trees Total must be NUMERIC");    }        $shrubs_total = $_GET['shrubs_total'];    $shrubs_total = trim($shrubs_total);    if (!is_numeric($shrubs_total)){      return error_request_from_external_device("107", "Shrubs must be NUMERIC");    }        $sub_shrubs_total = $_GET['sub_shrubs_total'];    $sub_shrubs_total = trim($sub_shrubs_total);    if (!is_numeric($sub_shrubs_total)){      return error_request_from_external_device("107", "Sub-Shrubs must be NUMERIC");    }        $perennial_grasses_total = $_GET['perennial_grasses_total'];    $perennial_grasses_total = trim($perennial_grasses_total);    if (!is_numeric($perennial_grasses_total)){      return error_request_from_external_device("107", "Grasses must be NUMERIC");    }        $annuals_total = $_GET['annuals_total'];    $annuals_total = trim($annuals_total);    if (!is_numeric($annuals_total)){      return error_request_from_external_device("107", "Annual Total must be NUMERIC");    }        $herb_litter_total = $_GET['herb_litter_total'];    $herb_litter_total = trim($herb_litter_total);    if (!is_numeric($herb_litter_total)){      return error_request_from_external_device("107", "Herb Litter Total must be NUMERIC");    }        $wood_litter_total = $_GET['wood_litter_total'];    $wood_litter_total = trim($wood_litter_total);    if (!is_numeric($wood_litter_total)){      return error_request_from_external_device("107", "Wood Litter Total must be NUMERIC");    }        $rock_total = $_GET['rock_total'];    $rock_total = trim($rock_total);    if (!is_numeric($rock_total)){      return error_request_from_external_device("107", "Rock Total must be NUMERIC");    }        $ip_address = get_ip_address_client();        $result_insert = insert_rhm_input_data_from_apps_to_server($name, $recorder_name, $transect, $segment, $date, $canopy_height, $canopy_gap, $basal_gap, $species_1_density, $species_2_density, $species_list, $stick_segment_0, $stick_segment_1, $stick_segment_2, $stick_segment_3, $stick_segment_4, $bare_total, $trees_total, $shrubs_total, $sub_shrubs_total, $perennial_grasses_total, $annuals_total, $herb_litter_total, $wood_litter_total, $rock_total, $ip_address);        if ($result_insert == 0){      return error_request_from_external_device('999', 'Error Link : Please check link');    } else {      /* Calculate Summary data from group by name */      $object = get_output_value_RHM_record($name);      /* Insert output data to database */      $result_inser_output = insert_rhm_output_data($result_insert,$name, $object);      if ($object == false) {        return error_request_from_external_device('999', 'Error Link : Please check link');      } else {        return success_api_rhm($object);      }    }  } catch (Exception $ex){    return error_request_from_external_device('990', $ex->getMessage());  }}/** * NGUYEN HAI THANH * Enter description here ... */function api_insert_landpks_input_data_from_mobile_apps(){  try {    $name = $_GET['name'];    $name = trim($name);    if (isEmpty($name)){      return error_request_from_external_device("101", "Name must be not NULL");    }    $name = standard_string_prevent_sql_injection($name);//    if (check_exit_name($name)){//      return error_request_from_external_device("109", "Name is existed in Server");//    }    $recorder_name = $_GET['recorder_name'];    $recorder_name = trim($recorder_name);    if (isEmpty($recorder_name)){      return error_request_from_external_device("102", "Recorder name must be not NULL");    }    $recorder_name = standard_string_prevent_sql_injection($recorder_name);    $test_plot = $_GET['test_plot'];    $test_plot = trim($test_plot);    if (isEmpty($test_plot)){      $test_plot = "TRUE";      $b_test_plot = 1;    }    $b_test_plot = 0;    $test_plot = standard_string_prevent_sql_injection($test_plot);    $test_plot = strtoupper($test_plot);    if (strtoupper($test_plot) == 'TRUE'){      $b_test_plot = 1;    }        $organization = $_GET['organization'];    $organization = trim($organization);    if (isEmpty($organization)){      //return error_request_from_external_device("103", "Organization must be not NULL");    }    $organization = standard_string_prevent_sql_injection($organization);    $latitude = $_GET['latitude'];    $latitude = trim($latitude);    if (isEmpty($latitude)){      return error_request_from_external_device("104", "Latitude must be not NULL");    }    if (!is_numeric($latitude)){      return error_request_from_external_device("105", "Latitude must be NUMERIC");    }    $longitude = $_GET['longitude'];    $longitude = trim($longitude);    if (isEmpty($longitude)){      return error_request_from_external_device("106", "Longitude must be not NULL");    }    if (!is_numeric($longitude)){      return error_request_from_external_device("107", "Longitude must be NUMERIC");    }    $city = $_GET['city'];    $city = trim($city);    if (isEmpty($city)){      //return error_request_from_external_device("108", "City must be not NULL");    }    $city = standard_string_prevent_sql_injection($city);    $modified_date = $_GET['modified_date'];    $modified_date = trim($modified_date);    if (isEmpty($modified_date)){      //return error_request_from_external_device("108", "Modified Date must be not NULL");    }    $modified_date = standard_string_prevent_sql_injection($modified_date);    $land_cover = $_GET['land_cover'];    $land_cover = trim($land_cover);    if (isEmpty($land_cover)){      //return error_request_from_external_device("108", "Modified Date must be not NULL");    }    $land_cover = standard_string_prevent_sql_injection($land_cover);    $grazed = $_GET['grazed'];    $grazed = trim($grazed);    if (isEmpty($grazed)){      //return error_request_from_external_device("108", "Modified Date must be not NULL");    }    $grazed = standard_string_prevent_sql_injection($grazed);    $b_grazed = 0;    if (strtoupper($grazed) == 'TRUE'){      $b_grazed = 1;    }    $flooding = $_GET['flooding'];    $flooding = trim($flooding);    if (isEmpty($flooding)){      //return error_request_from_external_device("108", "Modified Date must be not NULL");    }    $flooding = standard_string_prevent_sql_injection($flooding);    $b_flooding = 0;    if (strtoupper($flooding) == 'TRUE'){      $b_flooding = 1;    }    $slope = $_GET['slope'];    $slope = trim($slope);    if (isEmpty($slope)){      //return error_request_from_external_device("108", "Modified Date must be not NULL");    }    $slope = standard_string_prevent_sql_injection($slope);    $slope_shape = $_GET['slope_shape'];    $slope_shape = trim($slope_shape);    if (isEmpty($slope_shape)){      //return error_request_from_external_device("108", "Modified Date must be not NULL");    }    $slope_shape = standard_string_prevent_sql_injection($slope_shape);    $rock_fragment_for_soil_horizon_1 = $_GET['rock_fragment_for_soil_horizon_1'];    $rock_fragment_for_soil_horizon_1 = trim($rock_fragment_for_soil_horizon_1);    $rock_fragment_for_soil_horizon_1 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_1);    $rock_fragment_for_soil_horizon_2 = $_GET['rock_fragment_for_soil_horizon_2'];    $rock_fragment_for_soil_horizon_2 = trim($rock_fragment_for_soil_horizon_2);    $rock_fragment_for_soil_horizon_2 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_2);    $rock_fragment_for_soil_horizon_3 = $_GET['rock_fragment_for_soil_horizon_3'];    $rock_fragment_for_soil_horizon_3 = trim($rock_fragment_for_soil_horizon_3);    $rock_fragment_for_soil_horizon_3 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_3);    $rock_fragment_for_soil_horizon_4 = $_GET['rock_fragment_for_soil_horizon_4'];    $rock_fragment_for_soil_horizon_4 = trim($rock_fragment_for_soil_horizon_4);    $rock_fragment_for_soil_horizon_4 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_4);    $rock_fragment_for_soil_horizon_5 = $_GET['rock_fragment_for_soil_horizon_5'];    $rock_fragment_for_soil_horizon_5 = trim($rock_fragment_for_soil_horizon_5);    $rock_fragment_for_soil_horizon_5 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_5);    $rock_fragment_for_soil_horizon_6 = $_GET['rock_fragment_for_soil_horizon_6'];    $rock_fragment_for_soil_horizon_6 = trim($rock_fragment_for_soil_horizon_6);    $rock_fragment_for_soil_horizon_6 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_6);        $rock_fragment_for_soil_horizon_7 = $_GET['rock_fragment_for_soil_horizon_7'];    $rock_fragment_for_soil_horizon_7 = trim($rock_fragment_for_soil_horizon_7);    $rock_fragment_for_soil_horizon_7 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_7);    $color_for_soil_horizon_1 = $_GET['color_for_soil_horizon_1'];    $color_for_soil_horizon_1 = trim($color_for_soil_horizon_1);    $color_for_soil_horizon_1 = standard_string_prevent_sql_injection($color_for_soil_horizon_1);    $color_for_soil_horizon_2 = $_GET['color_for_soil_horizon_2'];    $color_for_soil_horizon_2 = trim($color_for_soil_horizon_2);    $color_for_soil_horizon_2 = standard_string_prevent_sql_injection($color_for_soil_horizon_2);    $color_for_soil_horizon_3 = $_GET['color_for_soil_horizon_3'];    $color_for_soil_horizon_3 = trim($color_for_soil_horizon_3);    $color_for_soil_horizon_3 = standard_string_prevent_sql_injection($color_for_soil_horizon_3);    $color_for_soil_horizon_4 = $_GET['color_for_soil_horizon_4'];    $color_for_soil_horizon_4 = trim($color_for_soil_horizon_4);    $color_for_soil_horizon_4 = standard_string_prevent_sql_injection($color_for_soil_horizon_4);    $color_for_soil_horizon_5 = $_GET['color_for_soil_horizon_5'];    $color_for_soil_horizon_5 = trim($color_for_soil_horizon_5);    $color_for_soil_horizon_5 = standard_string_prevent_sql_injection($color_for_soil_horizon_5);    $color_for_soil_horizon_6 = $_GET['color_for_soil_horizon_6'];    $color_for_soil_horizon_6 = trim($color_for_soil_horizon_6);    $color_for_soil_horizon_6 = standard_string_prevent_sql_injection($color_for_soil_horizon_6);        $color_for_soil_horizon_7 = $_GET['color_for_soil_horizon_7'];    $color_for_soil_horizon_7 = trim($color_for_soil_horizon_7);    $color_for_soil_horizon_7 = standard_string_prevent_sql_injection($color_for_soil_horizon_7);    $texture_for_soil_horizon_1 = $_GET['texture_for_soil_horizon_1'];    $texture_for_soil_horizon_1 = trim($texture_for_soil_horizon_1);    $texture_for_soil_horizon_1 = standard_string_prevent_sql_injection($texture_for_soil_horizon_1);    $texture_for_soil_horizon_2 = $_GET['texture_for_soil_horizon_2'];    $texture_for_soil_horizon_2 = trim($texture_for_soil_horizon_2);    $texture_for_soil_horizon_2 = standard_string_prevent_sql_injection($texture_for_soil_horizon_2);    $texture_for_soil_horizon_3 = $_GET['texture_for_soil_horizon_3'];    $texture_for_soil_horizon_3 = trim($texture_for_soil_horizon_3);    $texture_for_soil_horizon_3 = standard_string_prevent_sql_injection($texture_for_soil_horizon_3);    $texture_for_soil_horizon_4 = $_GET['texture_for_soil_horizon_4'];    $texture_for_soil_horizon_4 = trim($texture_for_soil_horizon_4);    $texture_for_soil_horizon_4 = standard_string_prevent_sql_injection($texture_for_soil_horizon_4);    $texture_for_soil_horizon_5 = $_GET['texture_for_soil_horizon_5'];    $texture_for_soil_horizon_5 = trim($texture_for_soil_horizon_5);    $texture_for_soil_horizon_5 = standard_string_prevent_sql_injection($texture_for_soil_horizon_5);    $texture_for_soil_horizon_6 = $_GET['texture_for_soil_horizon_6'];    $texture_for_soil_horizon_6 = trim($texture_for_soil_horizon_6);    $texture_for_soil_horizon_6 = standard_string_prevent_sql_injection($texture_for_soil_horizon_6);        $texture_for_soil_horizon_7 = $_GET['texture_for_soil_horizon_7'];    $texture_for_soil_horizon_7 = trim($texture_for_soil_horizon_7);    $texture_for_soil_horizon_7 = standard_string_prevent_sql_injection($texture_for_soil_horizon_7);    $surface_cracking = $_GET['surface_cracking'];    $surface_cracking = trim($surface_cracking);    if (isEmpty($surface_cracking)){      //return error_request_from_external_device("108", "Modified Date must be not NULL");      $surface_cracking = 'TRUE';    }    $surface_cracking = standard_string_prevent_sql_injection($surface_cracking);    $b_surface_cracking = 0;    if (strtoupper($surface_cracking) == 'TRUE'){      $b_surface_cracking = 1;    }    $surface_salt = $_GET['surface_salt'];    $surface_salt = trim($surface_salt);    if (isEmpty($surface_salt)){      //return error_request_from_external_device("108", "Modified Date must be not NULL");    }    $surface_salt = standard_string_prevent_sql_injection($surface_salt);    $b_surface_salt = 0;    if (strtoupper($surface_salt) == 'TRUE'){      $b_surface_salt = 1;    }        /* Photo URLs */    $soil_pit_photo_url = $_GET['soil_pit_photo_url'];    if (isEmpty($soil_pit_photo_url)){      $soil_pit_photo_url = "Photo is not existed";    } else {      $soil_pit_photo_url = str_replace("'","",$soil_pit_photo_url);      $soil_pit_photo_url = str_replace('"','',$soil_pit_photo_url);      $soil_pit_photo_url = urlencode($soil_pit_photo_url);    }    $soil_samples_photo_url = $_GET['soil_samples_photo_url'];    if (isEmpty($soil_samples_photo_url)){      $soil_samples_photo_url = "Photo is not existed";    } else {      $soil_samples_photo_url = str_replace("'","",$soil_samples_photo_url);      $soil_samples_photo_url = str_replace('"','',$soil_samples_photo_url);      $soil_samples_photo_url = urlencode($soil_samples_photo_url);    }    /* End Photo URLs */        $ip_address = get_ip_address_client();        /**     * Insert cai cua no ngu si dan don thoi thay nay truoc     * Enter description here ...     * @var unknown_type     */    //$result_insert_new = insert_landpks_input_plot_new($name, $recorder_name, $organization, $latitude, $longitude, $city, $modified_date, $land_cover, $grazed, $b_grazed, $flooding, $b_flooding, $slope, $slope_shape, $rock_fragment_for_soil_horizon_1, $rock_fragment_for_soil_horizon_2, $rock_fragment_for_soil_horizon_3, $rock_fragment_for_soil_horizon_4, $rock_fragment_for_soil_horizon_5, $rock_fragment_for_soil_horizon_6, $rock_fragment_for_soil_horizon_7 , $color_for_soil_horizon_1, $color_for_soil_horizon_2 , $color_for_soil_horizon_3, $color_for_soil_horizon_4, $color_for_soil_horizon_5, $color_for_soil_horizon_6, $color_for_soil_horizon_7 , $texture_for_soil_horizon_1, $texture_for_soil_horizon_2, $texture_for_soil_horizon_3, $texture_for_soil_horizon_4, $texture_for_soil_horizon_5, $texture_for_soil_horizon_6, $texture_for_soil_horizon_7 ,$surface_cracking, $b_surface_cracking, $surface_salt, $b_surface_salt,$ip_address);    $result_insert_new = 1985;    /**     * Ket thuc do thoi thay nay     * Enter description here ...     * @var unknown_type     */    //echo $rock_fragment_for_soil_horizon_1;    $result_insert = insert_landpks_input_data_from_apps_to_server($name, $recorder_name, $organization, $latitude, $longitude, $city, $modified_date, $land_cover, $grazed, $b_grazed, $flooding, $b_flooding, $slope, $slope_shape, $rock_fragment_for_soil_horizon_1, $rock_fragment_for_soil_horizon_2, $rock_fragment_for_soil_horizon_3, $rock_fragment_for_soil_horizon_4, $rock_fragment_for_soil_horizon_5, $rock_fragment_for_soil_horizon_6, $rock_fragment_for_soil_horizon_7 , $color_for_soil_horizon_1, $color_for_soil_horizon_2 , $color_for_soil_horizon_3, $color_for_soil_horizon_4, $color_for_soil_horizon_5, $color_for_soil_horizon_6, $color_for_soil_horizon_7 , $texture_for_soil_horizon_1, $texture_for_soil_horizon_2, $texture_for_soil_horizon_3, $texture_for_soil_horizon_4, $texture_for_soil_horizon_5, $texture_for_soil_horizon_6, $texture_for_soil_horizon_7 ,$surface_cracking, $b_surface_cracking, $surface_salt, $b_surface_salt,$ip_address,$soil_pit_photo_url,$soil_samples_photo_url,$test_plot,$b_test_plot);    /** Case 1 : Data => Return List of Analytics Data after running Relative Calculation **/    $run_model = call_python_script($result_insert,$longitude,$latitude,trim($recorder_name));    /** CASE 2 : DATA => Return only the raw output APEX for Dought **/            /***Update cho thang ngu dan ngu si dan don****/    update_plot_id_to_result_apex_table($result_insert,$result_insert_new);        if ($run_model == -1){        //return error_request_from_external_device('666', 'Error : Dougl facing');        $type = 1;        $record_data_no_apex = get_raw_output_data_NO_APEX_output($result_insert);        $content[0]->ID = $record_data_no_apex->record_id;        $content[0]->name = $record_data_no_apex->record_name;        /*        $content[0]->grass_productivity =  intval(-999);        $content[0]->grass_erosion = intval(-999);        $content[0]->maize_productivity = intval(-999);        $content[0]->maize_erosion = intval(-999);        $content[0]->maize_erosion = intval(-999);        */		$content[0]->grass_productivity = "";        $content[0]->grass_erosion = "";        $content[0]->maize_productivity = "";        $content[0]->maize_erosion = "";                        //GDAL        $content[0]->gdal_elevation = floatval($record_data_no_apex->old_elevation);        $content[0]->gdal_fao_lgp = $record_data_no_apex->fao_lgp;        $content[0]->gdal_aridity_index = floatval($record_data_no_apex->aridity);        //AWC        $content[0]->awc_soil_profile_awc = floatval($record_data_no_apex->soil_profile_awc);                //PRECIP        $content[0]->climate_precip_jan = floatval($record_data_no_apex->climate_precip_jan);        $content[0]->climate_precip_feb = floatval($record_data_no_apex->climate_precip_feb);        $content[0]->climate_precip_mar = floatval($record_data_no_apex->climate_precip_mar);        $content[0]->climate_precip_apr = floatval($record_data_no_apex->climate_precip_apr);        $content[0]->climate_precip_may = floatval($record_data_no_apex->climate_precip_may);        $content[0]->climate_precip_jun = floatval($record_data_no_apex->climate_precip_jun);        $content[0]->climate_precip_jul = floatval($record_data_no_apex->climate_precip_jul);        $content[0]->climate_precip_aug = floatval($record_data_no_apex->climate_precip_aug);        $content[0]->climate_precip_sep = floatval($record_data_no_apex->climate_precip_sep);        $content[0]->climate_precip_oct = floatval($record_data_no_apex->climate_precip_oct);        $content[0]->climate_precip_nov = floatval($record_data_no_apex->climate_precip_nov);        $content[0]->climate_precip_dec = floatval($record_data_no_apex->climate_precip_dec);        $content[0]->climate_precip_annual = floatval($record_data_no_apex->climate_precip_annual);                //AVG_TEMP        $content[0]->climate_avg_temp_jan = floatval($record_data_no_apex->climate_avg_temp_jan);        $content[0]->climate_avg_temp_feb = floatval($record_data_no_apex->climate_avg_temp_feb);        $content[0]->climate_avg_temp_mar = floatval($record_data_no_apex->climate_avg_temp_mar);        $content[0]->climate_avg_temp_apr = floatval($record_data_no_apex->climate_avg_temp_apr);        $content[0]->climate_avg_temp_may = floatval($record_data_no_apex->climate_avg_temp_may);        $content[0]->climate_avg_temp_jun = floatval($record_data_no_apex->climate_avg_temp_jun);        $content[0]->climate_avg_temp_jul = floatval($record_data_no_apex->climate_avg_temp_jul);        $content[0]->climate_avg_temp_aug = floatval($record_data_no_apex->climate_avg_temp_aug);        $content[0]->climate_avg_temp_sep = floatval($record_data_no_apex->climate_avg_temp_sep);        $content[0]->climate_avg_temp_oct = floatval($record_data_no_apex->climate_avg_temp_oct);        $content[0]->climate_avg_temp_nov = floatval($record_data_no_apex->climate_avg_temp_nov);        $content[0]->climate_avg_temp_dec = floatval($record_data_no_apex->climate_avg_temp_dec);                        //MAX_TEMP        $content[0]->climate_max_temp_jan = floatval($record_data_no_apex->climate_max_temp_jan);        $content[0]->climate_max_temp_feb = floatval($record_data_no_apex->climate_max_temp_feb);        $content[0]->climate_max_temp_mar = floatval($record_data_no_apex->climate_max_temp_mar);        $content[0]->climate_max_temp_apr = floatval($record_data_no_apex->climate_max_temp_apr);        $content[0]->climate_max_temp_may = floatval($record_data_no_apex->climate_max_temp_may);        $content[0]->climate_max_temp_jun = floatval($record_data_no_apex->climate_max_temp_jun);        $content[0]->climate_max_temp_jul = floatval($record_data_no_apex->climate_max_temp_jul);        $content[0]->climate_max_temp_aug = floatval($record_data_no_apex->climate_max_temp_aug);        $content[0]->climate_max_temp_sep = floatval($record_data_no_apex->climate_max_temp_sep);        $content[0]->climate_max_temp_oct = floatval($record_data_no_apex->climate_max_temp_oct);        $content[0]->climate_max_temp_nov = floatval($record_data_no_apex->climate_max_temp_nov);        $content[0]->climate_max_temp_dec = floatval($record_data_no_apex->climate_max_temp_dec);                        //MIN_TEMP        $content[0]->climate_min_temp_jan = floatval($record_data_no_apex->climate_min_temp_jan);        $content[0]->climate_min_temp_feb = floatval($record_data_no_apex->climate_min_temp_feb);        $content[0]->climate_min_temp_mar = floatval($record_data_no_apex->climate_min_temp_mar);        $content[0]->climate_min_temp_apr = floatval($record_data_no_apex->climate_min_temp_apr);        $content[0]->climate_min_temp_may = floatval($record_data_no_apex->climate_min_temp_may);        $content[0]->climate_min_temp_jun = floatval($record_data_no_apex->climate_min_temp_jun);        $content[0]->climate_min_temp_jul = floatval($record_data_no_apex->climate_min_temp_jul);        $content[0]->climate_min_temp_aug = floatval($record_data_no_apex->climate_min_temp_aug);        $content[0]->climate_min_temp_sep = floatval($record_data_no_apex->climate_min_temp_sep);        $content[0]->climate_min_temp_oct = floatval($record_data_no_apex->climate_min_temp_oct);        $content[0]->climate_min_temp_nov = floatval($record_data_no_apex->climate_min_temp_nov);        $content[0]->climate_min_temp_dec = floatval($record_data_no_apex->climate_min_temp_dec);                if ($result_insert == 0){            return error_request_from_external_device('999', 'Error Link : Please check link');              } else {            return success_api($type,$content);        }    }    /* Process to get content output to application */    $list_records = array();    $number_of_record = 8;            /** Case 1 : Data => Return List of Analytics Data after running Relative Calculation **/    /*    $list_records = get_list_analytics_data_from_apex_output_and_relative_calculation_model($recorder_name, $number_of_record);    $content[0]->name = $recorder_name;    $strContent_maize_erosion = "";    $strContent_maize_productivity = "";    $strContent_glass_erosion = "";    $strContent_glass_productivity = "";    $int_len = count($list_records);    for($i = 0 ; $i < $int_len ; $i++){        if ($i == $number_of_record - 1){            $strContent_maize_erosion .=  $list_records[$i]['maize_erosion'];            $strContent_maize_productivity .= $list_records[$i]['maize_productivity'];            $strContent_glass_erosion .=  $list_records[$i]['glass_erosion'];            $strContent_glass_productivity .= $list_records[$i]['glass_productivity'];        } else {            $strContent_maize_erosion .=  $list_records[$i]['maize_erosion'] . "|";            $strContent_maize_productivity .= $list_records[$i]['maize_productivity'] . "|";            $strContent_glass_erosion .=  $list_records[$i]['glass_erosion'] ."|";            $strContent_glass_productivity .= $list_records[$i]['glass_productivity'] ."|";        }    }    $content[0]->maize_erosion = $strContent_maize_erosion;    $content[0]->maize_productivity = $strContent_maize_productivity;        $content[0]->grass_productivity = $strContent_glass_productivity;    $content[0]->grass_erosion = $strContent_glass_erosion;    */        $type = 1;            /** CASE 2 : DATA => Return only the raw output APEX for Dought **/    $record_data = get_raw_output_data_from_apex_output($result_insert);    $content[0]->ID = $record_data->record_id;    $content[0]->name = $record_data->record_name;    $content[0]->grass_productivity = floatval($record_data->apex_output_yldg_glass);    $content[0]->grass_erosion = floatval($record_data->apex_output_y_glass);    $content[0]->maize_productivity = floatval($record_data->apex_output_yldg_maize);    $content[0]->maize_erosion = floatval($record_data->apex_output_y_maize);        $record_data_no_apex = get_raw_output_data_NO_APEX_output($result_insert);    //GDAL    $content[0]->gdal_elevation = floatval($record_data_no_apex->old_elevation);    $content[0]->gdal_fao_lgp = $record_data_no_apex->fao_lgp;    $content[0]->gdal_aridity_index = floatval($record_data_no_apex->aridity);    //AWC    $content[0]->awc_soil_profile_awc = floatval($record_data_no_apex->soil_profile_awc);            //PRECIP    $content[0]->climate_precip_jan = floatval($record_data_no_apex->climate_precip_jan);    $content[0]->climate_precip_feb = floatval($record_data_no_apex->climate_precip_feb);    $content[0]->climate_precip_mar = floatval($record_data_no_apex->climate_precip_mar);    $content[0]->climate_precip_apr = floatval($record_data_no_apex->climate_precip_apr);    $content[0]->climate_precip_may = floatval($record_data_no_apex->climate_precip_may);    $content[0]->climate_precip_jun = floatval($record_data_no_apex->climate_precip_jun);    $content[0]->climate_precip_jul = floatval($record_data_no_apex->climate_precip_jul);    $content[0]->climate_precip_aug = floatval($record_data_no_apex->climate_precip_aug);    $content[0]->climate_precip_sep = floatval($record_data_no_apex->climate_precip_sep);    $content[0]->climate_precip_oct = floatval($record_data_no_apex->climate_precip_oct);    $content[0]->climate_precip_nov = floatval($record_data_no_apex->climate_precip_nov);    $content[0]->climate_precip_dec = floatval($record_data_no_apex->climate_precip_dec);    $content[0]->climate_precip_annual = floatval($record_data_no_apex->climate_precip_annual);        //AVG_TEMP    $content[0]->climate_avg_temp_jan = floatval($record_data_no_apex->climate_avg_temp_jan);    $content[0]->climate_avg_temp_feb = floatval($record_data_no_apex->climate_avg_temp_feb);    $content[0]->climate_avg_temp_mar = floatval($record_data_no_apex->climate_avg_temp_mar);    $content[0]->climate_avg_temp_apr = floatval($record_data_no_apex->climate_avg_temp_apr);    $content[0]->climate_avg_temp_may = floatval($record_data_no_apex->climate_avg_temp_may);    $content[0]->climate_avg_temp_jun = floatval($record_data_no_apex->climate_avg_temp_jun);    $content[0]->climate_avg_temp_jul = floatval($record_data_no_apex->climate_avg_temp_jul);    $content[0]->climate_avg_temp_aug = floatval($record_data_no_apex->climate_avg_temp_aug);    $content[0]->climate_avg_temp_sep = floatval($record_data_no_apex->climate_avg_temp_sep);    $content[0]->climate_avg_temp_oct = floatval($record_data_no_apex->climate_avg_temp_oct);    $content[0]->climate_avg_temp_nov = floatval($record_data_no_apex->climate_avg_temp_nov);    $content[0]->climate_avg_temp_dec = floatval($record_data_no_apex->climate_avg_temp_dec);                    //MAX_TEMP    $content[0]->climate_max_temp_jan = floatval($record_data_no_apex->climate_max_temp_jan);    $content[0]->climate_max_temp_feb = floatval($record_data_no_apex->climate_max_temp_feb);    $content[0]->climate_max_temp_mar = floatval($record_data_no_apex->climate_max_temp_mar);    $content[0]->climate_max_temp_apr = floatval($record_data_no_apex->climate_max_temp_apr);    $content[0]->climate_max_temp_may = floatval($record_data_no_apex->climate_max_temp_may);    $content[0]->climate_max_temp_jun = floatval($record_data_no_apex->climate_max_temp_jun);    $content[0]->climate_max_temp_jul = floatval($record_data_no_apex->climate_max_temp_jul);    $content[0]->climate_max_temp_aug = floatval($record_data_no_apex->climate_max_temp_aug);    $content[0]->climate_max_temp_sep = floatval($record_data_no_apex->climate_max_temp_sep);    $content[0]->climate_max_temp_oct = floatval($record_data_no_apex->climate_max_temp_oct);    $content[0]->climate_max_temp_nov = floatval($record_data_no_apex->climate_max_temp_nov);    $content[0]->climate_max_temp_dec = floatval($record_data_no_apex->climate_max_temp_dec);                    //MIN_TEMP    $content[0]->climate_min_temp_jan = floatval($record_data_no_apex->climate_min_temp_jan);    $content[0]->climate_min_temp_feb = floatval($record_data_no_apex->climate_min_temp_feb);    $content[0]->climate_min_temp_mar = floatval($record_data_no_apex->climate_min_temp_mar);    $content[0]->climate_min_temp_apr = floatval($record_data_no_apex->climate_min_temp_apr);    $content[0]->climate_min_temp_may = floatval($record_data_no_apex->climate_min_temp_may);    $content[0]->climate_min_temp_jun = floatval($record_data_no_apex->climate_min_temp_jun);    $content[0]->climate_min_temp_jul = floatval($record_data_no_apex->climate_min_temp_jul);    $content[0]->climate_min_temp_aug = floatval($record_data_no_apex->climate_min_temp_aug);    $content[0]->climate_min_temp_sep = floatval($record_data_no_apex->climate_min_temp_sep);    $content[0]->climate_min_temp_oct = floatval($record_data_no_apex->climate_min_temp_oct);    $content[0]->climate_min_temp_nov = floatval($record_data_no_apex->climate_min_temp_nov);    $content[0]->climate_min_temp_dec = floatval($record_data_no_apex->climate_min_temp_dec);            if ($result_insert == 0){      return error_request_from_external_device('999', 'Error Link : Please check link');          } else {      return success_api($type,$content);    }  } catch (Exception $ex){    return error_request_from_external_device('990', $ex->getMessage());  }}
+<?php
+include_once 'apex_api_mobile_application.inc';
+include_once 'apex_api_mobile_application_defined.inc';
+/*
+ * Implemetn hook_permission()
+ */
+function apex_api_mobile_application_permission(){
+  return array(
+    'external device insert data from mobile to server' => array(
+          'title'=> t('external device insert data from mobile to server'),
+          'description' => t('external device insert data from mobile to server'),
+  ),
+    'external request export input data follow application' => array(
+          'title'=> t('external request export input data follow application'),
+          'description' => t('external request export input data follow application'),
+  ),
+  );
+}
+/**
+ * NGUYEN HAI THANH
+ * HOOK MENU
+ */
+function apex_api_mobile_application_menu(){
+  $items = array();
+
+  $items[APEX_ADMIN_TOOL] = array(
+          'title' => 'LandPKS',
+          'description' => 'LandPKS.',
+          'page callback' => 'display_thanhnh_functions',
+          'access arguments' => array('access content'),
+          'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items[APEX_ADMIN_TOOL_VIEW_DATA] = array(
+          'title' => 'LandPKS View Data',
+          'description' => 'LandPKS View Data.',
+          'page callback' => 'display_thanhnh_functions',
+          'access arguments' => array('access content'),
+          'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items[APEX_ADMIN_TOOL_VIEW_DATA_INSERT_FROM_MOBILE_LANDPKS] = array(
+          'title' => 'LandPKS InputData From Mobile',
+          'description' => 'LandPKS InputData From Mobile.',
+          'page callback' => 'drupal_get_form',
+          'page arguments' => array('list_landpks_input_data_from_mobile_form',1),
+          'access arguments' => array('administer user'),
+          'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items[APEX_ADMIN_TOOL_RUN_PYTHON_APEX] = array(
+          'title' => 'LandPKS Run Python Model',
+          'description' => 'LandPKS Run Python Model.',
+          'page callback' => 'drupal_get_form',
+          'page callback' => 'display_thanhnh_functions',
+          'access arguments' => array('access content'),
+          'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items[APEX_APIS_INSERT_DATA_FROM_MOBILE] = array(
+        'title' => 'LandPKS APIs Insert Data',
+        'description' => 'LandPKS APIs Insert Data.',
+        'page callback' => 'api_insert_landpks_input_data_from_mobile_apps',
+        'access arguments' => array('external device insert data from mobile to server'),
+        'type' => MENU_CALLBACK, 
+  );
+
+  $items[APEX_APIS_INSERT_DATA_FROM_MOBILE_RHM] = array(
+        'title' => 'RHM APIs Insert Data',
+        'description' => 'RHM APIs Insert Data.',
+        'page callback' => 'api_insert_rhm_input_data_from_mobile_apps',
+        'access arguments' => array('external device insert data from mobile to server'),
+        'type' => MENU_CALLBACK, 
+  );
+  
+  $items[APEX_APIS_TEST_SERVER] = array(
+        'title' => 'LandPKS APIs Test Server',
+        'description' => 'LandPKS APIs Test Server.',
+        'page callback' => 'api_test_landpks_server',
+        'access arguments' => array('external device insert data from mobile to server'),
+        'type' => MENU_CALLBACK, 
+  );
+  
+  $items[APEX_APIS_REQUEST_GDAL_DATA] = array(
+        'title' => 'GDAL APIs Request Data',
+        'description' => 'GDAL APIs Request Data.',
+        'page callback' => 'api_request_gdal_data_of_plot',
+        'access arguments' => array('external device insert data from mobile to server'),
+        'type' => MENU_CALLBACK, 
+  );
+  
+  
+  $items[APEX_APIS_REQUEST_RHM_DATA] = array(
+        'title' => 'RHM APIs Request Data',
+        'description' => 'RHM APIs Request Data.',
+        'page callback' => 'api_request_rhm_plots_export_data',
+        'access arguments' => array('external request export input data follow application'),
+        'type' => MENU_CALLBACK, 
+  );
+  
+  $items[APEX_APIS_REQUEST_LANDPKS_DATA] = array(
+        'title' => 'LandPKS APIs Request Data',
+        'description' => 'LandPKS APIs Request Data.',
+        'page callback' => 'api_request_landpks_plots_export_data',
+        'access arguments' => array('external request export input data follow application'),
+        'type' => MENU_CALLBACK, 
+  );
+
+  $items[APEX_FORM_REQUEST_EXPORT_INPUT_DATA] = array(
+          'title' => 'Request Data Export',
+          'description' => 'Request Data Export.',
+          'page callback' => 'drupal_get_form',
+          'page arguments' => array('form_request_export_data_for_rhm_landpks_application_form',1),
+          'access arguments' => array('external request export input data follow application'),
+          'type' => MENU_NORMAL_ITEM,
+  );
+  
+  $items[APEX_FORM_REQUEST_EXPORT_INPUT_DATA_RESULT] = array(
+          'title' => 'Export Data',
+          'description' => 'Export Data.',
+          'page callback' => 'action_export_input_data_application',
+          'access arguments' => array('external request export input data follow application'),
+          'type' => MENU_CALLBACK,
+	);
+  
+  return $items;
+}
+/*************************************************************************************************/
+/**************************************HOOK FORM**************************************************/
+/*************************************************************************************************/
+function form_request_export_data_for_rhm_landpks_application_form($form, &$form_state){
+   global $user;
+   $form['recorder_name'] = array(
+           '#type' => 'textfield',
+           '#description' => t('Input Recorder Name in plot you want to get'),
+           '#title' => t('Enter your recorder name :'),
+           '#default_value' => $user->mail,
+           '#size' => 50,
+           '#maxlength' => 250,
+   );
+   
+   $form['data_export'] = array(
+           '#title' => t('<b>Export ALL plots in the database (download may take several minutes</b>)') ,
+           '#type' => 'checkbox',
+           '#description' => t(''),
+           '#default_value' => 0,
+           '#attributes' => array('onclick' => 'if (document.getElementById("edit-data-export").value == 0){
+             										document.getElementById("edit-data-export").value = 1; 
+             										document.getElementsByClassName("form-item form-type-textfield form-item-recorder-name")[0].style.visibility = "visible";
+             										document.getElementById("edit-recorder-name").disabled = false; 
+             										document.getElementById("edit-recorder-name").focus();
+             										
+												} else {
+													document.getElementById("edit-recorder-name").value = ""; 
+													document.getElementById("edit-data-export").value = 0; 
+													document.getElementById("edit-recorder-name").disabled = true;
+													document.getElementsByClassName("form-item form-type-textfield form-item-recorder-name")[0].style.visibility = "hidden";
+												}')
+   );
+   
+   $options = array(
+      // 1 => 'ALL',
+       2 => 'LandInfo',
+       3 => 'LandCover',
+       4 => 'Metadata for LandInfo',
+       5 => 'Metadata for LandCover',
+   );
+   $form['application'] = array(
+       '#type' => 'select',
+       '#description' => t('Type of Data Export'),
+       '#default_value' => 3,
+       '#title' => t('Type of Data Export'),
+       '#options' => $options,
+       '#maxlength' => 80,
+       '#attributes' => array('onchange' => 'if (document.getElementById("edit-application").value == 3) {
+       												document.getElementById("edit-data-visualization").style.visibility = "visible"; 
+											 } else {
+											 		document.getElementById("edit-data-visualization").style.visibility = "hidden";}
+											 '),
+    );
+   
+   $form['submit'] = array(
+      '#value' => t('Export'),
+      '#type' => 'submit',
+      '#title' => t('Export'),
+      '#submit' => array('form_request_export_data_for_rhm_landpks_application_form_submit'),
+   );
+   
+   //if (isVisile($user)==true){
+     $form['data_visualization'] = array(
+        '#value' => t('Data Visualization'),
+        '#type' => 'submit',
+        '#title' => t('Data Visualization'),
+        '#submit' => array('form_request_export_data_for_rhm_landpks_application_form_submit_visualization'),
+     );
+   //}
+   
+   return $form;
+}
+
+/**
+ * NGUYEN HAI THANH
+ * Enter description here ...
+ * @param unknown_type $form
+ * @param unknown_type $form_state
+ */
+function form_request_export_data_for_rhm_landpks_application_form_submit_visualization(&$form, &$form_state){
+  global $user; 
+  if (!$user->uid) {
+      drupal_set_message("This message is only visible for not-logged-in users.","error");
+      drupal_exit();
+  } 
+  
+  $recorder_name = $form_state['values']['recorder_name'];
+  if ($form_state['values']['data_export'] == 1){
+    $recorder_name = "";
+  }
+  /* Request to Google Server API to get newest recorders == call python code*/
+  if ($recorder_name <> "" && !isEmpty($recorder_name)){
+      $last_updated_date = "none";
+      call_Python_Sync_RHM_Data($recorder_name, $last_updated_date);
+  }
+  /* End */
+  $application = $form_state['values']['application'];
+  $data = get_list_RHM_record_information($recorder_name);
+  $csv_rul = save_to_csv_file($data,"abc");
+  $form_state['redirect'] = URL_SHINY_RHM_CHARTS . "CSV_URL=$csv_rul";
+ 
+}
+/**
+ * NGUYEN HAI THANH
+ * Enter description here ...
+ * @param unknown_type $form
+ * @param unknown_type $form_state
+ */
+function form_request_export_data_for_rhm_landpks_application_form_submit($form, &$form_state){
+  
+  global $user; 
+  if (!$user->uid) {
+      drupal_set_message("This message is only visible for not-logged-in users.","error");
+      drupal_exit();
+  }
+  
+  $recorder_name = $form_state['values']['recorder_name'];
+  $application = $form_state['values']['application'];
+  if ($form_state['values']['data_export'] == 1){
+    $recorder_name = "";
+  }
+  
+  /* Request to Google Server API to get newest recorders == call python code*/
+  if ($recorder_name <> "" && !isEmpty($recorder_name)){
+      $last_updated_date = "none";
+      call_Python_Sync_RHM_Data($recorder_name, $last_updated_date);
+  }
+  /* End */
+  
+  $form_state['redirect'] = "admin/APEX/View_Data/data_export/result/" . $recorder_name . "/" . $application;
+}
+/**
+ * NGUYEN HAI THANH
+ * Enter description here ...
+ */
+function action_export_input_data_application(){
+   $recorder_name = arg(5);
+   $application = arg(6);
+   if ($application == 1){
+      $file_name = "Export_LandCover_LandInfo_Data.csv";
+      export_landpks_records_data_by_CSV_file($recorder_name);
+      export_rhm_records_data_by_CSV_file($recorder_name,$file_name);    
+   } else if ($application == 2){
+      export_landpks_records_data_by_CSV_file($recorder_name);
+   } else if ($application == 3){
+      $file_name = "Export_LandCover_Data.csv";
+      export_rhm_records_data_by_CSV_file($recorder_name,$file_name);
+   } else if ($application == 4) {
+      //export_gdal_data_by_CSV_file(null, null, $recorder_name, null);
+      /* Export metadata for LandInfo */
+      $file_name = "Export_METADATA_LandInfo.csv";
+      export_Metadata_by_CSV_file($recorder_name,$file_name,"LANDINFO");
+   } else if ($application == 5) {
+      /* Export metadata for LandCover */
+      $file_name = "Export_METADATA_LandCover.csv";
+      export_Metadata_by_CSV_file($recorder_name,$file_name,"LANDCOVER");
+   } 
+}
+/*************************************************************************************************/
+/**************************************HOOK FORM**************************************************/
+/*************************************************************************************************/
+
+function api_test_landpks_server(){
+  echo "Server is OK";
+}
+
+function test()
+{
+  $dbName = $_SERVER["DOCUMENT_ROOT"] . DATABASE_PATH_FILE;
+  //echo $dbName;
+  if (!file_exists($dbName)){
+    return error_request_from_external_device(99, 'Database is not existed');
+  }
+  $db = new PDO("odbc:DRIVER={Microsoft Access Driver (*.mdb)}; DBQ=$dbName; Uid=; Pwd=;");
+
+  $sql  = "SELECT MU_GLOBAL FROM HWSD_DATA";
+
+  $result = $db->query($sql);
+  $row = $result->fetch();
+  return success_api();
+
+  $output = exec('cd Python_APEX && python C:\xampp\htdocs\APEX\Python_APEX\test.py');
+  $output = exec('python C:\xampp\htdocs\APEX\Python_APEX\6_OPERATIONS_PROJECT\main_OPERATION.py -rm');
+  echo $output;
+}
+/**
+ * NGUYEN HAI THANH
+ * Enter description here ...
+ * @param unknown_type $form
+ * @param unknown_type $form_state
+ */
+function list_landpks_input_data_from_mobile_form($form, &$form_state){
+  /* Checking security */
+  global $user;
+  $admin = user_access('administer users');
+  if (!$admin){
+    drupal_goto('user');
+    drupal_session_destroy_uid($user->uid);
+  }
+  /* End Check */
+  $header = array(
+	        'name' => array('field' => 'name', 'data' => t('Name')),
+			'latitude' => array('field' => 'latitude', 'data' => t('Latitude')),
+		    'longitude' => array('field' => 'longitude', 'data' => t('Longitude')),
+		    'insert_normal_time' => array('field' => 'insert_normal_time', 'data' => t('Insert Time')),
+		    'ip_address' => array('field' => 'ip_address', 'data' => t('IP Address')),
+		    'view' => array('field' => 'view', 'data' => t('View')), 	
+		    'edit' => array('field' => 'edit', 'data' => t('Edit')),
+			'run' => array('field' => 'run', 'data' => t('Run')),
+  );
+
+  $option = get_all_landpks_input_data_from_mobile_order_by(1);
+
+  $form['content_list_price_plan'] = array(
+	       '#type' => 'tableselect',
+		   '#options' => $option,
+           '#header' => $header,
+           '#empty' => t('There is no eligible data'),
+           '#caption' => t('Danh s&#225;ch nh&#243;m &#273;&#7875; ki&#7875;m so&#225;t'),
+  );
+
+  $form['back'] = array(
+	    '#type' => 'link',
+	    '#href' => '',
+		'#title' => t('Back and Cancel'),
+  );
+
+  return $form;
+
+}
+
+/**
+ * NGUYEN HAI THANH
+ */
+function api_request_landpks_plots_export_data(){
+try{
+    $export_type = $_GET['export_type'];
+    $export_type = trim($export_type);
+    if (isEmpty($export_type)){
+      return error_request_from_external_device("101", "Should be select exportation type");
+    }
+    
+    if (strtoupper($export_type) == 'CSV'){  
+      $record_name = $_GET['recorder_name'];
+      $record_name = trim($record_name);
+      $record_name = standard_string_prevent_sql_injection($record_name);
+      //echo "Boston - America";
+      export_landpks_records_data_by_CSV_file($record_name);
+    } else if (strtoupper($export_type) == 'JSON') {
+      /** Will be update later **/
+    } else {
+      
+    }
+    
+  } catch (Exception $ex){
+    return error_request_from_external_device('990', $ex->getMessage());
+  }
+}
+
+/*
+ * NGUYEN HAI THANH
+ */
+function api_request_rhm_plots_export_data(){
+  try{
+    $export_type = $_GET['export_type'];
+    $export_type = trim($export_type);
+    if (isEmpty($export_type)){
+      return error_request_from_external_device("101", "Should be select exportation type");
+    }
+    
+    if (strtoupper($export_type) == 'CSV'){  
+      $record_name = $_GET['recorder_name'];
+      $record_name = trim($record_name);
+      $record_name = standard_string_prevent_sql_injection($record_name);
+      $file_name = "Export_LandCover_Data.csv";
+      export_rhm_records_data_by_CSV_file($record_name,$file_name);
+    } else if (strtoupper($export_type) == 'JSON') {
+      /** Will be update later **/
+    } else {
+      
+    }
+    
+  } catch (Exception $ex){
+    return error_request_from_external_device('990', $ex->getMessage());
+  }
+}
+
+/**
+ * NGUYEN HAI THANH
+ * Enter description here ...
+ */
+function api_request_gdal_data_of_plot(){
+  try{
+    $export_type = $_GET['export_type'];
+    $export_type = trim($export_type);
+    if (isEmpty($export_type)){
+      return error_request_from_external_device("101", "Should be select exportation type");
+    }
+    
+    if (strtoupper($export_type) == 'CSV'){
+      $from_record_id = $_GET['from_record_id'];
+      $from_record_id = trim($from_record_id);
+      $from_record_id = standard_string_prevent_sql_injection($from_record_id);
+      
+      $to_record_id = $_GET['to_record_id'];
+      $to_record_id = trim($to_record_id);
+      $to_record_id = standard_string_prevent_sql_injection($to_record_id);
+      
+      $record_name = $_GET['record_name'];
+      $record_name = trim($record_name);
+      $record_name = standard_string_prevent_sql_injection($record_name);
+      
+      $country_code = $_GET['country_code'];
+      $country_code = trim($country_code);
+      $country_code = standard_string_prevent_sql_injection($country_code);
+      
+      export_gdal_data_by_CSV_file($from_record_id, $to_record_id, $record_name, $country_code);
+    } else if (strtoupper($export_type) == 'JSON') {
+      /** Will be update later **/
+    } else {
+      
+    }
+    
+  } catch (Exception $ex){
+    return error_request_from_external_device('990', $ex->getMessage());
+  }    
+}
+/**
+ * NGUYEN HAI THANH
+ * Enter description here ...
+ * @param unknown_type $record_name
+ */
+function export_landpks_records_data_by_CSV_file($record_name){
+  $data = get_list_LandPKS_record_information($record_name);
+  header("Content-type: application/csv");
+  header("Content-Disposition: attachment; filename=\"Export_LandInfo_Data.csv\"");
+  header("Pragma: no-cache");
+  header("Expires: 0");
+  $handle = fopen('php://output', 'w');
+  fputcsv($handle, array(
+       'name','test_plot','latitude','longitude','modified_date','land_cover','grazed','grazing','flooding','slope','slope_shape','bedrock_depth','stopped_digging_depth',
+       'rock_fragment_for_soil_horizon_1','rock_fragment_for_soil_horizon_2','rock_fragment_for_soil_horizon_3','rock_fragment_for_soil_horizon_4',
+       'rock_fragment_for_soil_horizon_5','rock_fragment_for_soil_horizon_6','rock_fragment_for_soil_horizon_7',
+       'texture_for_soil_horizon_1','texture_for_soil_horizon_2','texture_for_soil_horizon_3','texture_for_soil_horizon_4','texture_for_soil_horizon_5',
+       'texture_for_soil_horizon_6','texture_for_soil_horizon_7','surface_cracking','surface_salt','landscape_north_photo_url',
+       'landscape_east_photo_url','landscape_south_photo_url','landscape_west_photo_url','soil_pit_photo_url','soil_samples_photo_url','max_temp_January (C)', 'max_temp_February (C)', 'max_temp_March (C)',
+       'max_temp_April (C)','max_temp_May (C)', 'max_temp_June (C)', 'max_temp_July (C)','max_temp_August (C)', 'max_temp_September (C)', 'max_temp_October (C)','max_temp_November (C)','max_temp_December (C)',
+       'min_temp_January (C)','min_temp_February (C)','min_temp_March (C)','min_temp_April (C)','min_temp_May (C)','min_temp_June (C)','min_temp_July (C)','min_temp_August (C)','min_temp_September (C)',
+       'min_temp_October (C)','min_temp_November (C)','min_temp_December (C)','precipitation_January (mm)','precipitation_February (mm)','precipitation_March (mm)','precipitation_April (mm)',
+       'precipitation_May (mm)','precipitation_June (mm)','precipitation_July (mm)','precipitation_August (mm)','precipitation_September (mm)','precipitation_October (mm)','precipitation_November (mm)','precipitation_December (mm)',
+       'precipitation_annual (mm)', 'soil_profile_AWC (cm)', 'Elevation (m)',' FAO Length of Growing Period (days/year)','Aridity Index','Notes'
+    ));
+  foreach ($data as $job) {
+        fputcsv($handle,array($job->name,$job->test_plot,$job->latitude,$job->longitude,$job->insert_normal_time,$job->land_cover,
+                              $job->grazed,$job->grazing,$job->flooding,$job->slope,$job->slope_shape,$job->bedrock_depth,$job->stopped_digging_depth,$job->rock_fragment_for_soil_horizon_1,$job->rock_fragment_for_soil_horizon_2,
+                              $job->rock_fragment_for_soil_horizon_3,$job->rock_fragment_for_soil_horizon_4, $job->rock_fragment_for_soil_horizon_5, $job->rock_fragment_for_soil_horizon_6,$job->rock_fragment_for_soil_horizon_7,
+                              $job->texture_for_soil_horizon_1,
+                              $job->texture_for_soil_horizon_2, $job->texture_for_soil_horizon_3, $job->texture_for_soil_horizon_4, $job->texture_for_soil_horizon_5, $job->texture_for_soil_horizon_6, $job->texture_for_soil_horizon_7,
+                              $job->surface_cracking,$job->surface_salt,$job->landscape_north_photo_url,
+                              $job->landscape_east_photo_url,$job->landscape_south_photo_url,$job->landscape_west_photo_url,$job->soil_pit_photo_url,$job->soil_samples_photo_url,$job->climate_max_temp_jan,$job->climate_max_temp_feb,$job->climate_max_temp_mar,$job->climate_max_temp_apr,
+                              $job->climate_max_temp_may,$job->climate_max_temp_jun,$job->climate_max_temp_jul,$job->climate_max_temp_aug,$job->climate_max_temp_sep,$job->climate_max_temp_oct,
+                              $job->climate_max_temp_nov,$job->climate_max_temp_dec,$job->climate_min_temp_jan,$job->climate_min_temp_feb, $job->climate_min_temp_mar, $job->climate_min_temp_apr,
+                              $job->climate_min_temp_may,$job->climate_min_temp_jun,$job->climate_min_temp_jul,$job->climate_min_temp_aug,$job->climate_min_temp_sep,$job->climate_min_temp_oct,
+                              $job->climate_min_temp_nov,$job->climate_min_temp_dec,$job->climate_precip_jan,$job->climate_precip_feb,$job->climate_precip_mar,$job->climate_precip_apr,$job->climate_precip_may,
+                              $job->climate_precip_jun,$job->climate_precip_jul,$job->climate_precip_aug,$job->climate_precip_sep,$job->climate_precip_oct,$job->climate_precip_nov,$job->climate_precip_dec,
+                              $job->climate_precip_annual,$job->soil_profile_awc,$job->old_elevation,$job->fao_lgp_value,$job->aridity,$job->notes
+                        )
+               );
+  }
+  fclose($handle);
+}
+
+/**
+ * Export Metadata RHM LandCover Application
+ * Enter description here ...
+ * @param unknown_type $record_name
+ * @param unknown_type $file_name
+ */
+function export_Metadata_by_CSV_file($record_name,$file_name,$application_name){
+  header("Content-type: application/csv");
+  header("Content-Disposition: attachment; filename=\"$file_name\"");
+  header("Pragma: no-cache");
+  header("Expires: 0");
+  $handle = fopen('php://output', 'w');
+  if ($application_name == "LANDCOVER"){
+    fputcsv($handle, array('COLUMN','HEADER','DESCRIPTION'));
+    fputcsv($handle, array('A','name','Name of the plot where data was collected'));
+    fputcsv($handle, array('B','transect','Direction of transect recorded (N, S, E, W)'));
+    fputcsv($handle, array('C','segment','Segment of each transect where observations are recorded (5 segments recorded every 5 meters of each transect)'));
+    fputcsv($handle, array('D','date','Time stamp for successful upload of data collected'));
+    fputcsv($handle, array('E','canopy_height','Header for each height class for vegetation height observations for each segment'));
+    fputcsv($handle, array('F','canopy_gap','Observed canopy gaps >1m; TRUE = canopy gap present, FALSE = no canopy gap present '));
+    fputcsv($handle, array('G','basal_gap','Observed basal gaps >1m; TRUE = basal gap present, FALSE = no basal gap present '));
+    fputcsv($handle, array('H','species_1_count','Observed count of species 1 (species determined by user on plot by plot basis)'));
+    fputcsv($handle, array('I','species_2_count','Observed count of species 2 (species determined by user on plot by plot basis)'));
+    fputcsv($handle, array('J','species_list','Documented species names of interest (determined by user)'));
+    fputcsv($handle, array('K','stick_sgement_1','All observed cover elements at segment 1 of the respective transect'));
+    fputcsv($handle, array('L','stick_segment_2','All observed cover elements at segment 2 of the respective transect'));
+    fputcsv($handle, array('M','stick_segment_3','All observed cover elements at segment 3 of the respective transect'));
+    fputcsv($handle, array('N','stick_segment_4','All observed cover elements at segment 4 of the respective transect'));
+    fputcsv($handle, array('O','stick_segment_5','All observed cover elements at segment 5 of the respective transect'));
+    fputcsv($handle, array('P','bare_total','Total count of all bare ground observations for the respective transect'));
+    fputcsv($handle, array('Q','trees_total','Total count of all trees observations for the respective transect'));
+    fputcsv($handle, array('R','shrubs_total','Total count of all shrubs observations for the respective transect'));
+    fputcsv($handle, array('S','sub_shrubs_total','Total count of all sub-shrubs observations for the respective transect'));
+    fputcsv($handle, array('T','perennial_grasses_total','Total count of all perennial grass observations for the respective transect'));
+    fputcsv($handle, array('U','annuals_total','Total count of all annual grasses and forbs observations for the respective transect'));
+    fputcsv($handle, array('V','herb_litter_total','Total count of all herbaceous litter observations for the respective transect'));
+    fputcsv($handle, array('W','wood_litter_total','Total count of all woody litter observations for the respective transect'));
+    fputcsv($handle, array('X','rock_total','Total count of all rock fragment observations for the respective transect'));
+    fputcsv($handle, array('Y','plot_total_cover','Percent of ground covered by plants, litter or rock (calculation = # points of any cover type/total number of points)'));
+    fputcsv($handle, array('Z','plot_total_bare_ground','Percent of ground not covered by plants, litter and rock (calculation = # points bare ground/total # points)'));
+    fputcsv($handle, array('AA','plot_total_foliar_cover','Percent cover of all plant elements combined (calculation = # points with any plant/total # points)'));
+    fputcsv($handle, array('AB','plot_total_plant_cover/composition_tree','Percent cover of trees (calculation = # points with trees/total # points)'));
+    fputcsv($handle, array('AC','plot_total_plant_cover/composition_shrub','Percent cover of shrubs (calculation = # points with shrubs/total # points)'));
+    fputcsv($handle, array('AD','plot_total_plant_cover/composition_sub_shrub','Percent cover of sub-shrubs (calculation = # points with sub-shrubs/total # points)'));
+    fputcsv($handle, array('AE','plot_total_plant_cover/composition_perennial_grasses','Percent cover of perennial grasses (calculation = # points with perennial /total # points)'));
+    fputcsv($handle, array('AF','plot_total_plant_cover/composition_annuals','Percent cover of annual grasses and forbs (calculation = # points with annual grasses and forbs/total # points)'));
+    fputcsv($handle, array('AG','plot_total_canopy_height_smaller_10_cm','Percent of plants in <10 cm height class (calculation = # points in <10cm height class/total # points)'));
+    fputcsv($handle, array('AH','plot_total_canopy_height_10_50_cm','Percent of plants in 10-50 cm height class (calculation = # points in 10-50 cm height class/total # points)'));
+    fputcsv($handle, array('AI','plot_total_canopy_height_50cm_1m','Percent of plants in 50cm-1m height class (calculation = # points in 50cm-1m height class/total # points)'));
+    fputcsv($handle, array('AJ','plot_total_canopy_height_1m_2m','Percent of plants in 1-2m height class (calculation = # points in 1-2m height class/total # points)'));
+    fputcsv($handle, array('AK','plot_total_canopy_height_2m_3m','Percent of plants in 2-3m height class (calculation = # points in 2-3m height class/total # points)'));
+    fputcsv($handle, array('AL','plot_total_canopy_height_greater_3m','Percent of plants in >3m height class (calculation = # points in >3m height class/total # points)'));
+    fputcsv($handle, array('AM','plot_total_canopy_gap_percentage','Percent of ground occurring in large gaps (>1m) between plant canopies (calculation = # points with canopy gap/total # points)'));
+    fputcsv($handle, array('AN','plot_total_basal_gap_percentage','Percent of ground occurring in large gaps (>1m) between plant bases (calculation = # points with basal gap/total # points)'));
+    fputcsv($handle, array('AO','plot_total_species_1_density','The number of individual plant species 1 per plot (calculated per m squared; calculation = # individual plants observed of the species of interest/per square m in the sample area)'));
+    fputcsv($handle, array('AP','plot_total_species_2_density','The number of individual plant species 2 per plot (calculated per m squared; calculation = # individual plants observed of the species of interest/per square m in the sample area)'));
+  } else if ($application_name == "LANDINFO"){
+    fputcsv($handle, array('COLUMN','HEADER','DESCRIPTION','EXTERNAL DATA SOURCES'));
+    fputcsv($handle, array('A','name','Name of the plot where data was collected'));
+    fputcsv($handle, array('B','test_plot','Identifies plot as test plot (deleted from database after 30 days from upload) or real plot (permanant record in database), TRUE = test plot, FALSE = real plot.'));
+    fputcsv($handle, array('C','latitude','Latitude of plot\'s geographic location in decimal degrees.'));
+    fputcsv($handle, array('D','longitude','Longitude of plot\'s geographic location in decimal degrees.'));
+    fputcsv($handle, array('E','modified_date','Time stamp for successful upload of data collected'));
+    fputcsv($handle, array('F','land_cover','Observed land cover. Land cover selections are a modified version of NRCS and WOCAT classes'));
+    fputcsv($handle, array('G','grazed','Local knowledge of grazing. TRUE = yes, this land has been grazed by livestock in the last year; FALSE = no, this land has not been grazed in the last year.'));
+    fputcsv($handle, array('H','grazing','IF grazed = TRUE, THEN type of animals that are grazing listed (any combination of LIVESTOCK, GOATS, SHEEP, WILDLIFE).'));
+    fputcsv($handle, array('I','flooding','Local knowledge of flooding. TRUE = yes, this land has flooded for more than 2 weeks in the last year; FALSE = no, this land has not been flooded for more than 2 weeks in the last year.'));
+    fputcsv($handle, array('J','slope','Slope in degrees. Option for either discrete value (using clinometer on phone) or slope classes (using icons on phone).'));
+    fputcsv($handle, array('K','slope_shape','Shape of both downslope and crosslope (linear, convex, concave)'));
+    fputcsv($handle, array('L','bedrock_depth','If digging stopped due to reaching bedrock, level at which digging stopped (in cm).'));
+    fputcsv($handle, array('M','stopped_digging_depth','If digging stopped due to any reason other than reaching bedrock, level at which digging stopped (in cm).'));
+    fputcsv($handle, array('N - T','rock_fragment_for_soil_horizon','Percent of soil containing rock fragments (fragments > 5mm diameter)'));
+    fputcsv($handle, array('U - AA','texture_for_soil_horizon','Texture of soil for each layer. Soil texture determined by hand.'));
+    fputcsv($handle, array('AB','surface_cracking','Deep, vertical cracks visible in the soil profile. TRUE = deep, vertical cracks visible; FALSE = no deep vertical cracks visible'));
+    fputcsv($handle, array('AC','surface_salt','Salt observed at the soil surface. TRUE = salt observed at the soil surface; FALSE = no salt observed at the soil surface'));
+    fputcsv($handle, array('AD','landscape_north_photo_url','URL link for North landscape photo'));
+    fputcsv($handle, array('AE','landscape_east_photo_url','URL link for East landscape photo'));
+    fputcsv($handle, array('AF','landscape_south_photo_url','URL link for South landscape photo'));
+    fputcsv($handle, array('AG','landscape_west_photo_url','URL link for West landscape photo'));
+    fputcsv($handle, array('AH','soil_pit_photo_url','URL link for soil pit photo'));
+    fputcsv($handle, array('AI','soil_samples_photo_url','URL link for soil samples photo'));
+    fputcsv($handle, array('AJ - AU','max_temp_Month (C)','Maximum temperature (C) recorded for month k. A value of -999 indicates that these data are not available for this location.','All weather summary data (monthly max. temp., monthly min. temp, monthly precip., and annual precip.) are taken from the CRU TS dataset. The values provided by Land Info are average values for the time period of 1971-2013. The spatial resolution of the data is 0.5° x 0.5° (approx 55 km x 55 km near the equator). (datasets available at: http://www.cru.uea.ac.uk/cru/data/hrg/)'));
+    fputcsv($handle, array('AV - BG','min_temp_Month (C)','Minimum temperature(C) recorded for month k. A value of -999 indicates that these data are not available for this location.','All weather summary data (monthly max. temp., monthly min. temp, monthly precip., and annual precip.) are taken from the CRU TS dataset. The values provided by Land Info are average values for the time period of 1971-2013. The spatial resolution of the data is 0.5° x 0.5° (approx 55 km x 55 km near the equator). (datasets available at: http://www.cru.uea.ac.uk/cru/data/hrg/)'));
+    fputcsv($handle, array('BH - BS','precipitation_Month (mm)','Average recorded precipitation (mm) for month k. A value of -999 indicates that these data are not available for this location.','All weather summary data (monthly max. temp., monthly min. temp, monthly precip., and annual precip.) are taken from the CRU TS dataset. The values provided by Land Info are average values for the time period of 1971-2013. The spatial resolution of the data is 0.5° x 0.5° (approx 55 km x 55 km near the equator). (datasets available at: http://www.cru.uea.ac.uk/cru/data/hrg/)'));
+    fputcsv($handle, array('BT','precipitation_annual (mm)','Average recorded precipitation (mm) for year. A value of -999 indicates that these data are not available for this location.','All weather summary data (monthly max. temp., monthly min. temp, monthly precip., and annual precip.) are taken from the CRU TS dataset. The values provided by Land Info are average values for the time period of 1971-2013. The spatial resolution of the data is 0.5° x 0.5° (approx 55 km x 55 km near the equator). (datasets available at: http://www.cru.uea.ac.uk/cru/data/hrg/)'));
+    fputcsv($handle, array('BU','soil_profile_AWC (cm)','Potential plant available water storage capacity in the recorded soil profile (cm). A value of -999 indicates that these data are not available for this location.','AWC  estimates were generated with the ROSETTA pedotransfer functions, using the user’s soil texture classes as inputs. Reference: Schaap MG, Leij FJ, van Genuchten MT. 2001. ROSETTA: A computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251: 163-176.'));
+    fputcsv($handle, array('BV','Elevation (m)','Elevation (m) of the recorded plot. A value of -999 indicates that these data are not available for this location.','The elevation estimate is from a 1 km grid from WorldClim. http://www.worldclim.org/current'));
+    fputcsv($handle, array('BW','FAO Length of Growing Period (days/year).','Length of growing period (LGP) is defined as the number of days during the year when average temperatures are greater than or equal to 5C (Tmean >=5 C) and precipitation plus moisture stored in the soil exceed half the potential evapotranspiration (P>0.5PET). A value of -999 indicates that these data are not available for this location.','The LGP data is from a 1 km grid produced by the FAO Global Agroecological Zones (GAEZ). http://gaez.fao.org/Main.html#'));
+    fputcsv($handle, array('BX','Aridity Index','Aridity index for the plot area. Aridity index is defined as the mean annual precipitation divided by mean annual evapotranspiration. A value of -999 indicates that these data are not available for this location.','The aridity index is from a 1 km resolution grid from the CGIAR consortium for spatial information. http://www.cgiar-csi.org/data/global-aridity-and-pet-database'));
+    fputcsv($handle, array('BY','Notes','Additional notes for the specific plot'));
+  }
+  fclose($handle);
+}
+
+
+/**
+ * EXPORT RHM CSV FUNTION:
+ * Enter description here ...
+ * @param unknown_type $record_name
+ */
+function export_rhm_records_data_by_CSV_file($record_name,$file_name){
+  $data = get_list_RHM_record_information($record_name);
+  /* Build CSV File in Sever */
+  /* End Build */
+  header("Content-type: application/csv");
+  header("Content-Disposition: attachment; filename=\"$file_name\"");
+  header("Pragma: no-cache");
+  header("Expires: 0");
+  $handle = fopen('php://output', 'w');
+  fputcsv($handle, array(
+       'name','date','transect','segment','canopy_height','canopy_gap','basal_gap',
+       'stick_segment_1','stick_segment_2','stick_segment_3','stick_segment_4','stick_segment_5','bare_total','trees_total','shrubs_total','sub_shrubs_total',
+       'perennial_grasses_total','annuals_total','herb_litter_total','wood_litter_total','rock_total','dominant_woody_species','dominant_nonwoody_species','species_of_interest_1','species_of_interest_1_count','species_of_interest_2','species_of_interest_2_count','plot_total_cover','plot_total_bare_ground','plot_total_foliar_cover','plot_total_plant_cover/composition_tree',
+       'plot_total_plant_cover/composition_shrub','plot_total_plant_cover/composition_sub_shrub','plot_total_plant_cover/composition_perennial_grasses','plot_total_plant_cover/composition_annuals','plot_total_plant_cover/composition_herb_litter','plot_total_plant_cover/composition_wood_litter','plot_total_plant_cover/composition_rock','plot_total_canopy_height_smaller_10_cm',
+       'plot_total_canopy_height_10_50_cm','plot_total_canopy_height_50cm_1m','plot_total_canopy_height_1m_2m','plot_total_canopy_height_2m_3m','plot_total_canopy_height_greater_3m','plot_total_canopy_gap_percentage','plot_total_basal_gap_percentage',
+       'plot_total_species_1_density','plot_total_species_2_density' 
+    ));
+  foreach ($data as $job) {
+        fputcsv($handle,array($job->name,$job->date,$job->transect,$job->segment,$job->canopy_height,$job->canopy_gap,$job->basal_gap,
+                              $job->stick_segment_0,$job->stick_segment_1,$job->stick_segment_2,
+                              $job->stick_segment_3,$job->stick_segment_4, $job->bare_total, $job->trees_total,$job->shrubs_total,$job->sub_shrubs_total,$job->perennial_grasses_total,
+                              $job->annuals_total,$job->herb_litter_total,$job->wood_litter_total,$job->rock_total,$job->dominant_woody_species,$job->dominant_nonwoody_species,
+                              $job->species_of_interest_1,$job->species_of_interest_1_count,$job->species_of_interest_2,$job->species_of_interest_2_count,
+                              $job->veg_cover_percent,$job->bare_ground_1_percent,$job->foliar_cover,
+                              $job->tree,$job->shrubs,$job->sub_shrubs,$job->perennial_grasses,$job->annual,$job->herb_litter,$job->wood_litter,$job->rock,$job->canopy_height_smaller_10_cm,$job->canopy_height_10_50_cm,
+                              $job->canopy_height_50cm_1m,$job->canopy_height_1m_2m,$job->canopy_height_2m_3m,$job->canopy_height_greater_3m,$job->canopy_gap_percent,
+                              $job->basal_gap_percent,$job->species_1_density_percent,$job->species_2_density_percent
+                        )
+               );
+  }
+  fclose($handle);
+}
+/**
+ * MAIN FUNCTION : Export GDAL Data to CSV File
+ * Enter description here ...
+ * @param unknown_type $from_record_id
+ * @param unknown_type $to_record_id
+ * @param unknown_type $record_name
+ * @param unknown_type $country_code
+ */
+function export_gdal_data_by_CSV_file($from_record_id,$to_record_id,$record_name,$country_code) {
+  $data = get_list_gdal_record_information($from_record_id, $to_record_id, $record_name, $country_code);
+  header("Content-type: application/csv");
+  header("Content-Disposition: attachment; filename=\"Jobs_".date('M-j-y', $from)."-".date('M-j-y', $to).".csv\"");
+  header("Pragma: no-cache");
+  header("Expires: 0");
+  $handle = fopen('php://output', 'w');
+  fputcsv($handle, array(
+        'ID','record_id','plot_id','record_name','latitude','longitude','country_code_data','country_name','clim_slate_weather_data','clim_precipitation_data','clim_gdd','clim_aridity_index',
+        'clim_kopgeiger','clim_kopgeiger_detail','clim_fao_lgp','clim_fao_lgp_detail','clim_modis_evapotrans','clim_precip_novdecjan','clim_precip_febmarapr','clim_precip_mayjunjul','clim_precip_augsepoct','clim_wind_data_1','clim_wind_data_2',
+        'clim_wind_data_3','clim_wind_data_4','clim_wind_data_5','clim_wind_data_6','clim_wind_data_7','clim_wind_data_8','clim_wind_data_9','clim_wind_data_10','clim_wind_data_11','clim_wind_data_12',
+        'soil_hwsd_data','soil_depth_gaez','soil_depth_gaez_detail','soil_textclass_gaez','soil_textclass_gaez_detail','soil_fert_gaez','soil_fert_gaez_detail','soil_workab_gaez','soil_workab_gaez_detail','soil_toxic_gaez','soil_toxic_gaez_detail','topog_elevation','topog_aspect','topog_geolage','topog_dem_global','topog_dem_old',
+        'topog_slope_global','topog_landform_global','topog_twi_global','topog_topi_global','topog_israd_global','landcover_modis_2001','landcover_modis_2001_detail','landcover_modis_2002','landcover_modis_2002_detail','landcover_modis_2004','landcover_modis_2004_detail','landcover_modis_2010','landcover_modis_2010_detail',
+        'landcover_modis_2011','landcover_modis_2011_detail','landcover_modis_2012','landcover_modis_2012_detail','landcover_cult_gaez','landcover_irrcult_gaez','landcover_grass_gaez','landcover_protect_gaez','landcover_protect_gaez_detail','landcover_agnprotect_gaez','landcover_agnprotect_gaez_detail','vegind_modis_evi_m',
+        'vegind_modis_evi_sd','vegind_modis_lai_m','vegind_modis_lai_sd','manage_cerealsuit_low_gaez','manage_cerealsuit_low_gaez_detail','manage_cerealsuit_hight_gaez','manage_cerealsuit_hight_gaez_detail','pop_density','afsis_topog_dem','afsis_topog_twi','afsis_topog_sca',
+        'country_name_2','slope_percentage','slope_reclassified','plane_curvature','profile_curvature','curvature','dem','aspect'
+        
+    ));
+  foreach ($data as $job) {
+        fputcsv($handle,array($job->ID,$job->record_id,$job->plot_id,$job->record_name,$job->latitude,$job->longitude,
+                              $job->country_code_data,$job->country_name,$job->clim_slate_weather_data,$job->clim_precipitation_data,$job->clim_gdd,$job->clim_aridity_index,$job->clim_kopgeiger,$job->clim_kopgeiger_detail,$job->clim_fao_lgp,$job->clim_fao_lgp_detail
+                              ,$job->clim_modis_evapotrans,$job->clim_precip_novdecjan,$job->clim_precip_febmarapr,$job->clim_precip_mayjunjul,$job->clim_precip_augsepoct,$job->clim_wind_data_1
+                              ,$job->clim_wind_data_2,$job->clim_wind_data_3,$job->clim_wind_data_4,$job->clim_wind_data_5,$job->clim_wind_data_6,$job->clim_wind_data_7
+                              ,$job->clim_wind_data_8,$job->clim_wind_data_9,$job->clim_wind_data_10,$job->clim_wind_data_11,$job->clim_wind_data_12,$job->soil_hwsd_data,$job->soil_depth_gaez,$job->soil_depth_gaez_detail
+                              ,$job->soil_textclass_gaez,$job->soil_textclass_gaez_detail,$job->soil_fert_gaez,$job->soil_fert_gaez_detail,$job->soil_workab_gaez,$job->soil_workab_gaez_detail,$job->soil_toxic_gaez,$job->soil_toxic_gaez_detail,$job->topog_elevation,$job->topog_aspect,$job->topog_geolage,$job->topog_dem_global
+                              ,$job->topog_dem_old,$job->topog_slope_global,$job->topog_landform_global,$job->topog_twi_global,$job->topog_topi_global,$job->topog_israd_global,$job->landcover_modis_2001,$job->landcover_modis_2001_detail
+                              ,$job->landcover_modis_2002,$job->landcover_modis_2002_detail,$job->landcover_modis_2004,$job->landcover_modis_2004_detail,$job->landcover_modis_2010,$job->landcover_modis_2010_detail,$job->landcover_modis_2011,$job->landcover_modis_2011_detail,$job->landcover_modis_2012,$job->landcover_modis_2012_detail,$job->landcover_cult_gaez,$job->landcover_irrcult_gaez
+                              ,$job->landcover_grass_gaez,$job->landcover_protect_gaez,$job->landcover_protect_gaez_detail,$job->landcover_agnprotect_gaez,$job->landcover_agnprotect_gaez_detail,$job->vegind_modis_evi_m,$job->vegind_modis_evi_sd,$job->vegind_modis_lai_m,$job->vegind_modis_lai_sd
+                              ,$job->manage_cerealsuit_low_gaez,$job->manage_cerealsuit_low_gaez_detail,$job->manage_cerealsuit_hight_gaez,$job->manage_cerealsuit_hight_gaez_detail,$job->pop_density,$job->afsis_topog_dem,$job->afsis_topog_twi,$job->afsis_topog_sca
+                              ,$job->country_name_2,$job->slope_percentage,$job->slope_reclassified,$job->plane_curvature,$job->profile_curvature,$job->curvature,$job->dem,$job->aspect));
+  }
+  fclose($handle);
+}
+
+/**
+ * NGUYEN HAI THANH
+ * Enter description here ...
+ */
+
+function api_insert_rhm_input_data_from_mobile_apps(){
+  try {
+    $name = $_GET['name'];
+    $name = trim($name);
+    if (isEmpty($name)){
+      return error_request_from_external_device("101", "Name must be not NULL");
+    }
+    $name = standard_string_prevent_sql_injection($name);
+    $recorder_name = $_GET['recorder_name'];
+    $recorder_name = trim($recorder_name);
+    if (isEmpty($name)){
+      return error_request_from_external_device("102", "Recorder name must be not NULL");
+    }
+    $recorder_name = standard_string_prevent_sql_injection($recorder_name);
+    
+    $transect = $_GET['transect'];
+    $transect = trim($transect);
+    $transect = standard_string_prevent_sql_injection($transect);
+    $transect = standard_string_2($transect);
+    $transect = strtoupper($transect);
+    
+    $segment = $_GET['segment'];
+    $segment = trim($segment);
+    $segment = standard_string_prevent_sql_injection($segment);
+    $segment = standard_string_2($segment);
+    
+    $date = $_GET['date'];
+    $date = trim($date);
+    $date = standard_string_prevent_sql_injection($date);
+    
+    $canopy_height = $_GET['canopy_height'];
+    $canopy_height = trim($canopy_height);
+    //$canopy_height = standard_string_prevent_sql_injection($canopy_height);
+    $canopy_height = standard_string_2($canopy_height);
+    
+   
+    $canopy_gap = $_GET['canopy_gap'];
+    $canopy_gap = trim($canopy_gap);
+    $canopy_gap = standard_string_prevent_sql_injection($canopy_gap);
+    $canopy_gap = standard_string_2($canopy_gap);
+    $canopy_gap = strtoupper($canopy_gap);
+    
+    $basal_gap = $_GET['basal_gap'];
+    $basal_gap = trim($basal_gap);
+    $basal_gap = standard_string_prevent_sql_injection($basal_gap);
+    $basal_gap = standard_string_2($basal_gap);
+    $basal_gap = strtoupper(($basal_gap));
+    
+    $species_1_density = $_GET['species_1_density'];
+    $species_1_density = trim($species_1_density);
+    if (!is_numeric($species_1_density)){
+      return error_request_from_external_device("107", "Species 1 Density must be NUMERIC");
+    }
+    
+    $species_2_density = $_GET['species_2_density'];
+    $species_2_density = trim($species_2_density);
+    if (!is_numeric($species_2_density)){
+      return error_request_from_external_device("107", "Species 2 Density must be NUMERIC");
+    }
+    
+    
+    $species_list = $_GET['species_list'];
+    $species_list = trim($species_list);
+    $species_list = standard_string_prevent_sql_injection($species_list);
+    $species_list = standard_string_2($species_list);
+    
+    
+    $stick_segment_0 = $_GET['stick_segment_0'];
+    $stick_segment_0 = trim($stick_segment_0);
+    $stick_segment_0 = standard_string_prevent_sql_injection($stick_segment_0);
+    $stick_segment_0 = strtoupper($stick_segment_0);
+    
+    $stick_segment_1 = $_GET['stick_segment_1'];
+    $stick_segment_1 = trim($stick_segment_1);
+    $stick_segment_1 = standard_string_prevent_sql_injection($stick_segment_1);
+    $stick_segment_1 = strtoupper($stick_segment_1);
+    
+    $stick_segment_2 = $_GET['stick_segment_2'];
+    $stick_segment_2 = trim($stick_segment_2);
+    $stick_segment_2 = standard_string_prevent_sql_injection($stick_segment_2);
+    $stick_segment_2 = strtoupper($stick_segment_2);
+    
+    $stick_segment_3 = $_GET['stick_segment_3'];
+    $stick_segment_3 = trim($stick_segment_3);
+    $stick_segment_3 = standard_string_prevent_sql_injection($stick_segment_3);
+    $stick_segment_3 = strtoupper($stick_segment_3);
+    
+    $stick_segment_4 = $_GET['stick_segment_4'];
+    $stick_segment_4 = trim($stick_segment_4);
+    $stick_segment_4 = standard_string_prevent_sql_injection($stick_segment_4);
+    $stick_segment_4 = strtoupper($stick_segment_4);
+    
+    $bare_total = $_GET['bare_total'];
+    $bare_total = trim($bare_total);
+    if (!is_numeric($bare_total)){
+      return error_request_from_external_device("107", "Bare_total must be NUMERIC");
+    }
+    
+    $trees_total = $_GET['trees_total'];
+    $trees_total = trim($trees_total);
+    if (!is_numeric($trees_total)){
+      return error_request_from_external_device("107", "Trees Total must be NUMERIC");
+    }
+    
+    $shrubs_total = $_GET['shrubs_total'];
+    $shrubs_total = trim($shrubs_total);
+    if (!is_numeric($shrubs_total)){
+      return error_request_from_external_device("107", "Shrubs must be NUMERIC");
+    }
+    
+    $sub_shrubs_total = $_GET['sub_shrubs_total'];
+    $sub_shrubs_total = trim($sub_shrubs_total);
+    if (!is_numeric($sub_shrubs_total)){
+      return error_request_from_external_device("107", "Sub-Shrubs must be NUMERIC");
+    }
+    
+    $perennial_grasses_total = $_GET['perennial_grasses_total'];
+    $perennial_grasses_total = trim($perennial_grasses_total);
+    if (!is_numeric($perennial_grasses_total)){
+      return error_request_from_external_device("107", "Grasses must be NUMERIC");
+    }
+    
+    $annuals_total = $_GET['annuals_total'];
+    $annuals_total = trim($annuals_total);
+    if (!is_numeric($annuals_total)){
+      return error_request_from_external_device("107", "Annual Total must be NUMERIC");
+    }
+    
+    $herb_litter_total = $_GET['herb_litter_total'];
+    $herb_litter_total = trim($herb_litter_total);
+    if (!is_numeric($herb_litter_total)){
+      return error_request_from_external_device("107", "Herb Litter Total must be NUMERIC");
+    }
+    
+    $wood_litter_total = $_GET['wood_litter_total'];
+    $wood_litter_total = trim($wood_litter_total);
+    if (!is_numeric($wood_litter_total)){
+      return error_request_from_external_device("107", "Wood Litter Total must be NUMERIC");
+    }
+    
+    $rock_total = $_GET['rock_total'];
+    $rock_total = trim($rock_total);
+    if (!is_numeric($rock_total)){
+      return error_request_from_external_device("107", "Rock Total must be NUMERIC");
+    }
+    
+    $ip_address = get_ip_address_client();
+    
+    $result_insert = insert_rhm_input_data_from_apps_to_server($name, $recorder_name, $transect, $segment, $date, $canopy_height, $canopy_gap, $basal_gap, $species_1_density, $species_2_density, $species_list, $stick_segment_0, $stick_segment_1, $stick_segment_2, $stick_segment_3, $stick_segment_4, $bare_total, $trees_total, $shrubs_total, $sub_shrubs_total, $perennial_grasses_total, $annuals_total, $herb_litter_total, $wood_litter_total, $rock_total, $ip_address);
+    
+    if ($result_insert == 0){
+      return error_request_from_external_device('999', 'Error Link : Please check link');
+    } else {
+      /* Calculate Summary data from group by name */
+      $object = get_output_value_RHM_record($name);
+      /* Insert output data to database */
+      $result_inser_output = insert_rhm_output_data($result_insert,$name, $object);
+      if ($object == false) {
+        return error_request_from_external_device('999', 'Error Link : Please check link');
+      } else {
+        return success_api_rhm($object);
+      }
+    }
+  } catch (Exception $ex){
+    return error_request_from_external_device('990', $ex->getMessage());
+  }
+}
+
+/**
+ * NGUYEN HAI THANH
+ * Enter description here ...
+ */
+function api_insert_landpks_input_data_from_mobile_apps()
+{
+  try {
+    $name = $_GET['name'];
+    $name = trim($name);
+    if (isEmpty($name)){
+      return error_request_from_external_device("101", "Name must be not NULL");
+    }
+    $name = standard_string_prevent_sql_injection($name);
+   
+    $recorder_name = $_GET['recorder_name'];
+    $recorder_name = trim($recorder_name);
+    if (isEmpty($recorder_name)){
+      return error_request_from_external_device("102", "Recorder name must be not NULL");
+    }
+    $recorder_name = standard_string_prevent_sql_injection($recorder_name);
+  
+    if (check_exit_name($name,$recorder_name)){
+        return error_request_from_external_device("109", "Duplicated requests");
+    }
+    
+    
+    $test_plot = $_GET['test_plot'];
+    $test_plot = trim($test_plot);
+    if (isEmpty($test_plot)){
+      $test_plot = "TRUE";
+      $b_test_plot = 1;
+    }
+    $b_test_plot = 0;
+    $test_plot = standard_string_prevent_sql_injection($test_plot);
+    $test_plot = strtoupper($test_plot);
+    if (strtoupper($test_plot) == 'TRUE'){
+      $b_test_plot = 1;
+    }
+    
+    $organization = $_GET['organization'];
+    $organization = trim($organization);
+    if (isEmpty($organization)){
+      //return error_request_from_external_device("103", "Organization must be not NULL");
+    }
+    $organization = standard_string_prevent_sql_injection($organization);
+
+    $latitude = $_GET['latitude'];
+    $latitude = trim($latitude);
+    if (isEmpty($latitude)){
+      return error_request_from_external_device("104", "Latitude must be not NULL");
+    }
+    if (!is_numeric($latitude)){
+      return error_request_from_external_device("105", "Latitude must be NUMERIC");
+    }
+
+    $longitude = $_GET['longitude'];
+    $longitude = trim($longitude);
+    if (isEmpty($longitude)){
+      return error_request_from_external_device("106", "Longitude must be not NULL");
+    }
+    if (!is_numeric($longitude)){
+      return error_request_from_external_device("107", "Longitude must be NUMERIC");
+    }
+
+    $city = $_GET['city'];
+    $city = trim($city);
+    if (isEmpty($city)){
+      //return error_request_from_external_device("108", "City must be not NULL");
+    }
+    $city = standard_string_prevent_sql_injection($city);
+    
+    $notes = $_GET['notes'];
+    $notes = trim($notes);
+    if (isEmpty($notes)){
+      //return error_request_from_external_device("108", "City must be not NULL");
+    }
+    $notes = standard_string_prevent_sql_injection($notes);
+
+    $modified_date = $_GET['modified_date'];
+    $modified_date = trim($modified_date);
+    if (isEmpty($modified_date)){
+      //return error_request_from_external_device("108", "Modified Date must be not NULL");
+    }
+    $modified_date = standard_string_prevent_sql_injection($modified_date);
+
+    $land_cover = $_GET['land_cover'];
+    $land_cover = trim($land_cover);
+    if (isEmpty($land_cover)){
+      //return error_request_from_external_device("108", "Modified Date must be not NULL");
+    }
+    $land_cover = standard_string_prevent_sql_injection($land_cover);
+
+    $grazed = $_GET['grazed'];
+    $grazed = trim($grazed);
+    $grazing = $_GET['grazing'];
+    $grazing = trim($grazing);
+    if (isEmpty($grazed)){
+      //return error_request_from_external_device("108", "Modified Date must be not NULL");
+    }
+    $grazed = standard_string_prevent_sql_injection($grazed);
+    $b_grazed = 0;
+    if (strtoupper($grazed) == 'TRUE'){
+      $b_grazed = 1;
+    }
+    if (strtoupper($grazed) == 'FALSE'){
+      $grazing = "NONE";   
+    }
+    $grazing = standard_string_prevent_sql_injection($grazing);
+    
+    
+    $flooding = $_GET['flooding'];
+    $flooding = trim($flooding);
+    if (isEmpty($flooding)){
+      //return error_request_from_external_device("108", "Modified Date must be not NULL");
+    }
+    $flooding = standard_string_prevent_sql_injection($flooding);
+    $b_flooding = 0;
+    if (strtoupper($flooding) == 'TRUE'){
+      $b_flooding = 1;
+    }
+
+    $slope = $_GET['slope'];
+    $slope = trim($slope);
+    if (isEmpty($slope)){
+      //return error_request_from_external_device("108", "Modified Date must be not NULL");
+    }
+    $slope = standard_string_prevent_sql_injection($slope);
+
+    $slope_shape = $_GET['slope_shape'];
+    $slope_shape = trim($slope_shape);
+    if (isEmpty($slope_shape)){
+      //return error_request_from_external_device("108", "Modified Date must be not NULL");
+    }
+    $slope_shape = standard_string_prevent_sql_injection($slope_shape);
+
+    
+    $bedrock_depth = $_GET['bedrock_depth'];
+    $bedrock_depth = trim($bedrock_depth);
+    $bedrock_depth = standard_string_prevent_sql_injection($bedrock_depth);
+    if (!isEmpty($bedrock_depth) && !is_numeric($bedrock_depth)){
+      return error_request_from_external_device("104", "bedrock_depth must be NUMERIC");
+    }
+    
+    
+    $stopped_digging_depth = $_GET['stopped_digging_depth'];
+    $stopped_digging_depth = trim($stopped_digging_depth);
+    $stopped_digging_depth = standard_string_prevent_sql_injection($stopped_digging_depth);
+    if (!isEmpty($stopped_digging_depth) && !is_numeric($stopped_digging_depth)){
+      return error_request_from_external_device("104", "stopped_digging_depth must be NUMERIC");
+    }
+   
+    
+    $rock_fragment_for_soil_horizon_1 = $_GET['rock_fragment_for_soil_horizon_1'];
+    $rock_fragment_for_soil_horizon_1 = trim($rock_fragment_for_soil_horizon_1);
+    $rock_fragment_for_soil_horizon_1 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_1);
+
+    $rock_fragment_for_soil_horizon_2 = $_GET['rock_fragment_for_soil_horizon_2'];
+    $rock_fragment_for_soil_horizon_2 = trim($rock_fragment_for_soil_horizon_2);
+    $rock_fragment_for_soil_horizon_2 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_2);
+
+    $rock_fragment_for_soil_horizon_3 = $_GET['rock_fragment_for_soil_horizon_3'];
+    $rock_fragment_for_soil_horizon_3 = trim($rock_fragment_for_soil_horizon_3);
+    $rock_fragment_for_soil_horizon_3 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_3);
+
+    $rock_fragment_for_soil_horizon_4 = $_GET['rock_fragment_for_soil_horizon_4'];
+    $rock_fragment_for_soil_horizon_4 = trim($rock_fragment_for_soil_horizon_4);
+    $rock_fragment_for_soil_horizon_4 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_4);
+
+    $rock_fragment_for_soil_horizon_5 = $_GET['rock_fragment_for_soil_horizon_5'];
+    $rock_fragment_for_soil_horizon_5 = trim($rock_fragment_for_soil_horizon_5);
+    $rock_fragment_for_soil_horizon_5 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_5);
+
+    $rock_fragment_for_soil_horizon_6 = $_GET['rock_fragment_for_soil_horizon_6'];
+    $rock_fragment_for_soil_horizon_6 = trim($rock_fragment_for_soil_horizon_6);
+    $rock_fragment_for_soil_horizon_6 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_6);
+    
+    $rock_fragment_for_soil_horizon_7 = $_GET['rock_fragment_for_soil_horizon_7'];
+    $rock_fragment_for_soil_horizon_7 = trim($rock_fragment_for_soil_horizon_7);
+    $rock_fragment_for_soil_horizon_7 = standard_string_prevent_sql_injection($rock_fragment_for_soil_horizon_7);
+
+    $color_for_soil_horizon_1 = $_GET['color_for_soil_horizon_1'];
+    $color_for_soil_horizon_1 = trim($color_for_soil_horizon_1);
+    $color_for_soil_horizon_1 = standard_string_prevent_sql_injection($color_for_soil_horizon_1);
+
+    $color_for_soil_horizon_2 = $_GET['color_for_soil_horizon_2'];
+    $color_for_soil_horizon_2 = trim($color_for_soil_horizon_2);
+    $color_for_soil_horizon_2 = standard_string_prevent_sql_injection($color_for_soil_horizon_2);
+
+    $color_for_soil_horizon_3 = $_GET['color_for_soil_horizon_3'];
+    $color_for_soil_horizon_3 = trim($color_for_soil_horizon_3);
+    $color_for_soil_horizon_3 = standard_string_prevent_sql_injection($color_for_soil_horizon_3);
+
+    $color_for_soil_horizon_4 = $_GET['color_for_soil_horizon_4'];
+    $color_for_soil_horizon_4 = trim($color_for_soil_horizon_4);
+    $color_for_soil_horizon_4 = standard_string_prevent_sql_injection($color_for_soil_horizon_4);
+
+    $color_for_soil_horizon_5 = $_GET['color_for_soil_horizon_5'];
+    $color_for_soil_horizon_5 = trim($color_for_soil_horizon_5);
+    $color_for_soil_horizon_5 = standard_string_prevent_sql_injection($color_for_soil_horizon_5);
+
+    $color_for_soil_horizon_6 = $_GET['color_for_soil_horizon_6'];
+    $color_for_soil_horizon_6 = trim($color_for_soil_horizon_6);
+    $color_for_soil_horizon_6 = standard_string_prevent_sql_injection($color_for_soil_horizon_6);
+    
+    $color_for_soil_horizon_7 = $_GET['color_for_soil_horizon_7'];
+    $color_for_soil_horizon_7 = trim($color_for_soil_horizon_7);
+    $color_for_soil_horizon_7 = standard_string_prevent_sql_injection($color_for_soil_horizon_7);
+
+    $texture_for_soil_horizon_1 = $_GET['texture_for_soil_horizon_1'];
+    $texture_for_soil_horizon_1 = trim($texture_for_soil_horizon_1);
+    $texture_for_soil_horizon_1 = standard_string_prevent_sql_injection($texture_for_soil_horizon_1);
+
+    $texture_for_soil_horizon_2 = $_GET['texture_for_soil_horizon_2'];
+    $texture_for_soil_horizon_2 = trim($texture_for_soil_horizon_2);
+    $texture_for_soil_horizon_2 = standard_string_prevent_sql_injection($texture_for_soil_horizon_2);
+
+    $texture_for_soil_horizon_3 = $_GET['texture_for_soil_horizon_3'];
+    $texture_for_soil_horizon_3 = trim($texture_for_soil_horizon_3);
+    $texture_for_soil_horizon_3 = standard_string_prevent_sql_injection($texture_for_soil_horizon_3);
+
+    $texture_for_soil_horizon_4 = $_GET['texture_for_soil_horizon_4'];
+    $texture_for_soil_horizon_4 = trim($texture_for_soil_horizon_4);
+    $texture_for_soil_horizon_4 = standard_string_prevent_sql_injection($texture_for_soil_horizon_4);
+
+    $texture_for_soil_horizon_5 = $_GET['texture_for_soil_horizon_5'];
+    $texture_for_soil_horizon_5 = trim($texture_for_soil_horizon_5);
+    $texture_for_soil_horizon_5 = standard_string_prevent_sql_injection($texture_for_soil_horizon_5);
+
+    $texture_for_soil_horizon_6 = $_GET['texture_for_soil_horizon_6'];
+    $texture_for_soil_horizon_6 = trim($texture_for_soil_horizon_6);
+    $texture_for_soil_horizon_6 = standard_string_prevent_sql_injection($texture_for_soil_horizon_6);
+    
+    $texture_for_soil_horizon_7 = $_GET['texture_for_soil_horizon_7'];
+    $texture_for_soil_horizon_7 = trim($texture_for_soil_horizon_7);
+    $texture_for_soil_horizon_7 = standard_string_prevent_sql_injection($texture_for_soil_horizon_7);
+
+    $surface_cracking = $_GET['surface_cracking'];
+    $surface_cracking = trim($surface_cracking);
+    if (isEmpty($surface_cracking)){
+      //return error_request_from_external_device("108", "Modified Date must be not NULL");
+      $surface_cracking = 'TRUE';
+    }
+    $surface_cracking = standard_string_prevent_sql_injection($surface_cracking);
+    $b_surface_cracking = 0;
+    if (strtoupper($surface_cracking) == 'TRUE'){
+      $b_surface_cracking = 1;
+    }
+
+    $surface_salt = $_GET['surface_salt'];
+    $surface_salt = trim($surface_salt);
+    if (isEmpty($surface_salt)){
+      //return error_request_from_external_device("108", "Modified Date must be not NULL");
+    }
+    $surface_salt = standard_string_prevent_sql_injection($surface_salt);
+    $b_surface_salt = 0;
+    if (strtoupper($surface_salt) == 'TRUE'){
+      $b_surface_salt = 1;
+    }
+    
+    /* Photo URLs */
+    $soil_pit_photo_url = $_GET['soil_pit_photo_url'];
+    if (isEmpty($soil_pit_photo_url)){
+      $soil_pit_photo_url = "";
+    } else {
+      $soil_pit_photo_url = str_replace("'","",$soil_pit_photo_url);
+      $soil_pit_photo_url = str_replace('"','',$soil_pit_photo_url);
+      $soil_pit_photo_url = urlencode($soil_pit_photo_url);
+    }
+    $soil_samples_photo_url = $_GET['soil_samples_photo_url'];
+    if (isEmpty($soil_samples_photo_url)){
+      $soil_samples_photo_url = "";
+    } else {
+      $soil_samples_photo_url = str_replace("'","",$soil_samples_photo_url);
+      $soil_samples_photo_url = str_replace('"','',$soil_samples_photo_url);
+      $soil_samples_photo_url = urlencode($soil_samples_photo_url);
+    }
+    /* End Photo URLs */
+    
+    $ip_address = get_ip_address_client();
+    
+    /**
+     * Insert cai cua no ngu si dan don thoi thay nay truoc
+     * Enter description here ...
+     * @var unknown_type
+     */
+    //$result_insert_new = insert_landpks_input_plot_new($name, $recorder_name, $organization, $latitude, $longitude, $city, $modified_date, $land_cover, $grazed, $b_grazed, $flooding, $b_flooding, $slope, $slope_shape, $rock_fragment_for_soil_horizon_1, $rock_fragment_for_soil_horizon_2, $rock_fragment_for_soil_horizon_3, $rock_fragment_for_soil_horizon_4, $rock_fragment_for_soil_horizon_5, $rock_fragment_for_soil_horizon_6, $rock_fragment_for_soil_horizon_7 , $color_for_soil_horizon_1, $color_for_soil_horizon_2 , $color_for_soil_horizon_3, $color_for_soil_horizon_4, $color_for_soil_horizon_5, $color_for_soil_horizon_6, $color_for_soil_horizon_7 , $texture_for_soil_horizon_1, $texture_for_soil_horizon_2, $texture_for_soil_horizon_3, $texture_for_soil_horizon_4, $texture_for_soil_horizon_5, $texture_for_soil_horizon_6, $texture_for_soil_horizon_7 ,$surface_cracking, $b_surface_cracking, $surface_salt, $b_surface_salt,$ip_address);
+    $result_insert_new = 1985;
+    /**
+     * Ket thuc do thoi thay nay
+     * Enter description here ...
+     * @var unknown_type
+     */
+    //echo $rock_fragment_for_soil_horizon_1;
+    $result_insert = insert_landpks_input_data_from_apps_to_server($name, $recorder_name, $organization, $latitude, $longitude, $city, $notes ,$modified_date, $land_cover, $grazed, $b_grazed, $grazing ,$flooding, $b_flooding, $slope, $slope_shape, $bedrock_depth , $stopped_digging_depth ,$rock_fragment_for_soil_horizon_1, $rock_fragment_for_soil_horizon_2, $rock_fragment_for_soil_horizon_3, $rock_fragment_for_soil_horizon_4, $rock_fragment_for_soil_horizon_5, $rock_fragment_for_soil_horizon_6, $rock_fragment_for_soil_horizon_7 , $color_for_soil_horizon_1, $color_for_soil_horizon_2 , $color_for_soil_horizon_3, $color_for_soil_horizon_4, $color_for_soil_horizon_5, $color_for_soil_horizon_6, $color_for_soil_horizon_7 , $texture_for_soil_horizon_1, $texture_for_soil_horizon_2, $texture_for_soil_horizon_3, $texture_for_soil_horizon_4, $texture_for_soil_horizon_5, $texture_for_soil_horizon_6, $texture_for_soil_horizon_7 ,$surface_cracking, $b_surface_cracking, $surface_salt, $b_surface_salt,$ip_address,$soil_pit_photo_url,$soil_samples_photo_url,$test_plot,$b_test_plot);
+    /** Case 1 : Data => Return List of Analytics Data after running Relative Calculation **/
+    $run_model = call_python_script($result_insert,$longitude,$latitude,trim($recorder_name));
+    /** CASE 2 : DATA => Return only the raw output APEX for Dought **/
+    
+    
+    /***Update cho thang ngu dan ngu si dan don****/
+    update_plot_id_to_result_apex_table($result_insert,$result_insert_new);
+    
+    if ($run_model == -1){
+        //return error_request_from_external_device('666', 'Error : Dougl facing');
+        $type = 1;
+        $record_data_no_apex = get_raw_output_data_NO_APEX_output($result_insert);
+        $content[0]->ID = $record_data_no_apex->record_id;
+        $content[0]->name = $record_data_no_apex->record_name;
+        /*
+        $content[0]->grass_productivity =  intval(-999);
+        $content[0]->grass_erosion = intval(-999);
+        $content[0]->maize_productivity = intval(-999);
+        $content[0]->maize_erosion = intval(-999);
+        $content[0]->maize_erosion = intval(-999);
+        */
+		$content[0]->grass_productivity = "";
+        $content[0]->grass_erosion = "";
+        $content[0]->maize_productivity = "";
+        $content[0]->maize_erosion = "";
+        
+        
+        //GDAL
+        $content[0]->gdal_elevation = floatval($record_data_no_apex->old_elevation);
+        $content[0]->gdal_fao_lgp = $record_data_no_apex->fao_lgp;
+        $content[0]->gdal_aridity_index = floatval($record_data_no_apex->aridity);
+        //AWC
+        $content[0]->awc_soil_profile_awc = floatval($record_data_no_apex->soil_profile_awc);
+        
+        //PRECIP
+        $content[0]->climate_precip_jan = floatval($record_data_no_apex->climate_precip_jan);
+        $content[0]->climate_precip_feb = floatval($record_data_no_apex->climate_precip_feb);
+        $content[0]->climate_precip_mar = floatval($record_data_no_apex->climate_precip_mar);
+        $content[0]->climate_precip_apr = floatval($record_data_no_apex->climate_precip_apr);
+        $content[0]->climate_precip_may = floatval($record_data_no_apex->climate_precip_may);
+        $content[0]->climate_precip_jun = floatval($record_data_no_apex->climate_precip_jun);
+        $content[0]->climate_precip_jul = floatval($record_data_no_apex->climate_precip_jul);
+        $content[0]->climate_precip_aug = floatval($record_data_no_apex->climate_precip_aug);
+        $content[0]->climate_precip_sep = floatval($record_data_no_apex->climate_precip_sep);
+        $content[0]->climate_precip_oct = floatval($record_data_no_apex->climate_precip_oct);
+        $content[0]->climate_precip_nov = floatval($record_data_no_apex->climate_precip_nov);
+        $content[0]->climate_precip_dec = floatval($record_data_no_apex->climate_precip_dec);
+        $content[0]->climate_precip_annual = floatval($record_data_no_apex->climate_precip_annual);
+        
+        //AVG_TEMP
+        $content[0]->climate_avg_temp_jan = floatval($record_data_no_apex->climate_avg_temp_jan);
+        $content[0]->climate_avg_temp_feb = floatval($record_data_no_apex->climate_avg_temp_feb);
+        $content[0]->climate_avg_temp_mar = floatval($record_data_no_apex->climate_avg_temp_mar);
+        $content[0]->climate_avg_temp_apr = floatval($record_data_no_apex->climate_avg_temp_apr);
+        $content[0]->climate_avg_temp_may = floatval($record_data_no_apex->climate_avg_temp_may);
+        $content[0]->climate_avg_temp_jun = floatval($record_data_no_apex->climate_avg_temp_jun);
+        $content[0]->climate_avg_temp_jul = floatval($record_data_no_apex->climate_avg_temp_jul);
+        $content[0]->climate_avg_temp_aug = floatval($record_data_no_apex->climate_avg_temp_aug);
+        $content[0]->climate_avg_temp_sep = floatval($record_data_no_apex->climate_avg_temp_sep);
+        $content[0]->climate_avg_temp_oct = floatval($record_data_no_apex->climate_avg_temp_oct);
+        $content[0]->climate_avg_temp_nov = floatval($record_data_no_apex->climate_avg_temp_nov);
+        $content[0]->climate_avg_temp_dec = floatval($record_data_no_apex->climate_avg_temp_dec);
+        
+        
+        //MAX_TEMP
+        $content[0]->climate_max_temp_jan = floatval($record_data_no_apex->climate_max_temp_jan);
+        $content[0]->climate_max_temp_feb = floatval($record_data_no_apex->climate_max_temp_feb);
+        $content[0]->climate_max_temp_mar = floatval($record_data_no_apex->climate_max_temp_mar);
+        $content[0]->climate_max_temp_apr = floatval($record_data_no_apex->climate_max_temp_apr);
+        $content[0]->climate_max_temp_may = floatval($record_data_no_apex->climate_max_temp_may);
+        $content[0]->climate_max_temp_jun = floatval($record_data_no_apex->climate_max_temp_jun);
+        $content[0]->climate_max_temp_jul = floatval($record_data_no_apex->climate_max_temp_jul);
+        $content[0]->climate_max_temp_aug = floatval($record_data_no_apex->climate_max_temp_aug);
+        $content[0]->climate_max_temp_sep = floatval($record_data_no_apex->climate_max_temp_sep);
+        $content[0]->climate_max_temp_oct = floatval($record_data_no_apex->climate_max_temp_oct);
+        $content[0]->climate_max_temp_nov = floatval($record_data_no_apex->climate_max_temp_nov);
+        $content[0]->climate_max_temp_dec = floatval($record_data_no_apex->climate_max_temp_dec);
+        
+        
+        //MIN_TEMP
+        $content[0]->climate_min_temp_jan = floatval($record_data_no_apex->climate_min_temp_jan);
+        $content[0]->climate_min_temp_feb = floatval($record_data_no_apex->climate_min_temp_feb);
+        $content[0]->climate_min_temp_mar = floatval($record_data_no_apex->climate_min_temp_mar);
+        $content[0]->climate_min_temp_apr = floatval($record_data_no_apex->climate_min_temp_apr);
+        $content[0]->climate_min_temp_may = floatval($record_data_no_apex->climate_min_temp_may);
+        $content[0]->climate_min_temp_jun = floatval($record_data_no_apex->climate_min_temp_jun);
+        $content[0]->climate_min_temp_jul = floatval($record_data_no_apex->climate_min_temp_jul);
+        $content[0]->climate_min_temp_aug = floatval($record_data_no_apex->climate_min_temp_aug);
+        $content[0]->climate_min_temp_sep = floatval($record_data_no_apex->climate_min_temp_sep);
+        $content[0]->climate_min_temp_oct = floatval($record_data_no_apex->climate_min_temp_oct);
+        $content[0]->climate_min_temp_nov = floatval($record_data_no_apex->climate_min_temp_nov);
+        $content[0]->climate_min_temp_dec = floatval($record_data_no_apex->climate_min_temp_dec);
+        
+        if ($result_insert == 0){
+            return error_request_from_external_device('999', 'Error Link : Please check link');
+      
+        } else {
+            return success_api($type,$content);
+        }
+    }
+
+    /* Process to get content output to application */
+    $list_records = array();
+    $number_of_record = 8;
+    
+    
+    /** Case 1 : Data => Return List of Analytics Data after running Relative Calculation **/
+    /*
+    $list_records = get_list_analytics_data_from_apex_output_and_relative_calculation_model($recorder_name, $number_of_record);
+    $content[0]->name = $recorder_name;
+    $strContent_maize_erosion = "";
+    $strContent_maize_productivity = "";
+    $strContent_glass_erosion = "";
+    $strContent_glass_productivity = "";
+    $int_len = count($list_records);
+    for($i = 0 ; $i < $int_len ; $i++){
+        if ($i == $number_of_record - 1){
+            $strContent_maize_erosion .=  $list_records[$i]['maize_erosion'];
+            $strContent_maize_productivity .= $list_records[$i]['maize_productivity'];
+            $strContent_glass_erosion .=  $list_records[$i]['glass_erosion'];
+            $strContent_glass_productivity .= $list_records[$i]['glass_productivity'];
+        } else {
+            $strContent_maize_erosion .=  $list_records[$i]['maize_erosion'] . "|";
+            $strContent_maize_productivity .= $list_records[$i]['maize_productivity'] . "|";
+            $strContent_glass_erosion .=  $list_records[$i]['glass_erosion'] ."|";
+            $strContent_glass_productivity .= $list_records[$i]['glass_productivity'] ."|";
+        }
+    }
+    $content[0]->maize_erosion = $strContent_maize_erosion;
+    $content[0]->maize_productivity = $strContent_maize_productivity;
+    
+    $content[0]->grass_productivity = $strContent_glass_productivity;
+    $content[0]->grass_erosion = $strContent_glass_erosion;
+    */
+    
+    $type = 1;
+    
+    
+    /** CASE 2 : DATA => Return only the raw output APEX for Dought **/
+    $record_data = get_raw_output_data_from_apex_output($result_insert);
+    $content[0]->ID = $record_data->record_id;
+    $content[0]->name = $record_data->record_name;
+    $content[0]->grass_productivity = floatval($record_data->apex_output_yldg_glass);
+    $content[0]->grass_erosion = floatval($record_data->apex_output_y_glass);
+    $content[0]->maize_productivity = floatval($record_data->apex_output_yldg_maize);
+    $content[0]->maize_erosion = floatval($record_data->apex_output_y_maize);
+    
+    $record_data_no_apex = get_raw_output_data_NO_APEX_output($result_insert);
+    //GDAL
+    $content[0]->gdal_elevation = floatval($record_data_no_apex->old_elevation);
+    $content[0]->gdal_fao_lgp = $record_data_no_apex->fao_lgp;
+    $content[0]->gdal_aridity_index = floatval($record_data_no_apex->aridity);
+    //AWC
+    $content[0]->awc_soil_profile_awc = floatval($record_data_no_apex->soil_profile_awc);
+        
+    //PRECIP
+    $content[0]->climate_precip_jan = floatval($record_data_no_apex->climate_precip_jan);
+    $content[0]->climate_precip_feb = floatval($record_data_no_apex->climate_precip_feb);
+    $content[0]->climate_precip_mar = floatval($record_data_no_apex->climate_precip_mar);
+    $content[0]->climate_precip_apr = floatval($record_data_no_apex->climate_precip_apr);
+    $content[0]->climate_precip_may = floatval($record_data_no_apex->climate_precip_may);
+    $content[0]->climate_precip_jun = floatval($record_data_no_apex->climate_precip_jun);
+    $content[0]->climate_precip_jul = floatval($record_data_no_apex->climate_precip_jul);
+    $content[0]->climate_precip_aug = floatval($record_data_no_apex->climate_precip_aug);
+    $content[0]->climate_precip_sep = floatval($record_data_no_apex->climate_precip_sep);
+    $content[0]->climate_precip_oct = floatval($record_data_no_apex->climate_precip_oct);
+    $content[0]->climate_precip_nov = floatval($record_data_no_apex->climate_precip_nov);
+    $content[0]->climate_precip_dec = floatval($record_data_no_apex->climate_precip_dec);
+    $content[0]->climate_precip_annual = floatval($record_data_no_apex->climate_precip_annual);
+    
+    //AVG_TEMP
+    $content[0]->climate_avg_temp_jan = floatval($record_data_no_apex->climate_avg_temp_jan);
+    $content[0]->climate_avg_temp_feb = floatval($record_data_no_apex->climate_avg_temp_feb);
+    $content[0]->climate_avg_temp_mar = floatval($record_data_no_apex->climate_avg_temp_mar);
+    $content[0]->climate_avg_temp_apr = floatval($record_data_no_apex->climate_avg_temp_apr);
+    $content[0]->climate_avg_temp_may = floatval($record_data_no_apex->climate_avg_temp_may);
+    $content[0]->climate_avg_temp_jun = floatval($record_data_no_apex->climate_avg_temp_jun);
+    $content[0]->climate_avg_temp_jul = floatval($record_data_no_apex->climate_avg_temp_jul);
+    $content[0]->climate_avg_temp_aug = floatval($record_data_no_apex->climate_avg_temp_aug);
+    $content[0]->climate_avg_temp_sep = floatval($record_data_no_apex->climate_avg_temp_sep);
+    $content[0]->climate_avg_temp_oct = floatval($record_data_no_apex->climate_avg_temp_oct);
+    $content[0]->climate_avg_temp_nov = floatval($record_data_no_apex->climate_avg_temp_nov);
+    $content[0]->climate_avg_temp_dec = floatval($record_data_no_apex->climate_avg_temp_dec);
+        
+        
+    //MAX_TEMP
+    $content[0]->climate_max_temp_jan = floatval($record_data_no_apex->climate_max_temp_jan);
+    $content[0]->climate_max_temp_feb = floatval($record_data_no_apex->climate_max_temp_feb);
+    $content[0]->climate_max_temp_mar = floatval($record_data_no_apex->climate_max_temp_mar);
+    $content[0]->climate_max_temp_apr = floatval($record_data_no_apex->climate_max_temp_apr);
+    $content[0]->climate_max_temp_may = floatval($record_data_no_apex->climate_max_temp_may);
+    $content[0]->climate_max_temp_jun = floatval($record_data_no_apex->climate_max_temp_jun);
+    $content[0]->climate_max_temp_jul = floatval($record_data_no_apex->climate_max_temp_jul);
+    $content[0]->climate_max_temp_aug = floatval($record_data_no_apex->climate_max_temp_aug);
+    $content[0]->climate_max_temp_sep = floatval($record_data_no_apex->climate_max_temp_sep);
+    $content[0]->climate_max_temp_oct = floatval($record_data_no_apex->climate_max_temp_oct);
+    $content[0]->climate_max_temp_nov = floatval($record_data_no_apex->climate_max_temp_nov);
+    $content[0]->climate_max_temp_dec = floatval($record_data_no_apex->climate_max_temp_dec);
+        
+        
+    //MIN_TEMP
+    $content[0]->climate_min_temp_jan = floatval($record_data_no_apex->climate_min_temp_jan);
+    $content[0]->climate_min_temp_feb = floatval($record_data_no_apex->climate_min_temp_feb);
+    $content[0]->climate_min_temp_mar = floatval($record_data_no_apex->climate_min_temp_mar);
+    $content[0]->climate_min_temp_apr = floatval($record_data_no_apex->climate_min_temp_apr);
+    $content[0]->climate_min_temp_may = floatval($record_data_no_apex->climate_min_temp_may);
+    $content[0]->climate_min_temp_jun = floatval($record_data_no_apex->climate_min_temp_jun);
+    $content[0]->climate_min_temp_jul = floatval($record_data_no_apex->climate_min_temp_jul);
+    $content[0]->climate_min_temp_aug = floatval($record_data_no_apex->climate_min_temp_aug);
+    $content[0]->climate_min_temp_sep = floatval($record_data_no_apex->climate_min_temp_sep);
+    $content[0]->climate_min_temp_oct = floatval($record_data_no_apex->climate_min_temp_oct);
+    $content[0]->climate_min_temp_nov = floatval($record_data_no_apex->climate_min_temp_nov);
+    $content[0]->climate_min_temp_dec = floatval($record_data_no_apex->climate_min_temp_dec);
+    
+    
+    if ($result_insert == 0){
+      return error_request_from_external_device('999', 'Error Link : Please check link');
+      
+    } else {
+      return success_api($type,$content);
+    }
+
+  } catch (Exception $ex){
+    return error_request_from_external_device('990', $ex->getMessage());
+  }
+}
+
+
