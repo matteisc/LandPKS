@@ -83,7 +83,7 @@ def getRasterValue(srcfile, mx, my):  # # Return the value of a raster at the po
     return(intval[0])
 
 # Check arguments
-DLY_STORE_FOLDER = "D:/ThanhNguyen_Working/Python_APEX/2_WEATHER_PROJECT/Weather_Files/Daily_Weather_Files"
+DLY_STORE_FOLDER = "E:/ThanhNguyen_Working/Python_APEX/2_WEATHER_PROJECT/Weather_Files/Daily_Weather_Files"
 
 
 
@@ -187,7 +187,7 @@ def main():
         #support_WEATHER.insert_data_X_Y_dly_name(ID,Y_COOR,X_COOR,str(slate_weather_tif))
         if (not os.path.exists(os.path.join(DLY_STORE_FOLDER,"%s.DLY" %(str(slate_weather_tif))))):
             print "Not existed => Convert %s" %(str(slate_weather_tif))
-            os.system("python Step_2_convert_wtg_to_dly_WEATHER_Real_Time.py -Fwtg D:/ThanhNguyen_Working/Python_APEX/2_WEATHER_PROJECT/wtg -Fdly %s -name %s" %(PRIVATE_FOLDER_ACCESS_PRE_DLY_FILE,str(slate_weather_tif)))
+            os.system("python Step_2_convert_wtg_to_dly_WEATHER_Real_Time.py -Fwtg E:/ThanhNguyen_Working/Python_APEX/2_WEATHER_PROJECT/wtg -Fdly %s -name %s" %(PRIVATE_FOLDER_ACCESS_PRE_DLY_FILE,str(slate_weather_tif)))
         
         print "Start Running..."
         
