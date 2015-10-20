@@ -16,14 +16,14 @@ from datetime import date, timedelta as td
 
 
 
-DEF_PERL_SCRIPT_FOLDER = 'D:/ThanhNguyen_Working/Python_APEX/Perl_Africa_Weather/'
+DEF_PERL_SCRIPT_FOLDER = 'E:/ThanhNguyen_Working/Python_APEX/Perl_Africa_Weather/'
 DEF_PERL_SCRIPT_RAINFALL_DRIVER = "africa_rainfall.pl"
 DEF_PERL_SCRIPT_TMAX_DRIVER = "africa_tmax.pl"
 DEF_PERL_SCRIPT_TMIN_DRIVER = "africa_tmin.pl"
 DEF_START_DATE = "2001-02-13"
 DEF_END_DATE = "2014-12-31"
-DEF_DLY_FILES_WEATHER_SATELLINE_DATA_AFTER_CONVERT = "D:\\ThanhNguyen_Working\\Python_APEX\\SATELLINE_WEATHER_DATA\\WEATHER_DLY_FILES"
-DEF_DLY_FILES_WEATHER_SATELLINE_DATA_MAP_SLATE_WEATHER = "D:\\ThanhNguyen_Working\\Python_APEX\\SATELLINE_WEATHER_DATA\\WEATHER_DLY_FILES_SLATE"
+DEF_DLY_FILES_WEATHER_SATELLINE_DATA_AFTER_CONVERT = "E:\\ThanhNguyen_Working\\Python_APEX\\SATELLINE_WEATHER_DATA\\WEATHER_DLY_FILES"
+DEF_DLY_FILES_WEATHER_SATELLINE_DATA_MAP_SLATE_WEATHER = "E:\\ThanhNguyen_Working\\Python_APEX\\SATELLINE_WEATHER_DATA\\WEATHER_DLY_FILES_SLATE"
 
 X_MAX = 14.063139287754893
 X_MIN = 14.063139287754893
@@ -31,11 +31,11 @@ Y_MAX = -19.15491965599358
 Y_MIN = -19.15491965599358
 DATA_SOURCE = ""
 tif_slate_weather = 'SLATE_Weather/tif/SLATE_raster1.tif'
-src_dir = "D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
+src_dir = "E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
 
-TIF_FILE_WEATHER_SATELLINE_PRECIPITATION_FOLDER = "D:\\ThanhNguyen_Working\\Python_APEX\\Perl_Africa_Weather\\data\\weather_tif_files\\precipitation\\extract\\"
-TIF_FILE_WEATHER_SATELLINE_TMAX_FOLDER = "D:\\ThanhNguyen_Working\\Python_APEX\\Perl_Africa_Weather\\data\\weather_tif_files\\tmax\\extract\\"
-TIF_FILE_WEATHER_SATELLINE_TMAX_FOLDER = "D:\\ThanhNguyen_Working\\Python_APEX\\Perl_Africa_Weather\\data\\weather_tif_files\\tmin\\extract\\"
+TIF_FILE_WEATHER_SATELLINE_PRECIPITATION_FOLDER = "E:\\ThanhNguyen_Working\\Python_APEX\\Perl_Africa_Weather\\data\\weather_tif_files\\precipitation\\extract\\"
+TIF_FILE_WEATHER_SATELLINE_TMAX_FOLDER = "E:\\ThanhNguyen_Working\\Python_APEX\\Perl_Africa_Weather\\data\\weather_tif_files\\tmax\\extract\\"
+TIF_FILE_WEATHER_SATELLINE_TMAX_FOLDER = "E:\\ThanhNguyen_Working\\Python_APEX\\Perl_Africa_Weather\\data\\weather_tif_files\\tmin\\extract\\"
 
 message ="Usage : python Weather_Setelline_Data_Project.py -data_source <TIF or BIN> -x_max <X Max> -x_min <X Min> -y_max <Y Max> -y_min <Y Min> -start_data <Start date yyyy-mm-dd> -end_date <End date yyyy-mm-dd>"
 
@@ -382,7 +382,7 @@ def Build_Africa_DLY_Library():
                             print "ERROR_PRINTING_10"
                             sys.exit(message)
                         SOURCE = os.path.join(DEF_DLY_FILES_WEATHER_SATELLINE_DATA_AFTER_CONVERT, "RFE_" + str(x) + "_" + str(y) + "_" + str(slate_weather_tif) + ".DLY")
-                        DES = os.path.join("D:\\ThanhNguyen_Working\\Python_APEX\\SATELLINE_WEATHER_DATA","WEATHER_DLY_FILES _SLATE")
+                        DES = os.path.join("E:\\ThanhNguyen_Working\\Python_APEX\\SATELLINE_WEATHER_DATA","WEATHER_DLY_FILES _SLATE")
                         copyFile(SOURCE, DES)
                         OLD_FILE = os.path.join(DES,"RFE_" + str(x) + "_" + str(y) + "_" + str(slate_weather_tif) + ".DLY")
                         NEW_FILE = os.path.join(DES,str(slate_weather_tif) + ".DLY")
