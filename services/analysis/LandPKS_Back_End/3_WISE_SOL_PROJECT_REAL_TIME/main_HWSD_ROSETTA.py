@@ -1,4 +1,4 @@
-﻿# Author : Thanh Nguyen
+# Author : Thanh Nguyen
 # 05/23/2014
 # ?/usr/local/bin
 __version__ = "1"
@@ -586,6 +586,606 @@ def createSOILFile_V2(wise3_id, name_sol, SAND_LIST, SILK_LIST, t_ph_h2o, s_ph_h
         sys.exit("Error : %s" % (err))
     finally:
         fo.close()
+###################################################################################################################################################################################        
+def createSOILFile_V2_Depend_Number_Of_Layers_SOIL_GRIDS_ISRIC(wise3_id, name_sol, SAND_LIST, SILK_LIST, t_ph_h2o, s_ph_h2o, t_oc, s_oc, t_caco3, s_caco3, t_cec_soil, s_cec_soil, ROCK_FRAGMENT_LIST, t_ref_bulk_density, s_ref_bulk_density, t_ece, s_ece, WILITING_POINT_LIST_FULL, FIELD_CAPACITY_LIST_FULL, SAT_HY_COND_LIST_FULL,ORCDRC_MAPPING_LIST,PHIHOX_MAPPING_LIST,BLD_MAPPING_LIST,CEC_MAPPING_LIST):
+    try:
+        fo = open(os.path.join("Result_HWSD/SOLFiles/%s/" % (str(mu_global)), name_sol + ".SOL"), "wb")
+        # print("Tham khao %d  %d" %(t_caco3,s_caco3))
+        print("---Write SOIL property to File %s.SOL" % (name_sol))
+        # Line 1
+        fo.write("            %s" % (name_sol))
+        # Line 2
+        field_2_line_2 = 0.0
+        shc = SAT_HY_COND_LIST_FULL[0] + SAT_HY_COND_LIST_FULL[1] + SAT_HY_COND_LIST_FULL[2] + SAT_HY_COND_LIST_FULL[3]
+        if (shc > 254):
+            field_2_line_2 = 1
+        elif (shc >= 84 and shc <= 254):
+            field_2_line_2 = 2
+        elif (shc >= 8.4 and shc <= 84):
+            field_2_line_2 = 3
+        elif (shc >= 0 and shc < 8.4):
+            field_2_line_2 = 4
+        fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0.15, field_2_line_2, 0, 0, 0, 0, 0, 0, 0, 0))
+        
+        # Line 3
+        # fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (10, 0, 50, 2, 0.1, 0.1, 0.1, 0, 0, 0))
+        field_1 = 10
+        field_2 = 0
+        field_3 = 50
+        field_4 = 2
+        field_5 = 0.1
+        field_6 = 0.1
+        field_7 = 0.1
+        field_8 = 0
+        field_9 = 0
+        field_10 = 0
+        fo.write("\n")
+        if (field_1 >= 0 and field_1 < 10):
+            strContent = "    %0.2f" % (field_1)
+        elif (field_1 > 9 and field_1 < 100):
+            strContent = "   %0.2f" % (field_1)
+        fo.write(strContent)
+        
+        if (field_2 >= 0 and field_2 < 10):
+            strContent = "    %0.2f" % (field_2)
+        elif (field_2 > 9 and field_2 < 100):
+            strContent = "   %0.2f" % (field_2)
+        fo.write(strContent)
+        
+        if (field_3 >= 0 and field_3 < 10):
+            strContent = "    %0.2f" % (field_3)
+        elif (field_3 > 9 and field_3 < 100):
+            strContent = "   %0.2f" % (field_3)
+        fo.write(strContent)
+        
+        if (field_4 >= 0 and field_4 < 10):
+            strContent = "    %0.2f" % (field_4)
+        elif (field_4 > 9 and field_4 < 100):
+            strContent = "   %0.2f" % (field_4)
+        fo.write(strContent)
+        
+        if (field_5 >= 0 and field_5 < 10):
+            strContent = "    %0.2f" % (field_5)
+        elif (field_5 > 9 and field_5 < 100):
+            strContent = "   %0.2f" % (field_5)
+        fo.write(strContent)
+        
+        if (field_6 >= 0 and field_6 < 10):
+            strContent = "    %0.2f" % (field_6)
+        elif (field_6 > 9 and field_6 < 100):
+            strContent = "   %0.2f" % (field_6)
+        fo.write(strContent)
+        
+        if (field_7 >= 0 and field_7 < 10):
+            strContent = "    %0.2f" % (field_7)
+        elif (field_7 > 9 and field_7 < 100):
+            strContent = "   %0.2f" % (field_7)
+        fo.write(strContent)
+        
+        if (field_8 >= 0 and field_8 < 10):
+            strContent = "    %0.2f" % (field_8)
+        elif (field_8 > 9 and field_8 < 100):
+            strContent = "   %0.2f" % (field_8)
+        fo.write(strContent)
+        
+        if (field_9 >= 0 and field_9 < 10):
+            strContent = "    %0.2f" % (field_9)
+        elif (field_9 > 9 and field_9 < 100):
+            strContent = "   %0.2f" % (field_9)
+        fo.write(strContent)
+        
+        if (field_10 >= 0 and field_10 < 10):
+            strContent = "    %0.2f" % (field_10)
+        elif (field_10 > 9 and field_10 < 100):
+            strContent = "   %0.2f" % (field_10)
+        fo.write(strContent)
+        # Line 4 - Depth to bottom of layer - 0.01 - 10
+        fo.write("\n")
+        strContent = ""
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+           strContent = "    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0.01, 0.1, 0.2, 0.5, 0.7, 1.0, 1.2)
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+           strContent = "    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0.01, 0.1, 0.2, 0.5, 0.7, 1.0)
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+           strContent = "    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0.01, 0.1, 0.2, 0.5, 0.7)
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+           strContent = "    %0.2f    %0.2f    %0.2f    %0.2f" % (0.01, 0.1, 0.2, 0.5)
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+           strContent = "    %0.2f    %0.2f    %0.2f" % (0.01, 0.1, 0.2)
+        elif (NUMBER_LAYERS_SOL_FILE == 2):      
+           strContent = "    %0.2f    %0.2f" % (0.01, 0.1)
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+           strContent = "    %0.2f" % (0.01)
+        else:
+           strContent = "    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0.01, 0.1, 0.2, 0.5, 0.7, 1.0, 1.2)
+        fo.write(strContent)
+        
+        # Line 5 - Dry Bulk Density % - T_REF_BULK_DENSITY and S_REF_BULK_DENSITY - 0 -> 2.0
+        fo.write("\n")
+        strContent = ""
+        for i in range(0, NUMBER_LAYERS_SOL_FILE):
+            if (BLD_MAPPING_LIST[i] >= 0 and BLD_MAPPING_LIST[i] < 10):
+                strContent = strContent + "    %0.2f" % (BLD_MAPPING_LIST[i])
+            elif (BLD_MAPPING_LIST[i] > 9 and BLD_MAPPING_LIST[i] < 100):
+                strContent = strContent + "   %0.2f" % (BLD_MAPPING_LIST[i])
+        fo.write(strContent)
+        
+        # Line 6 - Water content at PWP - 0.01 - 0.5
+        fo.write("\n")
+        strContent = ""
+        for i in range(0, NUMBER_LAYERS_SOL_FILE):
+            if (WILITING_POINT_LIST_FULL[i] >= 0 and WILITING_POINT_LIST_FULL[i] < 10):
+                strContent = strContent + "    %0.2f" % (WILITING_POINT_LIST_FULL[i])
+            elif (WILITING_POINT_LIST_FULL[i] > 9 and WILITING_POINT_LIST_FULL[i] < 100):
+                strContent = strContent + "   %0.2f" % (WILITING_POINT_LIST_FULL[i])
+        fo.write(strContent)
+          
+        # Line 7 - Water Content at FC - 0.1 - 0.6
+        fo.write("\n")
+        strContent = ""
+        for i in range(0, NUMBER_LAYERS_SOL_FILE):
+            if (FIELD_CAPACITY_LIST_FULL[i] >= 0 and FIELD_CAPACITY_LIST_FULL[i] < 10):
+                strContent = strContent + "    %0.2f" % (FIELD_CAPACITY_LIST_FULL[i])
+            elif (FIELD_CAPACITY_LIST_FULL[i] > 9 and FIELD_CAPACITY_LIST_FULL[i] < 100):
+                strContent = strContent + "   %0.2f" % (FIELD_CAPACITY_LIST_FULL[i])
+        fo.write(strContent)
+        
+        # Line 8 - Sand Content - T_SAND and S_SAND - 1 -> 99
+        fo.write("\n")
+        strContent = ""
+        for i in range(0, NUMBER_LAYERS_SOL_FILE):
+            if (SAND_LIST[i] >= 0 and SAND_LIST[i] < 10):
+                strContent = strContent + "    %0.2f" % (SAND_LIST[i])
+            elif (SAND_LIST[i] > 9 and SAND_LIST[i] < 100):
+                strContent = strContent + "   %0.2f" % (SAND_LIST[i])
+        fo.write(strContent)
+        
+        # Line 9 - Silt Content - T_SILT and S_SILT - 1 -> 99
+        fo.write("\n")
+        strContent = ""
+        for i in range(0, NUMBER_LAYERS_SOL_FILE):
+            if (SILK_LIST[i] >= 0 and SILK_LIST[i] < 10):
+               strContent = strContent + "    %0.2f" % (SILK_LIST[i])
+            elif (SILK_LIST[i] > 9 and SILK_LIST[i] < 100):
+               strContent = strContent + "   %0.2f" % (SILK_LIST[i])
+        fo.write(strContent)
+        
+        # Line 10 - Initial Organic N - 100 -> 5000 ppm
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+            fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+            fo.write("\n    %0.2f    %0.2f" % (0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+            fo.write("\n    %0.2f" % (0))
+        else:
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))    
+        
+        # Line 11 - Soil PH - T_PH_H2O and S_PH_H2O - 3 -> 9
+        fo.write("\n")
+        strContent = ""
+        for i in range(0, NUMBER_LAYERS_SOL_FILE):
+            if (PHIHOX_MAPPING_LIST[i] >= 0 and PHIHOX_MAPPING_LIST[i] < 10):
+                strContent = strContent + "    %0.2f" % (PHIHOX_MAPPING_LIST[i])
+            elif (PHIHOX_MAPPING_LIST[i] > 9 and PHIHOX_MAPPING_LIST[i] < 100):
+                strContent = strContent + "   %0.2f" % (PHIHOX_MAPPING_LIST[i])
+        fo.write(strContent)
+        
+        # Line 12 - Sum of bases - 0 -> 150
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+            fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+            fo.write("\n    %0.2f    %0.2f" % (0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+            fo.write("\n    %0.2f" % (0))
+        else:    
+            fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+            
+            
+        # Line 13 - Organic C Conc % - T_OC and S_OC - 0.1 -> 10
+        fo.write("\n")
+        strContent = ""
+        for i in range(0, NUMBER_LAYERS_SOL_FILE):
+            if (ORCDRC_MAPPING_LIST[i] >= 0 and ORCDRC_MAPPING_LIST[i] < 10):
+                strContent = strContent + "    %0.2f" % (ORCDRC_MAPPING_LIST[i])
+            elif (ORCDRC_MAPPING_LIST[i] > 9 and ORCDRC_MAPPING_LIST[i] < 100):
+                strContent = strContent + "   %0.2f" % (ORCDRC_MAPPING_LIST[i])
+        fo.write(strContent)
+        
+        # Line 14 - Calcium Carbonat Content % - T_CACO3 and S_CACO3 - 0 -> 99
+        fo.write("\n")
+        if (t_caco3 >= 0 and t_caco3 < 10):
+            if (NUMBER_LAYERS_SOL_FILE == 7):
+               strContent = "    %0.2f    %0.2f    %0.2f" % (t_caco3, t_caco3, t_caco3)
+            elif (NUMBER_LAYERS_SOL_FILE == 6):
+               strContent = "    %0.2f    %0.2f    %0.2f" % (t_caco3, t_caco3, t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 5):
+               strContent = "    %0.2f    %0.2f" % (t_caco3, t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 4):
+               strContent = "    %0.2f    %0.2f" % (t_caco3, t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 3):
+               strContent = "    %0.2f" % (t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 2):
+               strContent = "    %0.2f" % (t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = "" 
+            else:
+               strContent = "    %0.2f    %0.2f    %0.2f" % (t_caco3, t_caco3, t_caco3) 
+        elif (t_caco3 > 9 and t_caco3 < 100):
+            if (NUMBER_LAYERS_SOL_FILE == 7):
+               strContent = "   %0.2f   %0.2f   %0.2f" % (t_caco3, t_caco3, t_caco3)
+            elif (NUMBER_LAYERS_SOL_FILE == 6):
+               strContent = "   %0.2f   %0.2f   %0.2f" % (t_caco3, t_caco3, t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 5):
+               strContent = "   %0.2f   %0.2f" % (t_caco3, t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 4):
+               strContent = "   %0.2f   %0.2f" % (t_caco3, t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 3):
+               strContent = "   %0.2f" % (t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 2):
+               strContent = "   %0.2f" % (t_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = "" 
+            else:
+               strContent = "   %0.2f   %0.2f   %0.2f" % (t_caco3, t_caco3, t_caco3)
+        fo.write(strContent)
+        
+        weighted_average_t_caco3 = (float(t_caco3) + float(s_caco3)) / 2
+        if (weighted_average_t_caco3 >= 0 and weighted_average_t_caco3 < 10):
+            if (NUMBER_LAYERS_SOL_FILE == 7 or NUMBER_LAYERS_SOL_FILE == 5 or NUMBER_LAYERS_SOL_FILE == 3 or NUMBER_LAYERS_SOL_FILE == 1):
+              strContent = "    %0.2f" % (weighted_average_t_caco3)
+            else:
+              strContent = ""
+        elif (weighted_average_t_caco3 > 9 and weighted_average_t_caco3 < 100):
+            if (NUMBER_LAYERS_SOL_FILE == 7 or NUMBER_LAYERS_SOL_FILE == 5 or NUMBER_LAYERS_SOL_FILE == 3 or NUMBER_LAYERS_SOL_FILE == 1):
+              strContent = "   %0.2f" % (weighted_average_t_caco3)
+            else:
+              strContent = ""
+        fo.write(strContent)
+        
+        if (s_caco3 >= 0 and s_caco3 < 10):
+            if (NUMBER_LAYERS_SOL_FILE == 7):
+               strContent = "    %0.2f    %0.2f    %0.2f" % (s_caco3, s_caco3, s_caco3)
+            elif (NUMBER_LAYERS_SOL_FILE == 6):
+               strContent = "    %0.2f    %0.2f    %0.2f" % (s_caco3, s_caco3, s_caco3)
+            elif (NUMBER_LAYERS_SOL_FILE == 5):
+               strContent = "    %0.2f    %0.2f" % (s_caco3, s_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 4):
+               strContent = "    %0.2f    %0.2f" % (s_caco3, s_caco3)
+            elif (NUMBER_LAYERS_SOL_FILE == 3):
+               strContent = "    %0.2f" % (s_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 2):
+               strContent = "    %0.2f" % (s_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = "" 
+            else:
+               strContent = "    %0.2f    %0.2f    %0.2f" % (s_caco3, s_caco3, s_caco3)
+        elif (s_caco3 > 9 and s_caco3 < 100):
+            if (NUMBER_LAYERS_SOL_FILE == 7):
+               strContent = "   %0.2f   %0.2f   %0.2f" % (s_caco3, s_caco3, s_caco3)
+            elif (NUMBER_LAYERS_SOL_FILE == 6):
+               strContent = "   %0.2f   %0.2f   %0.2f" % (s_caco3, s_caco3, s_caco3)
+            elif (NUMBER_LAYERS_SOL_FILE == 5):
+               strContent = "   %0.2f   %0.2f" % (s_caco3, s_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 4):
+               strContent = "   %0.2f   %0.2f" % (s_caco3, s_caco3)
+            elif (NUMBER_LAYERS_SOL_FILE == 3):
+               strContent = "   %0.2f" % (s_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 2):
+               strContent = "   %0.2f" % (s_caco3) 
+            elif (NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = "" 
+            else:
+               strContent = "   %0.2f   %0.2f   %0.2f" % (s_caco3, s_caco3, s_caco3)
+        fo.write(strContent)
+        
+        
+        # Line 15 - CEC - T_CEC_SOIL and S_CEC_SOIL - 0 -> 150
+        fo.write("\n")
+        strContent = ""
+        for i in range(0, NUMBER_LAYERS_SOL_FILE):
+            if (CEC_MAPPING_LIST[i] >= 0 and CEC_MAPPING_LIST[i] < 10):
+                strContent = strContent + "    %0.2f" % (CEC_MAPPING_LIST[i])
+            elif (CEC_MAPPING_LIST[i] > 9 and CEC_MAPPING_LIST[i] < 100):
+                strContent = strContent + "   %0.2f" % (CEC_MAPPING_LIST[i])
+        fo.write(strContent)
+        
+        # Line 16 - Coarse Fragment % 
+        fo.write("\n")
+        strContent = ""
+        for i in range(0,NUMBER_LAYERS_SOL_FILE):
+           if (ROCK_FRAGMENT_LIST[i] >= 0 and ROCK_FRAGMENT_LIST[i] < 10):
+               strContent = strContent + "    %0.2f" % (ROCK_FRAGMENT_LIST[i])
+           elif (ROCK_FRAGMENT_LIST[i] > 9 and ROCK_FRAGMENT_LIST[i] < 100):
+               strContent = strContent + "   %0.2f" % (ROCK_FRAGMENT_LIST[i])
+        fo.write(strContent)
+       
+        
+        # Line 17 - Initial Soluble N
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+           fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+           fo.write("\n    %0.2f    %0.2f" % (0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+           fo.write("\n    %0.2f" % (0)) 
+        else:
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+            
+        # Line 18 - Initial Soluble P
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+           fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+           fo.write("\n    %0.2f    %0.2f" % (0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+           fo.write("\n    %0.2f" % (0)) 
+        else:
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+           
+        # Line 19 - Crop Residue - 0 - 20
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+           fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+           fo.write("\n    %0.2f    %0.2f" % (0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+           fo.write("\n    %0.2f" % (0)) 
+        else:
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        
+        # Line 20 - Moist bulk density - 0.5 - 2.5
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+           fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+           fo.write("\n    %0.2f    %0.2f" % (0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+           fo.write("\n    %0.2f" % (0)) 
+        else:
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        # Line 21 - Phosphorous sorption ratio - 0 -> 0.9
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+           fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+           fo.write("\n    %0.2f    %0.2f" % (0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+           fo.write("\n    %0.2f" % (0)) 
+        else:
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        # Line 22 - Saturated conductivity 0.00001-100
+        fo.write("\n")
+        strContent = ""
+        for i in range(0,NUMBER_LAYERS_SOL_FILE):
+           if (SAT_HY_COND_LIST_FULL[i] >= 0 and SAT_HY_COND_LIST_FULL[i] < 10):
+               strContent = strContent + "    %0.2f" % (SAT_HY_COND_LIST_FULL[i])
+           elif (SAT_HY_COND_LIST_FULL[i] > 9 and SAT_HY_COND_LIST_FULL[i] < 100):
+               strContent = strContent + "   %0.2f" % (SAT_HY_COND_LIST_FULL[i])
+        fo.write(strContent)
+        
+        
+        # Line 23 - Lateral Hydraulic 0.00001-10
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+           fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+           fo.write("\n    %0.2f    %0.2f" % (0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+           fo.write("\n    %0.2f" % (0)) 
+        else:
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+           
+           
+        # Line 24 - Initial Organic P conc 50 - 1000
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+           fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+           fo.write("\n    %0.2f    %0.2f" % (0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+           fo.write("\n    %0.2f" % (0)) 
+        else:
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+           
+           
+        # Line 25 - Exchangeable K conc
+        if (NUMBER_LAYERS_SOL_FILE == 7):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 6):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 5):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 4):
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 3):
+           fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+        elif (NUMBER_LAYERS_SOL_FILE == 2):
+           fo.write("\n    %0.2f    %0.2f" % (0, 0)) 
+        elif (NUMBER_LAYERS_SOL_FILE == 1):
+           fo.write("\n    %0.2f" % (0)) 
+        else:
+           fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+           
+        
+        # Line 26 - Electrical Conductivity 0 - 50
+        fo.write("\n")
+        if (t_ece >= 0 and t_ece < 10):
+            if (NUMBER_LAYERS_SOL_FILE == 7):
+               strContent = "    %0.2f    %0.2f    %0.2f" % (t_ece,t_ece,t_ece)
+            elif (NUMBER_LAYERS_SOL_FILE == 6):
+               strContent = "    %0.2f    %0.2f    %0.2f" % (t_ece,t_ece,t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 5):
+               strContent = "    %0.2f    %0.2f" % (t_ece,t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 4):
+               strContent = "    %0.2f    %0.2f" % (t_ece,t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 3):
+               strContent = "    %0.2f" % (t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 2):
+               strContent = "    %0.2f" % (t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = "" 
+            else:
+               strContent = "    %0.2f    %0.2f    %0.2f" % (t_ece,t_ece,t_ece) 
+        elif (t_ece > 9 and t_ece < 100):
+            if (NUMBER_LAYERS_SOL_FILE == 7):
+               strContent = "   %0.2f   %0.2f   %0.2f" % (t_ece,t_ece,t_ece)
+            elif (NUMBER_LAYERS_SOL_FILE == 6):
+               strContent = "   %0.2f   %0.2f   %0.2f" % (t_ece,t_ece,t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 5):
+               strContent = "   %0.2f   %0.2f" % (t_ece,t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 4):
+               strContent = "   %0.2f   %0.2f" % (t_ece,t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 3):
+               strContent = "   %0.2f" % (t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 2):
+               strContent = "   %0.2f" % (t_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = "" 
+            else:
+               strContent = "   %0.2f   %0.2f   %0.2f" % (t_ece,t_ece,t_ece)
+        fo.write(strContent)
+        
+        weighted_average_ece = (float(t_ece) + float(s_ece)) / 2
+        if (weighted_average_ece >= 0 and weighted_average_ece < 10):
+           if (NUMBER_LAYERS_SOL_FILE == 7 or NUMBER_LAYERS_SOL_FILE == 5 or NUMBER_LAYERS_SOL_FILE == 3 or NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = "    %0.2f" % (weighted_average_ece)
+           else:
+               strContent = ""
+        elif (weighted_average_ece > 9 and weighted_average_ece < 100):
+           if (NUMBER_LAYERS_SOL_FILE == 7 or NUMBER_LAYERS_SOL_FILE == 5 or NUMBER_LAYERS_SOL_FILE == 3 or NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = "   %0.2f" % (weighted_average_ece)
+           else:
+               strContent = ""
+        fo.write(strContent)
+        
+        if (s_ece >= 0 and s_ece < 10):
+            if (NUMBER_LAYERS_SOL_FILE == 7):
+               strContent = "    %0.2f    %0.2f    %0.2f" % (s_ece,s_ece,s_ece)
+            elif (NUMBER_LAYERS_SOL_FILE == 6):
+               strContent = "    %0.2f    %0.2f    %0.2f" % (s_ece,s_ece,s_ece)
+            elif (NUMBER_LAYERS_SOL_FILE == 5):
+               strContent = "    %0.2f    %0.2f" % (s_ece,s_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 4):
+               strContent = "    %0.2f    %0.2f" % (s_ece,s_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 3):
+               strContent = "    %0.2f" % (s_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 2):
+               strContent = "    %0.2f" % (s_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = ""
+            else:
+               strContent = "    %0.2f    %0.2f    %0.2f" % (s_ece,s_ece,s_ece)
+        elif (s_ece > 9 and s_ece < 100):
+            if (NUMBER_LAYERS_SOL_FILE == 7):
+               strContent = "   %0.2f   %0.2f   %0.2f" % (s_ece,s_ece,s_ece)
+            elif (NUMBER_LAYERS_SOL_FILE == 6):
+               strContent = "   %0.2f   %0.2f   %0.2f" % (s_ece,s_ece,s_ece)
+            elif (NUMBER_LAYERS_SOL_FILE == 5):
+               strContent = "   %0.2f   %0.2f" % (s_ece,s_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 4):
+               strContent = "   %0.2f   %0.2f" % (s_ece,s_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 3):
+               strContent = "   %0.2f" % (s_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 2):
+               strContent = "   %0.2f" % (s_ece) 
+            elif (NUMBER_LAYERS_SOL_FILE == 1):
+               strContent = ""
+            else:
+               strContent = "   %0.2f   %0.2f   %0.2f" % (s_ece,s_ece,s_ece)
+        fo.write(strContent)
+
+        # Line 27 -> 45
+        for i in range(27, 46):
+            if (NUMBER_LAYERS_SOL_FILE == 7):
+               fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+            elif (NUMBER_LAYERS_SOL_FILE == 6):
+               fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0)) 
+            elif (NUMBER_LAYERS_SOL_FILE == 5):
+               fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0)) 
+            elif (NUMBER_LAYERS_SOL_FILE == 4):
+               fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0)) 
+            elif (NUMBER_LAYERS_SOL_FILE == 3):
+               fo.write("\n    %0.2f    %0.2f    %0.2f" % (0, 0, 0))
+            elif (NUMBER_LAYERS_SOL_FILE == 2):
+               fo.write("\n    %0.2f    %0.2f" % (0, 0)) 
+            elif (NUMBER_LAYERS_SOL_FILE == 1):
+               fo.write("\n    %0.2f" % (0)) 
+            else:
+               fo.write("\n    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f    %0.2f" % (0, 0, 0, 0, 0, 0, 0))
+    except Exception, err:
+        sys.exit("Error : %s" % (err))
+    finally:
+        fo.close() 
+####################################################################################################################################################################################### 
+####################################################################################################################################################################################### 
+####################################################################################################################################################################################### 
+####################################################################################################################################################################################### 
+#######################################################################################################################################################################################         
 #######################################################################################################################################################################################        
 def createSOILFile_V2_Depend_Number_Of_Layers(wise3_id, name_sol, SAND_LIST, SILK_LIST, t_ph_h2o, s_ph_h2o, t_oc, s_oc, t_caco3, s_caco3, t_cec_soil, s_cec_soil, ROCK_FRAGMENT_LIST, t_ref_bulk_density, s_ref_bulk_density, t_ece, s_ece, WILITING_POINT_LIST_FULL, FIELD_CAPACITY_LIST_FULL, SAT_HY_COND_LIST_FULL):
     try:
@@ -1838,10 +2438,25 @@ def main():
                         SAT_HY_COND_LIST_FULL = output_model_value[0]
                         FIELD_CAPACITY_LIST_FULL = output_model_value[1]
                         WILITING_POINT_LIST_FULL = output_model_value[2]
-                        if (NUMBER_LAYERS_SOL_FILE == 7 or NUMBER_LAYERS_SOL_FILE is None):
-                            createSOILFile_V2(wise3_id, name_sol, SAND_LIST, SILT_LIST , item2[7], item2[8], item2[9], item2[10], item2[11], item2[12], item2[13], item2[14], ROCK_FRAGMENT_LIST, item2[17], item2[18], item2[19], item2[20], WILITING_POINT_LIST_FULL, FIELD_CAPACITY_LIST_FULL, SAT_HY_COND_LIST_FULL)
+                        
+                        #Update_ThanhNH_20150114 : Truy van data tu SOIL GRID
+                        SOIL_GRIDS_VALUE_LIST = support_SOIL.select_isric_soilgrids_soil_modified_data(ID)
+                        if SOIL_GRIDS_VALUE_LIST is None :
+                            if (NUMBER_LAYERS_SOL_FILE == 7 or NUMBER_LAYERS_SOL_FILE is None):
+                                createSOILFile_V2(wise3_id, name_sol, SAND_LIST, SILT_LIST , item2[7], item2[8], item2[9], item2[10], item2[11], item2[12], item2[13], item2[14], ROCK_FRAGMENT_LIST, item2[17], item2[18], item2[19], item2[20], WILITING_POINT_LIST_FULL, FIELD_CAPACITY_LIST_FULL, SAT_HY_COND_LIST_FULL)
+                            else:
+                                createSOILFile_V2_Depend_Number_Of_Layers(wise3_id, name_sol, SAND_LIST, SILT_LIST , item2[7], item2[8], item2[9], item2[10], item2[11], item2[12], item2[13], item2[14], ROCK_FRAGMENT_LIST, item2[17], item2[18], item2[19], item2[20], WILITING_POINT_LIST_FULL, FIELD_CAPACITY_LIST_FULL, SAT_HY_COND_LIST_FULL)
                         else:
-                            createSOILFile_V2_Depend_Number_Of_Layers(wise3_id, name_sol, SAND_LIST, SILT_LIST , item2[7], item2[8], item2[9], item2[10], item2[11], item2[12], item2[13], item2[14], ROCK_FRAGMENT_LIST, item2[17], item2[18], item2[19], item2[20], WILITING_POINT_LIST_FULL, FIELD_CAPACITY_LIST_FULL, SAT_HY_COND_LIST_FULL)
+                            print "RUN ISRIC SOIL GRIDS =========== !!!!!!!!!!!!!!!!! \n"
+                            ORCDRC_MAPPING_LIST = SOIL_GRIDS_VALUE_LIST[0]
+                            PHIHOX_MAPPING_LIST = SOIL_GRIDS_VALUE_LIST[1]
+                            BLD_MAPPING_LIST = SOIL_GRIDS_VALUE_LIST[2]
+                            CEC_MAPPING_LIST = SOIL_GRIDS_VALUE_LIST[3]
+                            createSOILFile_V2_Depend_Number_Of_Layers_SOIL_GRIDS_ISRIC(wise3_id, name_sol, SAND_LIST, SILT_LIST , item2[7], item2[8], item2[9], item2[10], item2[11], item2[12], item2[13], item2[14], ROCK_FRAGMENT_LIST, item2[17], item2[18], item2[19], item2[20], WILITING_POINT_LIST_FULL, FIELD_CAPACITY_LIST_FULL, SAT_HY_COND_LIST_FULL,ORCDRC_MAPPING_LIST,PHIHOX_MAPPING_LIST,BLD_MAPPING_LIST,CEC_MAPPING_LIST)    
+                        #End Update
+                        
+                        
+                            
                         try:
                             avg_sand_1_2_3_4 = (float(SAND_LIST[0] + SAND_LIST[1] + SAND_LIST[2] + SAND_LIST[3])) / 4
                             avg_sand_5_6_7 = (float(SAND_LIST[4] + SAND_LIST[5] + SAND_LIST[6])) / 3
