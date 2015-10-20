@@ -1,4 +1,4 @@
-﻿# Author : Thanh Nguyen
+# Author : Thanh Nguyen
 # 05/23/2014
 # ?/usr/local/bin
 __version__ = "1"
@@ -324,6 +324,9 @@ def angle(v1, v2):
   return (dotproduct(v1, v2) / (length(v1) * length(v2)))
 def main():
     if (ACTION_FLAG == 1):
+       # Get Rock Fragment Value
+       ROCK_FRAGMENT_LIST = [0,0,0,0,0,0,0]
+       ROCK_FRAGMENT_LIST = support_AWC.get_list_value_of_rock_fragment(ID)
        
        TEXTURE_SOIL_LAYER = support_AWC.get_values_texture_for_soil_horizon(ID)
        if (TEXTURE_SOIL_LAYER is None):
@@ -354,19 +357,41 @@ def main():
        for i in range(0, NUMBER_LAYERS_SOL_FILE):
            EXAMPLE_AWC[i] = FIELD_CAPACITY_LIST[i] - WILTING_POINT_LIST[i]   
            if (i==0):
-               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_1[1] - LAYER_1[0])
+               depth_layer_cm = LAYER_1[1] - LAYER_1[0]
+               soil_depth_cm =  depth_layer_cm - (depth_layer_cm*ROCK_FRAGMENT_LIST[i])
+               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(soil_depth_cm)
+               #CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_1[1] - LAYER_1[0])
            elif (i==1):
-               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_2[1] - LAYER_2[0])
+               depth_layer_cm = LAYER_2[1] - LAYER_2[0]
+               soil_depth_cm =  depth_layer_cm - (depth_layer_cm*ROCK_FRAGMENT_LIST[i])
+               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(soil_depth_cm)
+               #CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_2[1] - LAYER_2[0])
            elif (i==2):
-               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_3[1] - LAYER_3[0])
+               depth_layer_cm = LAYER_3[1] - LAYER_3[0]
+               soil_depth_cm =  depth_layer_cm - (depth_layer_cm*ROCK_FRAGMENT_LIST[i])
+               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(soil_depth_cm)
+               #CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_3[1] - LAYER_3[0])
            elif (i==3):
-               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_4[1] - LAYER_4[0])
+               depth_layer_cm = LAYER_4[1] - LAYER_4[0]
+               soil_depth_cm =  depth_layer_cm - (depth_layer_cm*ROCK_FRAGMENT_LIST[i])
+               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(soil_depth_cm)
+               #CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_4[1] - LAYER_4[0])
            elif (i==4):
-               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_5[1] - LAYER_5[0])
+               depth_layer_cm = LAYER_5[1] - LAYER_5[0]
+               soil_depth_cm =  depth_layer_cm - (depth_layer_cm*ROCK_FRAGMENT_LIST[i])
+               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(soil_depth_cm)
+               #CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_5[1] - LAYER_5[0])
            elif (i==5):
-               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_6[1] - LAYER_6[0])
+               depth_layer_cm = LAYER_6[1] - LAYER_6[0]
+               soil_depth_cm =  depth_layer_cm - (depth_layer_cm*ROCK_FRAGMENT_LIST[i])
+               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(soil_depth_cm)
+               #CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_6[1] - LAYER_6[0])
            elif (i==6):
-               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_7[1] - LAYER_7[0])
+               depth_layer_cm = LAYER_7[1] - LAYER_7[0]
+               soil_depth_cm =  depth_layer_cm - (depth_layer_cm*ROCK_FRAGMENT_LIST[i])
+               CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(soil_depth_cm)
+               #CENTIMES_AWC[i] = EXAMPLE_AWC[i]*(LAYER_7[1] - LAYER_7[0])
+           print ("\n Da chay gia tri moi : rock_fragment : %s ; example_awc : %s ; centimes_awc : %s " %(str(ROCK_FRAGMENT_LIST[i]),str(EXAMPLE_AWC[i]),str(CENTIMES_AWC[i])))
            soil_profile_awc = float(soil_profile_awc) + CENTIMES_AWC[i]    
        result = support_AWC.insert_rosetta_value_awc_output(ID, '', Y_Coor, X_Coor, FIELD_CAPACITY_LIST, WILTING_POINT_LIST,EXAMPLE_AWC, CENTIMES_AWC, soil_profile_awc) 
        
