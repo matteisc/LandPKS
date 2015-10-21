@@ -8,8 +8,8 @@ shinyServer(function(input, output,session) {
   first<<- TRUE
   
   
-  ##https://landpotential.shinyapps.io/RHMcharts/?CSV_URL=http://portal.landpotential.org/sites/default/public_shiny_csv/19-nasim_gh-1444954112.csv
-  
+##https://landpotential.shinyapps.io/LandCoverCharts/?userName=dwkimiti@gmail.com
+
   output$PlotNames <- renderUI({
     
     searchStr = parseQueryString(session$clientData$url_search)
