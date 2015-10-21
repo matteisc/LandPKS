@@ -1,4 +1,4 @@
-﻿# Author : Thanh Nguyen
+# Author : Thanh Nguyen
 # 05/23/2014
 # ?/usr/local/bin
 __version__ = "1"
@@ -76,7 +76,7 @@ else:
 def main():
     if (ACTION_FLAG == 1):
        #if (TIF_FOLDER_COMM is None):
-       TIF_FOLDER_COMM = "E:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
+       TIF_FOLDER_COMM = "D:/ThanhNguyen_Working/Python_APEX/TIF_FILE_COLLECTION/"
        
        TIF_PRECIP_MON_JAN = support_Climate_Summary.getRasterValue_ThanhNH_Float(TIF_FOLDER_COMM + "CLIMATE_SUMMARY/PRECIP_Monthly/ma_prec_01_1971_2013.tif", X_Coor, Y_Coor)
        TIF_PRECIP_MON_FEB = support_Climate_Summary.getRasterValue_ThanhNH_Float(TIF_FOLDER_COMM + "CLIMATE_SUMMARY/PRECIP_Monthly/ma_prec_02_1971_2013.tif", X_Coor, Y_Coor)

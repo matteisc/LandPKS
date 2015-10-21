@@ -6,8 +6,6 @@ import os
 import sys
 import shutil
 
-
-
 #define
 EXTEND_FILE_OPERATIONS = ".OPS"
 DAT_DIRECTORY = "Operation_Files\DAT_Files"

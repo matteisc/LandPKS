@@ -1,4 +1,4 @@
-﻿# Author : Thanh Nguyen
+# Author : Thanh Nguyen
 # 05/23/2014
 # ?/usr/local/bin
 __version__ = "1"
@@ -141,7 +141,8 @@ import math
 import decimal
 _dir = "c:\\xampp\\htdocs\\APEX\\Python_APEX\\2_WEATHER_PROJECT_REAL_TIME\\Weather_Station_Data\\Africa\\countryName"
 dly_folder = "C:\\xampp\\htdocs\\APEX\\Python_APEX\\2_WEATHER_PROJECT_REAL_TIME\\Weather_Station_Data\\DLY_Files"
-
+D = 0.5  #Distance between 2 points in km
+R = 6378.1 
 #this method returns the distance between p0,p1 in kilometers  
 def distance_on_unit_sphere(p0,p1):
     lat1 = p0[0]
@@ -236,6 +237,115 @@ def formatClosestStationDLY(Long ,Lat ,countryName ,dlyFileName):
     stationData = findClosestStation(Long, Lat, countryName);
     formatDLY(stationData, dlyFileName)
     return stationData
+#######################################################################################################################################################
+#Horizontal Bearing between 2 locations
+def calcBearing(lat1, lon1, lat2, lon2):
+    dLon = lon2 - lon1
+    y = math.sin(dLon) * math.cos(lat2)
+    x = math.cos(lat1) * math.sin(lat2) \
+        - math.sin(lat1) * math.cos(lat2) * math.cos(dLon)
+    return math.atan2(y, x)
+
+
+#was defined previously ,you may need to delete this one
+#this method returns the distance between p0,p1 in kilometers
+def distance_on_unit_sphere(p0,p1):
+
+    lat1 = p0[0]
+    long1 = p0[1]
+    lat2= p1[0]
+    long2 = p1[1]
+    # Convert latitude and longitude to 
+    # spherical coordinates in radians.
+    degrees_to_radians = math.pi/180.0
+        
+    # phi = 90 - latitude
+    phi1 = (90.0 - lat1)*degrees_to_radians
+    phi2 = (90.0 - lat2)*degrees_to_radians
+        
+    # theta = longitude
+    theta1 = long1*degrees_to_radians
+    theta2 = long2*degrees_to_radians
+        
+    # Compute spherical distance from spherical coordinates.
+    
+    cos = (math.sin(phi1)*math.sin(phi2)*math.cos(theta1 - theta2) + 
+           math.cos(phi1)*math.cos(phi2))
+    arc = math.acos( cos )
+
+    # Multiply arc by the radius of the earth in kilometers
+    return arc* 6371 
+
+
+#this method will find and return the next point with distance d on the same line
+def getNextPoint(brng, lat1, long1):
+    
+    _lat2 = math.asin( math.sin(lat1)*math.cos(D/R) +
+         math.cos(lat1)*math.sin(D/R)*math.cos(brng))
+
+    _long2 = long1 + math.atan2(math.sin(brng)*math.sin(D/R)*math.cos(lat1),
+                 math.cos(D/R)-math.sin(lat1)*math.sin(_lat2))
+    
+    return _lat2,_long2
+
+
+#This method will return an array of points in between loc1 and loc2 inclusive
+#and prints the max height difference between these points
+#Long = x , Lat = y
+#long1,lat1 is user's location
+#long2,lat2 is station's location
+def getElevationVector(lat1, long1, lat2, long2):
+
+
+    dist = distance_on_unit_sphere((lat1, long1),(lat2, long2))#distance between 2 points
+    
+    lat1 = math.radians(lat1) # lat point converted to radians
+    long1 = math.radians(long1) # long point converted to radians
+
+    lat2 = math.radians(lat2) # lat point converted to radians
+    long2 = math.radians(long2) # long point converted to radians
+
+
+    brng = calcBearing(lat1, long1, lat2, long2) #Bearing
+
+    #number of points between loc1 and loc2
+    count = int(math.floor(dist/D))
+
+    #first point is loc1
+    points = []
+    points.append([])
+    points[0] = lat1,long1,get_elevation(long1,lat1)
+    
+    for i in range(1,count+1):
+        
+        point = getNextPoint(brng,lat1,long1)
+
+        lat1 = point[0]
+        long1 = point[1]
+        
+        points.append([])
+        points[i] = lat1,long1,get_elevation(long1,lat1)
+
+    #last point is loc2
+    points.append([])
+    points[count+1] = lat2,long2,get_elevation(long1,lat1)
+
+    #radian to degree for all points
+    for i in range(0,count+2):
+        points[i] = math.degrees(points[i][0]),math.degrees(points[i][1]),points[i][2]
+
+##    #print the points
+##    for i in range(0,count+2):        
+##        print(str(points[i][0]) +","+str(points[i][1])
+##              )#+","+str(points[i][2]))
+
+    #print the max (h) - min(h) ,maximum height difference in whatever scale the method will return.
+    heights = [row[2] for row in points]
+    print(max(heights) - min(heights))
+
+    return points
+#getElevationVector(32.279549, -106.728230,32.363687, -106.790371)
+
 #######################################################################################################################################################
 def get_dly_folder():
     return dly_folder

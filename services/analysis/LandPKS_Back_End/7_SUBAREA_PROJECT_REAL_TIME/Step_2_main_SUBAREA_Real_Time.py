@@ -21,7 +21,6 @@ FLOAT_Y_COOR = 0.0
 X_COOR_1 = 0.0
 Y_COOR_1 = 0.0
 ID = ""
-
 if (len(sys.argv) < 8):
     print("Sorry, not enough arguments")
     sys.exit("Usage : python Step_2_main_SUBAREA.py -m <original SUB filename> -s <Soil SOL filename> <Path of SOILCOM.DAT file OR -default> -o <opearation OPS filename> <Path of OPSCCOM.DAT or -default>  -d <Daily weather DLY filename> <Path of WDLSTCOM.DAT or -default> -x <X coordinate> -y <Y coordinate> -IDapex <ID of entry in MySQL database - APEX>")

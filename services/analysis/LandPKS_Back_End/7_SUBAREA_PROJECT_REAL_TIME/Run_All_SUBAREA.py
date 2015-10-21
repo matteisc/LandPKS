@@ -7,7 +7,6 @@ import sys
 
 from support import support_SUBAREA
 tif_countries = 'countryrastermap/Countries_Raster.tif'
-
 if (len(sys.argv) <>  7):
    print("Not enough arguments")
    sys.exit("Usage : python Run_All_SUBAREA -x <Longtitude X Coordinate> -y <Latitude Y Coordinate> -ID <Record ID User Input>")

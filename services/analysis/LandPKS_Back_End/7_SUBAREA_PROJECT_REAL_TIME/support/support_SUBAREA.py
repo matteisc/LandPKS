@@ -11,7 +11,6 @@ except Exception, err:
     print err
     sys.exit("Please install GDAL for Python")
 
-
 try:
    import MySQLdb
 except:

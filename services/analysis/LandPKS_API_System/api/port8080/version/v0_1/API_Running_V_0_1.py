@@ -19,13 +19,17 @@ import time
 import datetime
 
 from auth import AuthController, require, member_of, name_is, check_credentials
-
+SESSION_KEY = '_cp_username'
 
 CURRENT_VERSION = 0.1
 '''
 Configuration
 '''
+ACCESS_LOG_CHERRYPY_8080 = "C:/xampp/htdocs/LandPKS_API_System/api/port8080=cherrypd_server+cherrypy_framework/log/%s_8080_access_log.log" %(str(datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d')))
+ERROR_LOG_CHERRYPY_8080 = "C:/xampp/htdocs/LandPKS_API_System/api/port8080=cherrypd_server+cherrypy_framework/log/%s_8080_error_log.log" %(str(datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d')))
 
+
+CORE_BACK_END_MAIN_LANPKS = "C:/xampp/htdocs/APEX/Python_APEX/1_CONTROLLER_PROJECT/"
 def prepare_response(data,format="JSON"):
     return "Da converted"
 def return_response_error(code,type,mess,format="JSON"):
@@ -187,8 +191,13 @@ def Running_API_V_0_1(request_data):
                     
                    city = get_parameter(request_data, 'city', False)
                    plot_data['city'] = str(city)
+                   
+                   notes = get_parameter(request_data, 'notes', False)
+                   plot_data['notes'] = str(notes)
+                   
                    modified_date = get_parameter(request_data, 'modified_date', False)
                    plot_data['modified_date'] = str(modified_date)
+                   
                    land_cover = get_parameter(request_data, 'land_cover', False)
                    plot_data['land_cover'] = str(land_cover)
                    
@@ -205,7 +214,10 @@ def Running_API_V_0_1(request_data):
                        b_grazed = 0
                    plot_data['grazed'] = grazed
                    plot_data['boolean_grazed'] = b_grazed
-                       
+                   
+                   grazing = get_parameter(request_data, 'grazing', False)
+                   plot_data['grazing'] = str(grazing)
+                        
                    flooding = get_parameter(request_data, 'flooding', False)
                    if (not flooding or flooding == '' or flooding is None):
                        flooding = "FALSE"
@@ -233,6 +245,11 @@ def Running_API_V_0_1(request_data):
                    if (not slope_shape or slope_shape == '' or slope_shape is None):
                        return return_response_error(400,"error","Invalid or missing slope_shape field","JSON")
                    plot_data['slope_shape'] = str(slope_shape)
+                   
+                   bedrock_depth = get_parameter(request_data, 'bedrock_depth', False)
+                   plot_data['bedrock_depth'] = str(bedrock_depth)
+                   stopped_digging_depth = get_parameter(request_data, 'stopped_digging_depth', False)
+                   plot_data['stopped_digging_depth'] = str(stopped_digging_depth)
                    
                    rock_fragment_for_soil_horizon_1 = get_parameter(request_data, 'rock_fragment_for_soil_horizon_1', False)
                    rock_fragment_for_soil_horizon_1 = rock_fragment_for_soil_horizon_1.strip()
@@ -1003,6 +1020,10 @@ def Running_API_V_0_1(request_data):
                            return return_response_error(400,"error","Invalide or missing ID field or (Recorder_name and name) pair","JSON")
                        if (not recorder_name or recorder_name == '' or recorder_name is None):
                            return return_response_error(400,"error","Invalide or missing ID field or (Recorder_name and name) pair","JSON")
+                       
+                       if (LandPKS_Database_Driver.get_land_cover_id_from_key_pair_MySQL_Database(name, recorder_name) != 1):
+                           return return_response_error(400,"error","LandCover with (Recorder_name and name) pair has been deleted already or does not exist in System","JSON")
+                       
                        result_delete = LandPKS_Database_Driver.delete_land_cover_record_name_recorder_name_MySQL_Database(name, recorder_name)
                        if (result_delete == 1):
                                message = {'name':name,'recorder_name':recorder_name,'status':'deleted','version':CURRENT_VERSION,'object':object}
@@ -1167,6 +1188,40 @@ def Running_API_V_0_1(request_data):
                    print err
                    return return_response_error(500,"error","Something went wrong. Please try it again","JSON")
             else:
-                return return_response_error(404,"error","Invalide action field","JSON")      
+                return return_response_error(404,"error","Invalide action field","JSON")
+        elif (object == 'CLIMATE'):
+            if (action == "GET"):
+                try:      
+                    from model_support import geospatial_functions
+                except Exception,err:
+                    print err
+                    return return_response_error(500,"error","Something went wrong. Please try it again","JSON")
+                
+                latitude = get_parameter(request_data, LandPKS_LandInfo.PARAMS_LAT, True)
+                if (latitude == -9999):
+                    return return_response_error(400,"error","Invalid or missing latitude field","JSON")
+                if (is_Float(latitude) == False):
+                    return return_response_error(400,"error","Invalid or missing latitude field","JSON")
+                fl_latitude = float(latitude)
+                   
+                longitude = get_parameter(request_data, LandPKS_LandInfo.PARAMS_LONG, True)
+                if (longitude == -9999):
+                    return return_response_error(400,"error","Invalid or missing longitude field","JSON")
+                if (is_Float(longitude) == False):
+                    return return_response_error(400,"error","Invalid or missing longitude field","JSON")
+                fl_longitude= float(longitude)
+                
+                data_source = ""
+                data_source = get_parameter(request_data, 'data_source', False)
+                if ((data_source == -9999) or (not data_source) or (data_source == "") or (data_source is None)):
+                    data_source = ""
+                CLIMATE_DATA_SOURCE = "CRU"
+                if (data_source != ""):
+                   CLIMATE_DATA_SOURCE = data_source.strip().upper()
+                print CLIMATE_DATA_SOURCE
+                climate_data = geospatial_functions.get_climate_data_set(fl_longitude,fl_latitude,CLIMATE_DATA_SOURCE)
+                return return_success_get(climate_data)
+            else:
+                return return_response_error(404,"error","Invalide action field","JSON")
         else:
             return return_response_error(404,"error","Invalide object field","JSON")

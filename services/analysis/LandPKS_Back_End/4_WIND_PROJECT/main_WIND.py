@@ -6,8 +6,6 @@ import os
 import sys
 import shutil
 
-
-
 # define
 EXTEND_FILE_OPERATIONS = ".WND"
 DAT_DIRECTORY = "Wind_Files\DAT_Files"

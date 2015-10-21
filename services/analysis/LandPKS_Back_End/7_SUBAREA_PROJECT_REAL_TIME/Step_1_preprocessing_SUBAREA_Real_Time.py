@@ -14,6 +14,7 @@ from __builtin__ import str
 
 TIF_FOLDER_COLLECTION = ""
 
+
 mess = "Usage : python Step_1_preprocessing_SUBAREA.py -x <Longtitude X Coordinate> -y <Latitude Y coordinate> -ID <Record ID> -tif <Folder path of TIF File> -subname <Sub File name> -opsname <OPS File Name>"
 if (len(sys.argv) < 10):
     print("Sorry, not enough arguments")

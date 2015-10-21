@@ -142,4 +142,3 @@ def checkParams(request_data):
      b_params[LandPKS_LandInfo.PARAMS_AFTER_DATE] = b_after_date
      
      return b_params
-     

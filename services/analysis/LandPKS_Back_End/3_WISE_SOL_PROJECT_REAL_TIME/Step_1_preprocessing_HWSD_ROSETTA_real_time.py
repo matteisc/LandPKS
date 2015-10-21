@@ -6,6 +6,8 @@ __version__ = "1"
 from osgeo import gdal, ogr
 import struct,csv, os, sys
 import shutil
+from support import ISRIC_REST_API_SOIL
+from support import support_SOIL
 
 class UTF8Recoder:
     """
@@ -142,6 +144,17 @@ def main():
        print "MU_GLOBAL = " + str(mu_global)
        dat_folder = os.path.join("C:\\xampp\\htdocs\\APEX\\Python_APEX\\3_WISE_SOL_PROJECT_REAL_TIME\\Result_HWSD\\DATFiles\\",str(mu_global))
        sol_folder = os.path.join("C:\\xampp\\htdocs\\APEX\\Python_APEX\\3_WISE_SOL_PROJECT_REAL_TIME\\Result_HWSD\\SOLFiles\\",str(mu_global))
+       
+       
+       #Update_ThanhNH_20150114 : Truy van data tu SOIL GRID
+       try:
+           urlRequest = "http://rest.soilgrids.org/query?lon=%f&lat=%f" %(X_COOR,Y_COOR)
+           SOIL_GRIDS_LIST = ISRIC_REST_API_SOIL.request_rest_api_ISRIC(urlRequest)
+           support_SOIL.insert_isric_soilgrids_soil_original_data(str(ID), "", Y_COOR, X_COOR, SOIL_GRIDS_LIST[0], SOIL_GRIDS_LIST[1],SOIL_GRIDS_LIST[2], SOIL_GRIDS_LIST[3], SOIL_GRIDS_LIST[4], SOIL_GRIDS_LIST[5], SOIL_GRIDS_LIST[6])
+       except Exception,err:
+           pass
+       #End Update
+       
        
        if (os.path.exists(dat_folder) and os.path.exists(sol_folder)):
           #copyFolder(dat_folder, PRIVATE_FOLDER_ACCESS_DAT) 
