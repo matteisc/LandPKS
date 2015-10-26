@@ -14,14 +14,23 @@ shinyUI(fluidPage(
     condition = "input.exportAll == false",
     textInput("recorder", label = "Enter your recorder name :")
   ),
-  
-  
-  
+
+   
   checkboxInput("exportAll", label = h6("Export ALL plots in the database (download may take several minutes)"), value = FALSE),
   selectInput("dataType", label = h5("Type of Data Export"), 
               choices = list("LandInfo" , "LandCover" , "Metadata for LandInfo" , "Metadata for LandCover" ), 
               selected = "LandInfo"),
-  
-  downloadButton('downloadData', 'Export')
+
+  fluidRow(
+    column(width = 1,
+  downloadButton("downloadData", "Export")
+    )
+  ,
+  column(width = 1,
+  conditionalPanel(condition = "input.dataType == 'LandCover'",
+#   actionButton('visualize',"Data Visualization")),
+  tags$body(uiOutput('url')) 
+  )
+  ))
 ))
 

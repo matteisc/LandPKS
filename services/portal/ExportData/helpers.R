@@ -146,6 +146,10 @@ calcFormulas<-function(df){
     df[rowNo,"plot_total_canopy_gap_percentage"] <- sum(as.logical(plot$canopy_gap))*5 
     df[rowNo,"plot_total_basal_gap_percentage"] <- sum(as.logical(plot$basal_gap))*5
     
+    df[rowNo,"species_of_interest_1_density"] <- sum(plot$species_of_interest_1_count,na.rm = TRUE)/20
+    df[rowNo,"species_of_interest_2_density"] <- sum(plot$species_of_interest_2_count,na.rm = TRUE)/20
+
+    
   }
   return (df)
 }
@@ -225,11 +229,11 @@ getCoverData<-function(userName,items){
       
       result[rowNo,"species_of_interest_1"] = speciesOfInterest1
       result[rowNo,"species_of_interest_1_count"] = getColumn(segment,"speciesOfInterest1Count")
-      result[rowNo,"species_of_interest_1_density"] = getColumn(segment,"species1Density")
+      #result[rowNo,"species_of_interest_1_density"] = getColumn(segment,"species1Density")
    
       result[rowNo,"species_of_interest_2"] = speciesOfInterest2
       result[rowNo,"species_of_interest_2_count"] = getColumn(segment,"speciesOfInterest2Count")
-      result[rowNo,"species_of_interest_2_density"] = getColumn(segment,"species2Density")
+     # result[rowNo,"species_of_interest_2_density"] = getColumn(segment,"species2Density")
 
     }
   } 
@@ -308,7 +312,6 @@ getPlotListData<-function(){
 
 ###########
 updateRequestedData<-function(recorder,dataType){
-  
   
   if(dataType == "Metadata for LandInfo" )
   {
