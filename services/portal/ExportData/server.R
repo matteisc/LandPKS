@@ -7,7 +7,6 @@ library(googleVis)
 
 shinyServer(function(input, output,session) {
   
-
   output$url<- renderUI({
     
     link =paste0("https://landpotential.shinyapps.io/LandCoverCharts/?userName=",selectedRecorder())  
@@ -15,32 +14,29 @@ shinyServer(function(input, output,session) {
       target="_blank",
       style = "background-color:white ; color: black; border-color: #CDCDCD")
   })
-    
- 
-  
-getFilename <- function() { 
-    if(input$dataType == "LandInfo"){
-      paste('Export_LandInfo_Data', '.csv', sep='') 
-    }
-    else if(input$dataType == "LandCover")
-    {
-      paste('Export_LandCover_Data', '.csv', sep='') 
-    }
-    else if(input$dataType == "Metadata for LandInfo" )
-    {
-      paste('Export_METADATA_LandInfo', '.csv', sep='') 
-    }
-    else if(input$dataType == "Metadata for LandCover" )
-    {
-      paste('Export_METADATA_LandCover', '.csv', sep='') 
-    }
-    else
-      "dummy.csv"
-  }
-  
+      
 
   output$downloadData <- downloadHandler(  
-    filename = getFilename(),
+    filename = function(){
+      if(input$dataType == "LandInfo"){
+              'Export_LandInfo_Data.csv' 
+            }
+            else if(input$dataType == "LandCover")
+            {
+              'Export_LandCover_Data.csv' 
+            }
+            else if(input$dataType == "Metadata for LandInfo" )
+            {
+              'Export_METADATA_LandInfo.csv'
+            }
+            else if(input$dataType == "Metadata for LandCover" )
+            {
+              'Export_METADATA_LandCover.csv'
+            }
+            else
+              "dummy.csv"
+        
+    },
     content = function(file) { 
       req_data <- updateRequestedData(selectedRecorder(),isolate(input$dataType))
       req_data$recName <- NULL
