@@ -463,9 +463,9 @@ prepareData<-function(recorder )
 
   
   data<<-getData(recorder)
-  if(nrow(data) ==0) 
+  if( is.null(data) || nrow(data) ==0) 
   {
-    stop("There is no RHM data for this user to display!")
+    stop("There is no LandCover data for this user to display!")
   }
   ## extract plot names
   plotNames <<- levels(factor(data, levels = unique(data$name)))

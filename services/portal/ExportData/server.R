@@ -39,6 +39,9 @@ shinyServer(function(input, output,session) {
     },
     content = function(file) { 
       req_data <- updateRequestedData(selectedRecorder(),isolate(input$dataType))
+      if(is.null(req_data) || nrow(req_data) == 0 ){
+        stop("No data to display!")
+      }
       req_data$recName <- NULL
       write.csv(req_data, file,row.names=FALSE,quote=TRUE,na="",qmethod='escape')
     }
