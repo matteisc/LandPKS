@@ -15,7 +15,7 @@ shinyServer(function(input, output,session) {
     searchStr = parseQueryString(session$clientData$url_search)
 #     print(searchStr["userName"])
     shiny::validate(
-      need("userName" %in% names(searchStr) ,paste0('No data to display!',searchStr))
+      need("userName" %in% names(searchStr) ,'No data to display!')
       ,
       need(searchStr["userName"] != "" ,'No data to display!')
     )
