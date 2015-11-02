@@ -1,0 +1,116 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Maven Default Project</name>
+ 
+  
+ 
+  <pluginRepositories>
+    <pluginRepository>
+      <id>central</id>
+      <name>Maven Plugin Repository</name>
+      <url>http://repo1.maven.org/maven2</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+    </pluginRepository>
+ <pluginRepository>
+                <id>javabuilders</id>
+                <url>http://javabuilders.googlecode.com/svn/repo</url>
+        </pluginRepository>
+  </pluginRepositories>
+ 
+  <build>
+    <directory>target</directory>
+    <outputDirectory>target/classes</outputDirectory>
+    <finalName>${artifactId}-${version}</finalName>
+    <testOutputDirectory>target/test-classes</testOutputDirectory>
+    <sourceDirectory>services\analysis\LandPKS_API_System\api\port8080</sourceDirectory>
+    <scriptSourceDirectory></scriptSourceDirectory>
+    <testSourceDirectory></testSourceDirectory>
+    <resources>
+      <resource>
+        <directory></directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory></directory>
+      </testResource>
+    </testResources>
+  </build>
+ 
+  <reporting>
+    <outputDirectory>target/site</outputDirectory>
+  </reporting>
+ 
+  <profiles>
+    <profile>
+      <id>release-profile</id>
+ 
+      <activation>
+        <property>
+          <name>performRelease</name>
+        </property>
+      </activation>
+ 
+      <build>
+        <plugins>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+ 
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+ 
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+ 
+            <configuration>
+              <updateReleaseInfo>true</updateReleaseInfo>
+            </configuration>
+          </plugin>
+<plugin>
+        <groupId>maven-python-mojos</groupId>
+        <artifactId>maven-python-distribute-plugin</artifactId>
+        <version>..</version>
+        <executions>
+                <execution>
+                        <goals>
+                                <goal>package</goal>
+                        </goals>
+                </execution>
+        </executions>
+</plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+ 
+</project>
