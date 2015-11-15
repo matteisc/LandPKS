@@ -162,43 +162,43 @@ paths:
           required: false
           type: string
           format: Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ; LOAM ; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}
-		- name: texture_for_soil_horizon_2
+        - name: texture_for_soil_horizon_2
           in: query
           description: Texture of soil for each layer. Soil texture determined by hand. Horizontal layer 2.
           required: false
           type: string
           format: Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ; LOAM ; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}
-		- name: texture_for_soil_horizon_3
+        - name: texture_for_soil_horizon_3
           in: query
           description: Texture of soil for each layer. Soil texture determined by hand. Horizontal layer 3.
           required: false
           type: string
           format: Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ; LOAM ; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}
-		- name: texture_for_soil_horizon_4
+        - name: texture_for_soil_horizon_4
           in: query
           description: Texture of soil for each layer. Soil texture determined by hand. Horizontal layer 4.
           required: false
           type: string
-          format: Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ; LOAM ; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}
-		- name: texture_for_soil_horizon_5
+          format: Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ; LOAM ; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY} 
+        - name: texture_for_soil_horizon_5
           in: query
           description: Texture of soil for each layer. Soil texture determined by hand. Horizontal layer 5.
           required: false
           type: string
           format: Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ; LOAM ; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}
-		- name: texture_for_soil_horizon_6
+        - name: texture_for_soil_horizon_6
           in: query
           description: Texture of soil for each layer. Soil texture determined by hand. Horizontal layer 6.
           required: false
           type: string
           format: Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ; LOAM ; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}
-		- name: texture_for_soil_horizon_7
+        - name: texture_for_soil_horizon_7
           in: query
           description: Texture of soil for each layer. Soil texture determined by hand. Horizontal layer 7.
           required: false
           type: string
           format: Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ; LOAM ; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}
-	  tags:
+      tags:
         - LandInfo
         - Put
       responses:
