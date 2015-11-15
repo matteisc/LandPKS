@@ -1,0 +1,874 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "LandPKS API System",
+        "description": "This is Web Service description for LandPKS Project API System. This documentation follows [..] to describe all Web Services API operations of LandPKS Project. It allows third-parties and developers be able to interact with LandPKS's data (LandInfo, LandCover...). 
+                        \n\n\n version : The current version of internal recipe database. Each time when new plot are put into the server through the web service, the internal database version is incremented. If the version == empty or version = -1, this is default value, it means that the latest API version is used 
+                        \n Action and object : Additional data includes action and object to identify PUT or POST or GET or DELETE action and which object do you want to interact (landinfo, landcover or all)? 
+                        \n Meta data: The rest of parameters are metadata (landinfo data or landcover data) want to put and run model ",
+        "version": "1.0.0"
+    },
+    "host": "api.landpotential.org",
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "basePath": "/query",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/query?version=&action=put&object=landinfo": {
+            "put": {
+                "summary": "Insert a new LandInfo object",
+                "description": "This operation allows to insert new data object of LandInfo to cloud data store. \n",
+                "parameters": [
+				    {
+                        "name": "auth_key",
+                        "in": "http header",
+                        "description": "Authenticatin key for using API.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Name of the plot where data was collected.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "recorder_name",
+                        "in": "query",
+                        "description": "LandInfo recorder name. It is email that users registered to use LandPKS services.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "test_plot",
+                        "in": "query",
+                        "description": "Identifies plot as test plot (deleted from database after 30 days from upload) or real plot (permanant record in database), TRUE = test plot, FALSE = real plot.",
+                        "required": true,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "organization",
+                        "in": "query",
+                        "description": "Organization.",
+                        "required": false,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "query",
+                        "description": "Latitude of plot's geographic location in decimal degrees.",
+                        "required": true,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "query",
+                        "description": "Longitude of plot's geographic location in decimal degrees.",
+                        "required": true,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "City location.",
+                        "required": false,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "modified_date",
+                        "in": "query",
+                        "description": "Time stamp for successful upload of data collected.",
+                        "required": false,
+                        "type": "datetime",
+                        "format": "string"
+                    },
+                    {
+                        "name": "land_cover",
+                        "in": "query",
+                        "description": "Observed land cover. Land cover selections are a modified version of NRCS and WOCAT classes. SINGLE elemet in SET { tree cover, >25% canopy ; shrub cover, >50% cover ; grassland, >50% grass ; savanna, 10-20% tree cover ; garden/mixed ; cropland ; developed ; water ; grassland ; forest ; village or city ; barren ; barren, < 5% Veg Cover ; Water, Swamp/Mash }",
+                        "required": false,
+                        "type": "string",
+                        "format": "SINGLE elemet in SET { tree cover, >25% canopy ; shrub cover, >50% cover ; grassland, >50% grass ; savanna, 10-20% tree cover ; garden/mixed ; cropland ; developed ; water ; grassland ; forest ; village or city ; barren ; barren, < 5% Veg Cover ; Water, Swamp/Mash }"
+                    },
+                    {
+                        "name": "grazed",
+                        "in": "query",
+                        "description": "Local knowledge of grazing. TRUE = yes, this land has been grazed by livestock in the last year; FALSE = no, this land has not been grazed in the last year.",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "grazing",
+                        "in": "query",
+                        "description": "IF grazed = TRUE, THEN type of animals that are grazing listed (any combination of LIVESTOCK, GOATS, SHEEP, WILDLIFE). None or combination elements in Set {LIVESTOCK, GOAT, SHEEP,WILDLIFE,CATTLE}",
+                        "required": false,
+                        "type": "string",
+                        "format": "None or combination elements in Set {LIVESTOCK, GOAT, SHEEP,WILDLIFE,CATTLE}"
+                    },
+                    {
+                        "name": "flooding",
+                        "in": "query",
+                        "description": "Local knowledge of flooding. TRUE = yes, this land has flooded for more than 2 weeks in the last year; FALSE = no, this land has not been flooded for more than 2 weeks in the.",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "slope",
+                        "in": "query",
+                        "description": "Slope in degrees. Option for either discrete value (using clinometer on phone) or slope classes (using icons on phone). Single element in {0-2% ; 3-5% ; 6-10% ; 11-15% ; 16-30% ; 31-60% ; >60%}",
+                        "required": true,
+                        "type": "string",
+                        "format": "Single element in {0-2% ; 3-5% ; 6-10% ; 11-15% ; 16-30% ; 31-60% ; >60%}"
+                    },
+                    {
+                        "name": "slope_shape",
+                        "in": "query",
+                        "description": "Shape of both downslope and crosslope (linear, convex, concave). SINGLE element in Downslope set +  , + SINGLE element in Cross-slope",
+                        "required": true,
+                        "type": "string",
+                        "format": "SINGLE element in Downslope set +  , + SINGLE element in Cross-slope Downslope = {LINEAR ; CONVEX;CONCAVE} Cross-Slope = {LINEAR ; CONVEX; CONCAVE}"
+                    },
+                    {
+                        "name": "bedrock_depth",
+                        "in": "query",
+                        "description": "If digging stopped due to reaching bedrock, level at which digging stopped (in cm).",
+                        "required": false,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    {
+                        "name": "stopped_digging_depth",
+                        "in": "query",
+                        "description": "If digging stopped due to any reason other than reaching bedrock, level at which digging stopped (in cm).",
+                        "required": false,
+                        "type": "number",
+                        "format": "double"
+                    },
+                    {
+                        "name": "rock_fragment_for_soil_horizon_1",
+                        "in": "query",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 1. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
+                    },
+                    {
+                        "name": "rock_fragment_for_soil_horizon_2",
+                        "in": "query",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 2. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
+                    },
+					{
+                        "name": "rock_fragment_for_soil_horizon_3",
+                        "in": "query",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 3. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
+                    },
+					{
+                        "name": "rock_fragment_for_soil_horizon_4",
+                        "in": "query",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 4. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
+                    },
+					{
+                        "name": "rock_fragment_for_soil_horizon_5",
+                        "in": "query",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 5. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
+                    },
+					{
+                        "name": "rock_fragment_for_soil_horizon_6",
+                        "in": "query",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 6. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
+                    },
+					{
+                        "name": "rock_fragment_for_soil_horizon_7",
+                        "in": "query",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 7. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_1",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_2",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_3",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_4",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_5",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_6",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_7",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "surface_salt",
+                        "in": "query",
+                        "description": "Salt observed at the soil surface. TRUE = salt observed at the soil surface; FALSE = no salt observed at the soil surface",
+                        "required": true,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+					{
+                        "name": "surface_cracking",
+                        "in": "query",
+                        "description": "Deep, vertical cracks visible in the soil profile. TRUE = deep, vertical cracks visible; FALSE = no deep vertical cracks visible",
+                        "required": true,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+					{
+                        "name": "soil_pit_photo_url",
+                        "in": "query",
+                        "description": "URL link for soil pit photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "soil_samples_photo_url",
+                        "in": "query",
+                        "description": "URL link for soil samples photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "landscape_north_photo_url",
+                        "in": "query",
+                        "description": "URL link for North landscape photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "landscape_east_photo_url",
+                        "in": "query",
+                        "description": "URL link for East landscape photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "landscape_south_photo_url",
+                        "in": "query",
+                        "description": "URL link for South landscape photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "landscape_west_photo_url",
+                        "in": "query",
+                        "description": "URL link for West landscape photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    }
+                ],
+                "tags": [
+                    "LandInfo",
+                    "Put"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response will be an object containing the ID of record that is created in Database (record_id or ID) ",
+                        "schema": {
+                             "$ref": "#/definitions/response_put_landinfo"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/query?version=&action=put&object=landcover": {
+            "put": {
+                "summary": "Insert a new LandCover object",
+                "description": "This operation allows to insert new data object of LandCover to cloud data store. \n",
+                "parameters": [
+				    {
+                        "name": "auth_key",
+                        "in": "http header",
+                        "description": "Authenticatin key for using API.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Name of the plot where data was collected.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "recorder_name",
+                        "in": "query",
+                        "description": "LandInfo recorder name. It is email that users registered to use LandPKS services.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "transect",
+                        "in": "query",
+                        "description": "Direction of transect recorded (N, S, E, W). SINGLE element in SET {WEST ; NORTH ; SOUTH ; EAST}",
+                        "required": true,
+                        "type": "string",
+                        "format": "SINGLE element in SET {WEST ; NORTH ; SOUTH ; EAST}"
+                    },
+                    {
+                        "name": "segment",
+                        "in": "query",
+                        "description": "Segment of each transect where observations are recorded (5 segments recorded every 5 meters of each transect). SINGLE element in SET {5m ; 10m ; 15m ; 20m ; 25m}",
+                        "required": true,
+                        "type": "string",
+                        "format": "SINGLE element in SET {5m ; 10m ; 15m ; 20m ; 25m}"
+                    },
+                    {
+                        "name": "canopy_height",
+                        "in": "query",
+                        "description": "Header for each height class for vegetation height observations for each segment. SINGLE element in SET { <10cm ; 10-50cm ; 50cm-1m ; 1-2m ; 2-3m ; >3m}",
+                        "required": false,
+                        "type": "string",
+                        "format": "SINGLE element in SET { <10cm ; 10-50cm ; 50cm-1m ; 1-2m ; 2-3m ; >3m}"
+                    },
+					{
+                        "name": "canopy_gap",
+                        "in": "query",
+                        "description": "Observed canopy gaps >1m; TRUE = canopy gap present, FALSE = no canopy gap present",
+                        "required": true,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+					{
+                        "name": "basal_gap",
+                        "in": "query",
+                        "description": "Observed basal gaps >1m; TRUE = basal gap present, FALSE = no basal gap present ",
+                        "required": true,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+					{
+                        "name": "species_of_interest_1",
+                        "in": "query",
+                        "description": "Observed count of species 1 (species determined by user on plot by plot basis)",
+                        "required": false,
+                        "type": "number",
+                        "format": "integer"
+                    },
+					{
+                        "name": "species_of_interest_2",
+                        "in": "query",
+                        "description": "Observed count of species 2 (species determined by user on plot by plot basis)",
+                        "required": false,
+                        "type": "number",
+                        "format": "integer"
+                    },
+					{
+                        "name": "dominant_woody_species",
+                        "in": "query",
+                        "description": "dominant_woody_species",
+                        "required": false,
+                        "type": "string",
+                        "format": "string"
+                    },
+					{
+                        "name": "dominant_nonwoody_species",
+                        "in": "query",
+                        "description": "dominant_nonwoody_species",
+                        "required": false,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "stick_segment_0",
+                        "in": "query",
+                        "description": "All observed cover elements at segment 1 of the respective transect. SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock}",
+                        "required": false,
+                        "type": "string",
+                        "format": "SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock} "
+                    },
+                    {
+                        "name": "stick_segment_1",
+                        "in": "query",
+                        "description": "All observed cover elements at segment 2 of the respective transect. SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock}",
+                        "required": false,
+                        "type": "string",
+                        "format": "SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock} "
+                    },
+                    {
+                        "name": "stick_segment_2",
+                        "in": "query",
+                        "description": "All observed cover elements at segment 3 of the respective transect. SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock}",
+                        "required": false,
+                        "type": "string",
+                        "format": "SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock} "
+                    },
+                    {
+                        "name": "stick_segment_3",
+                        "in": "query",
+                        "description": "All observed cover elements at segment 4 of the respective transect. SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock}",
+                        "required": false,
+                        "type": "string",
+                        "format": "SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock} "
+                    },
+                    {
+                        "name": "stick_segment_4",
+                        "in": "query",
+                        "description": "All observed cover elements at segment 5 of the respective transect. SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock}",
+                        "required": false,
+                        "type": "string",
+                        "format": "SUBSET of SET = { Bare ; Trees ; Shrubs ; Sub-shrubs ; Perennial grasses ; Annuals ; Herb Litter ; Wood Litter ; Rock} "
+                    }
+                ],
+                "tags": [
+                    "LandCover",
+                    "Put"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response will be an object containing the ID of record that is created in Database (record_id or ID) ",
+                        "schema": {
+                             "$ref": "#/definitions/response_put_landcover"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }, 
+        "/query?version=&action=delete&object=landinfo&type=delete_by_id": {
+            "delete": {
+                "summary": "Delete a LandInfo Object by LandInfo Plot ID",
+                "description": "This operation allows to delete object of LandInfo by LandInfo Plot ID in cloud data store. \n",
+                "parameters": [
+				    {
+                        "name": "auth_key",
+                        "in": "http header",
+                        "description": "Authenticatin key for using API.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "LandInfo Plot ID.",
+                        "required": true,
+                        "type": "number",
+                        "format": "integer"
+                    }
+                ],
+                "tags": [
+                    "LandInfo",
+                    "Delete"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array containing the ID’s of landcovers or landinfos to delete is given",
+                        "schema": {
+                             "$ref": "#/definitions/response_delete_landinfo"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+		"/query?version=&action=delete&object=landcover&type=delete_by_id": {
+            "delete": {
+                "summary": "Delete a LandCover Object by LandCover ID",
+                "description": "This operation allows to delete object of LandCover by LandCover ID in cloud data store. \n",
+                "parameters": [
+				    {
+                        "name": "auth_key",
+                        "in": "http header",
+                        "description": "Authenticatin key for using API.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "LandCover  ID.",
+                        "required": true,
+                        "type": "number",
+                        "format": "integer"
+                    }
+                ],
+                "tags": [
+                    "LandCover",
+                    "Delete"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array containing the ID’s of landcovers or landinfos to delete is given",
+                        "schema": {
+                             "$ref": "#/definitions/response_delete_landcover"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+		"/query?version=&action=delete&object=landcover&type=delete_by_name_recorder_name": {
+            "delete": {
+                "summary": "Delete a LandCover Object by par [Recorder_name and name]",
+                "description": "This operation allows to delete object of LandCover by [Recorder_name and name] in cloud data store. \n",
+                "parameters": [
+				    {
+                        "name": "auth_key",
+                        "in": "http header",
+                        "description": "Authenticatin key for using API.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "recorder_name",
+                        "in": "query",
+                        "description": "Recorder name to collect landcover.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+					{
+                        "name": "name",
+                        "in": "query",
+                        "description": "Plot name that collects landcover records.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    }
+                ],
+                "tags": [
+                    "LandCover",
+                    "Delete"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array containing the ID’s of landcovers or landinfos to delete is given",
+                        "schema": {
+                             "$ref": "#/definitions/response_delete_landcover"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+		"/query?version=&action=delete&object=landinfo&type=delete_by_name_recorder_name": {
+            "delete": {
+                "summary": "Delete a LandInfo Plot by par [Recorder_name and name]",
+                "description": "This operation allows to delete object of LandInfo Plot by [Recorder_name and name] in cloud data store. \n",
+                "parameters": [
+				    {
+                        "name": "auth_key",
+                        "in": "http header",
+                        "description": "Authenticatin key for using API.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "recorder_name",
+                        "in": "query",
+                        "description": "Recorder name to collect LandInfo plot.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    },
+					{
+                        "name": "name",
+                        "in": "query",
+                        "description": "Plot name that collects LandInfo plot.",
+                        "required": true,
+                        "type": "string",
+                        "format": "string"
+                    }
+                ],
+                "tags": [
+                    "LandInfo",
+                    "Delete"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array containing the ID’s of landcovers or landinfos to delete is given",
+                        "schema": {
+                             "$ref": "#/definitions/response_delete_landcover"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/query?version=&action=get&object=landinfo&type=get_by_id": {
+            "get": {
+                "summary": "GET single/list records of LandInfo and Predicted data by LandInfo Plot ID",
+                "description": "GET single/list records of LandInfo and Predicted data by LandInfo Plot ID. \n",
+                "parameters": 
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Single ID or list of IDs.",
+                        "required": true,
+                        "type": "string",
+                        "format": "list of ids"
+                    },
+                    {
+                        "name": "delimiter",
+                        "in": "query",
+                        "description": "Separate symbol",
+                        "required": false,
+                        "type": "string",
+                        "format": "string"
+                    },
+                    {
+                        "name": "display",
+                        "in": "query",
+                        "description": "Determine which collections of data will be display in response corresponding with LandInfo plot data. Sub-Set of Display = {PREDICTION ; GEOSPATIAL_DATA ; ANALYTIC_DATA_SOIL ; CLIMATE} .",
+                        "required": false,
+                        "type": "string",
+                        "format": "string"
+                    }
+                ],
+                "tags": [
+                    "LandInfo",
+                    "Get"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of landinfo plots",
+                        "schema": {
+                             "$ref": "#/definitions/response_get_landinfo"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+	},
+    "definitions": {
+        "response_put_landinfo": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "number",
+                    "description": "Status of process"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "LandInfo Plot Name."
+                },
+                "object": {
+                    "type": "string",
+                    "description": "LANDINFO"
+                },
+                "recorder_name": {
+                    "type": "string",
+                    "description": "Recorder name == email address."
+                },
+                "id": {
+                    "type": "number",
+                    "description": "Plot ID in Data Store."
+                },
+                "version": {
+                    "type": "string",
+                    "description": "LandPKS API Version."
+                },
+                "detail": {
+                    "type": "string",
+                    "description": "Detail information about Plot status."
+                }
+            }
+        },
+		"response_put_landcover": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "number",
+                    "description": "Status of process"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "LandCover Plot Name."
+                },
+                "object": {
+                    "type": "string",
+                    "description": "LANDCOVER"
+                },
+                "recorder_name": {
+                    "type": "string",
+                    "description": "Recorder name == email address."
+                },
+                "id": {
+                    "type": "number",
+                    "description": "Plot ID in Data Store."
+                },
+                "version": {
+                    "type": "string",
+                    "description": "LandPKS API Version."
+                },
+                "detail": {
+                    "type": "string",
+                    "description": "Detail information about LandCover status."
+                }
+            }
+        },
+        "response_delete_landinfo": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "description": "Status of process"
+                },
+                "object": {
+                    "type": "string",
+                    "description": "LANDINFO"
+                },
+                "id": {
+                    "type": "number",
+                    "description": "Plot ID in Data Store."
+                },
+                "version": {
+                    "type": "string",
+                    "description": "LandPKS API Version."
+                }
+            }
+        },
+		"response_delete_landcover": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "description": "Status of process"
+                },
+                "object": {
+                    "type": "string",
+                    "description": "LANDCOVER"
+                },
+                "id": {
+                    "type": "number",
+                    "description": "LANDCOVER ID in Data Store."
+                },
+                "version": {
+                    "type": "string",
+                    "description": "LandPKS API Version."
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
