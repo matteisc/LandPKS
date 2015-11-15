@@ -22,7 +22,7 @@
             "put": {
                 "summary": "Insert a new LandInfo object",
                 "description": "This operation allows to insert new data object of LandInfo to cloud data store. \n",
-                "parameters": [
+                "parameters": [ 
                     {
                         "name": "name",
                         "in": "query",
