@@ -259,6 +259,30 @@
                         "required": false,
                         "type": "string",
                         "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "surface_salt",
+                        "in": "query",
+                        "description": "Salt observed at the soil surface. TRUE = salt observed at the soil surface; FALSE = no salt observed at the soil surface",
+                        "required": true,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+					{
+                        "name": "surface_cracking",
+                        "in": "query",
+                        "description": "Deep, vertical cracks visible in the soil profile. TRUE = deep, vertical cracks visible; FALSE = no deep vertical cracks visible",
+                        "required": true,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+					{
+                        "name": "soil_pit_photo_url",
+                        "in": "query",
+                        "description": "URL link for soil pit photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
                     }
                 ],
                 "tags": [
