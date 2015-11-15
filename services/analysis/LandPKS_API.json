@@ -336,7 +336,7 @@
                     "200": {
                         "description": "Response will be an object containing the ID of record that is created in Database (record_id or ID) ",
                         "schema": {
-                            "type": "array",
+                            "type": "object",
                             "items": {
                                 "$ref": "#/definitions/response_put_landinfo"
                             }
@@ -543,11 +543,7 @@
                     "type": "string",
                     "description": "LandInfo Plot Name."
                 },
-                "object": {
-                    "type": "string",
-                    "value":"LANDINFO",
-                    "description": "LANDINFO"
-                },
+                "object": "LANDINFO",
                 "recorder_name": {
                     "type": "string",
                     "description": "Recorder name == email address."
