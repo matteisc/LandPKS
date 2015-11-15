@@ -89,8 +89,8 @@
                         "in": "query",
                         "description": "Observed land cover. Land cover selections are a modified version of NRCS and WOCAT classes.",
                         "required": false,
-                        "type": "lists",
-                        "format": "String - separated by comma"
+                        "type": "string",
+                        "format": "SINGLE elemet in SET { tree cover, >25% canopy ; shrub cover, >50% cover ; grassland, >50% grass ; savanna, 10-20% tree cover ; garden/mixed ; cropland ; developed ; water ; grassland ; forest ; village or city ; barren ; barren, < 5% Veg Cover ; Water, Swamp/Mash }"
                     },
                     {
                         "name": "grazed",
@@ -98,15 +98,15 @@
                         "description": "Local knowledge of grazing. TRUE = yes, this land has been grazed by livestock in the last year; FALSE = no, this land has not been grazed in the last year.",
                         "required": false,
                         "type": "boolean",
-                        "format": "string"
+                        "format": "boolean"
                     },
                     {
                         "name": "grazing",
                         "in": "query",
                         "description": "IF grazed = TRUE, THEN type of animals that are grazing listed (any combination of LIVESTOCK, GOATS, SHEEP, WILDLIFE).",
                         "required": false,
-                        "type": "List",
-                        "format": "String - separated by comma"
+                        "type": "string",
+                        "format": "None or combination elements in Set {LIVESTOCK, GOAT, SHEEP,WILDLIFE,CATTLE}"
                     },
                     {
                         "name": "flooding",
@@ -114,7 +114,7 @@
                         "description": "Local knowledge of flooding. TRUE = yes, this land has flooded for more than 2 weeks in the last year; FALSE = no, this land has not been flooded for more than 2 weeks in the.",
                         "required": false,
                         "type": "boolean",
-                        "format": "string"
+                        "format": "boolean"
                     },
                     {
                         "name": "slope",
@@ -129,8 +129,8 @@
                         "in": "query",
                         "description": "Shape of both downslope and crosslope (linear, convex, concave).",
                         "required": true,
-                        "type": "List",
-                        "format": "String - separated by comma"
+                        "type": "string",
+                        "format": "SINGLE element in Downslope set +  , + SINGLE element in Cross-slope Downslope = {LINEAR ; CONVEX;CONCAVE} Cross-Slope = {LINEAR ; CONVEX; CONCAVE}"
                     },
                     {
                         "name": "bedrock_depth",
