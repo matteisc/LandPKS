@@ -334,11 +334,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "An array of products",
+                        "description": "Response will be an object containing the ID of record that is created in Database (record_id or ID) ",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Product"
+                                "$ref": "#/definitions/response_put_landinfo"
                             }
                         }
                     },
@@ -532,28 +532,37 @@
         }
     },
     "definitions": {
-        "Product": {
+        "response_put_landinfo": {
             "type": "object",
             "properties": {
-                "product_id": {
-                    "type": "string",
-                    "description": "Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles."
+                "status": {
+                    "type": "number",
+                    "description": "Status of process"
                 },
-                "description": {
+                "name": {
                     "type": "string",
-                    "description": "Description of product."
+                    "description": "LandInfo Plot Name."
                 },
-                "display_name": {
+                "object": {
                     "type": "string",
-                    "description": "Display name of product."
+                    "value":"LANDINFO",
+                    "description": "LANDINFO"
                 },
-                "capacity": {
+                "recorder_name": {
                     "type": "string",
-                    "description": "Capacity of product. For example, 4 people."
+                    "description": "Recorder name == email address."
                 },
-                "image": {
+                "id": {
+                    "type": "number",
+                    "description": "Plot ID in Data Store."
+                },
+                "version": {
                     "type": "string",
-                    "description": "Image URL representing the product."
+                    "description": "LandPKS API Version."
+                },
+                "detail": {
+                    "type": "string",
+                    "description": "Detail information about Plot status."
                 }
             }
         },
