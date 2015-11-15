@@ -3,7 +3,7 @@
     "info": {
         "title": "LandPKS API System",
         "description": "This is Web Service description for LandPKS Project API System. This documentation follows [..] to describe all Web Services API operations of LandPKS Project. It allows third-parties and developers be able to interact with LandPKS's data (LandInfo, LandCover...). 
-                        \n version : The current version of internal recipe database. Each time when new plot are put into the server through the web service, the internal database version is incremented. If the version == empty or version = -1, this is default value, it means that the latest API version is used 
+                        \n\n\n version : The current version of internal recipe database. Each time when new plot are put into the server through the web service, the internal database version is incremented. If the version == empty or version = -1, this is default value, it means that the latest API version is used 
                         \n Action and object : Additional data includes action and object to identify PUT or POST or GET or DELETE action and which object do you want to interact (landinfo, landcover or all)? 
                         \n Meta data: The rest of parameters are metadata (landinfo data or landcover data) want to put and run model ",
         "version": "1.0.0"
