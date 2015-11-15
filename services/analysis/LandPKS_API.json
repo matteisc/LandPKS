@@ -89,7 +89,7 @@
                         "in": "query",
                         "description": "Observed land cover. Land cover selections are a modified version of NRCS and WOCAT classes.",
                         "required": false,
-                        "type": "List",
+                        "type": "lists",
                         "format": "String - separated by comma"
                     },
                     {
