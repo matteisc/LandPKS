@@ -87,7 +87,7 @@
                     {
                         "name": "land_cover",
                         "in": "query",
-                        "description": "Observed land cover. Land cover selections are a modified version of NRCS and WOCAT classes.",
+                        "description": "Observed land cover. Land cover selections are a modified version of NRCS and WOCAT classes. SINGLE elemet in SET { tree cover, >25% canopy ; shrub cover, >50% cover ; grassland, >50% grass ; savanna, 10-20% tree cover ; garden/mixed ; cropland ; developed ; water ; grassland ; forest ; village or city ; barren ; barren, < 5% Veg Cover ; Water, Swamp/Mash }",
                         "required": false,
                         "type": "string",
                         "format": "SINGLE elemet in SET { tree cover, >25% canopy ; shrub cover, >50% cover ; grassland, >50% grass ; savanna, 10-20% tree cover ; garden/mixed ; cropland ; developed ; water ; grassland ; forest ; village or city ; barren ; barren, < 5% Veg Cover ; Water, Swamp/Mash }"
@@ -103,7 +103,7 @@
                     {
                         "name": "grazing",
                         "in": "query",
-                        "description": "IF grazed = TRUE, THEN type of animals that are grazing listed (any combination of LIVESTOCK, GOATS, SHEEP, WILDLIFE).",
+                        "description": "IF grazed = TRUE, THEN type of animals that are grazing listed (any combination of LIVESTOCK, GOATS, SHEEP, WILDLIFE). None or combination elements in Set {LIVESTOCK, GOAT, SHEEP,WILDLIFE,CATTLE}",
                         "required": false,
                         "type": "string",
                         "format": "None or combination elements in Set {LIVESTOCK, GOAT, SHEEP,WILDLIFE,CATTLE}"
@@ -119,15 +119,15 @@
                     {
                         "name": "slope",
                         "in": "query",
-                        "description": "Slope in degrees. Option for either discrete value (using clinometer on phone) or slope classes (using icons on phone).",
+                        "description": "Slope in degrees. Option for either discrete value (using clinometer on phone) or slope classes (using icons on phone). Single element in {0-2% ; 3-5% ; 6-10% ; 11-15% ; 16-30% ; 31-60% ; >60%}",
                         "required": true,
                         "type": "string",
-                        "format": "string {0-2% ; 3-5% ; 6-10% ; 11-15% ; 16-30% ; 31-60% ; >60%}"
+                        "format": "Single element in {0-2% ; 3-5% ; 6-10% ; 11-15% ; 16-30% ; 31-60% ; >60%}"
                     },
                     {
                         "name": "slope_shape",
                         "in": "query",
-                        "description": "Shape of both downslope and crosslope (linear, convex, concave).",
+                        "description": "Shape of both downslope and crosslope (linear, convex, concave). SINGLE element in Downslope set +  , + SINGLE element in Cross-slope",
                         "required": true,
                         "type": "string",
                         "format": "SINGLE element in Downslope set +  , + SINGLE element in Cross-slope Downslope = {LINEAR ; CONVEX;CONCAVE} Cross-Slope = {LINEAR ; CONVEX; CONCAVE}"
@@ -151,7 +151,7 @@
                     {
                         "name": "rock_fragment_for_soil_horizon_1",
                         "in": "query",
-                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 1.",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 1. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
                         "required": false,
                         "type": "string",
                         "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
@@ -159,7 +159,7 @@
                     {
                         "name": "rock_fragment_for_soil_horizon_2",
                         "in": "query",
-                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 2.",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 2. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
                         "required": false,
                         "type": "string",
                         "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
@@ -167,7 +167,7 @@
 					{
                         "name": "rock_fragment_for_soil_horizon_3",
                         "in": "query",
-                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 3.",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 3. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
                         "required": false,
                         "type": "string",
                         "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
@@ -175,7 +175,7 @@
 					{
                         "name": "rock_fragment_for_soil_horizon_4",
                         "in": "query",
-                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 4.",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 4. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
                         "required": false,
                         "type": "string",
                         "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
@@ -183,7 +183,7 @@
 					{
                         "name": "rock_fragment_for_soil_horizon_5",
                         "in": "query",
-                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 5.",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 5. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
                         "required": false,
                         "type": "string",
                         "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
@@ -191,7 +191,7 @@
 					{
                         "name": "rock_fragment_for_soil_horizon_6",
                         "in": "query",
-                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 6.",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 6. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
                         "required": false,
                         "type": "string",
                         "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
@@ -199,10 +199,66 @@
 					{
                         "name": "rock_fragment_for_soil_horizon_7",
                         "in": "query",
-                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 7.",
+                        "description": "Percent of soil containing rock fragments (fragments > 5mm diameter) Horizontal layer 7. Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}",
                         "required": false,
                         "type": "string",
                         "format": "Single element in set {0-15% ; 15-35% ; 35-60% ; >60%}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_1",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_2",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_3",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_4",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_5",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_6",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
+                    },
+					{
+                        "name": "texture_for_soil_horizon_7",
+                        "in": "query",
+                        "description": "Texture of soil for each layer. Soil texture determined by hand. Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}",
+                        "required": false,
+                        "type": "string",
+                        "format": "Single element in set {SAND ; LOAMY SAND ; SANDY LOAM ;LOAM; SILT LOAM ; SANDY CLAY LOAM ; CLAY LOAM ; SILTY CLAY LOAM ; SANDY CLAY ; CLAY ; SILTY CLAY}"
                     }
                 ],
                 "tags": [
