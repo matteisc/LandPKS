@@ -2,7 +2,10 @@
     "swagger": "2.0",
     "info": {
         "title": "LandPKS API System",
-        "description": "This is Web Service description for LandPKS Project API System. This documentation follows [..] to describe all Web Services API operations of LandPKS Project. It allows third-parties and developers be able to interact with LandPKS's data (LandInfo, LandCover...).",
+        "description": "This is Web Service description for LandPKS Project API System. This documentation follows [..] to describe all Web Services API operations of LandPKS Project. It allows third-parties and developers be able to interact with LandPKS's data (LandInfo, LandCover...). 
+                        version : The current version of internal recipe database. Each time when new plot are put into the server through the web service, the internal database version is incremented. If the version == empty or version = -1, this is default value, it means that the latest API version is used 
+                        Action and object : Additional data includes action and object to identify PUT or POST or GET or DELETE action and which object do you want to interact (landinfo, landcover or all)? 
+                        Meta data: The rest of parameters are metadata (landinfo data or landcover data) want to put and run model ",
         "version": "1.0.0"
     },
     "host": "api.landpotential.org",
@@ -280,6 +283,46 @@
                         "name": "soil_pit_photo_url",
                         "in": "query",
                         "description": "URL link for soil pit photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "soil_samples_photo_url",
+                        "in": "query",
+                        "description": "URL link for soil samples photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "landscape_north_photo_url",
+                        "in": "query",
+                        "description": "URL link for North landscape photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "landscape_east_photo_url",
+                        "in": "query",
+                        "description": "URL link for East landscape photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "landscape_south_photo_url",
+                        "in": "query",
+                        "description": "URL link for South landscape photo",
+                        "required": false,
+                        "type": "string",
+                        "format": "URL"
+                    },
+					{
+                        "name": "landscape_west_photo_url",
+                        "in": "query",
+                        "description": "URL link for West landscape photo",
                         "required": false,
                         "type": "string",
                         "format": "URL"
