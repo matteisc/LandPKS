@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
 	<title>tiltle</title>
@@ -9,8 +8,8 @@
 	<form>
 
 		<div id="emailInput">
-			Enter your recorder name :<br><br>
-			<input type="text" name="userName" id ="userName">
+			Enter your recorder name :<br>
+			<input type="text" name="userName" style="background-color: #d9d9d9;"  id ="userName">
 		</div>
 		<br>
 		<input type="checkbox" onChange="hideEmailInput(this)" name="exportAll" id = "exportAll" value="TRUE">Export ALL plots in the database (download may take several minutes)
@@ -28,7 +27,10 @@
 
 		<button type="button" onclick= "downloadFunc()" id= "exportBtn">Export</button>
 		<button type="button" onclick="vizFunction()" id= "dataVizBtn" style="visibility: hidden;" >Data Visualization </button>
-
+		<br>
+		<br>
+		<div id="dlDiv">
+		</div>
 
 		<script>
 		function hideEmailInput(element){
@@ -96,7 +98,7 @@
 			iframe.height="100px";
 			iframe.id="dlFrame";
 			iframe.setAttribute("src", link);
-			document.body.appendChild(iframe);
+			document.getElementById("dlDiv").appendChild(iframe);
 		}
 
 		function validateInput(){
