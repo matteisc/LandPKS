@@ -1,7 +1,7 @@
 <html>
 <head>
 	<title>tiltle</title>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 </head>
 <body>
@@ -76,9 +76,7 @@
 				alert("Please enter a valid email address!")
 				return;
 			}
-			if (document.contains(document.getElementById("dlFrame"))) {
-				document.getElementById("dlFrame").remove();
-			}
+			removeShiny();
 
 			var query ="";
 			if(document.getElementById("exportAll").checked){
@@ -99,7 +97,19 @@
 			iframe.id="dlFrame";
 			iframe.setAttribute("src", link);
 			document.getElementById("dlDiv").appendChild(iframe);
+
+			setTimeout(removeShiny, 15000);
+
 		}
+
+		function removeShiny(){
+		if (document.contains(document.getElementById("dlFrame"))) {
+				$("#dlFrame").fadeOut(10000);
+				//document.getElementById("dlFrame").remove();
+			}
+
+		}
+
 
 		function validateInput(){
 			return document.getElementById("exportAll").checked || validateEmail(document.getElementById("userName").value);
