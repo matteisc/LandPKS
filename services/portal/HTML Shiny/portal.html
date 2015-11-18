@@ -76,7 +76,10 @@
 				alert("Please enter a valid email address!")
 				return;
 			}
-			removeShiny();
+			
+			if (document.contains(document.getElementById("dlFrame"))) {
+				document.getElementById("dlFrame").remove();
+			}
 
 			var query ="";
 			if(document.getElementById("exportAll").checked){
