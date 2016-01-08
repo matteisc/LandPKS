@@ -1,0 +1,45 @@
+body {
+	background-color: #EBEBEB;
+	margin: 0px;
+	padding: 0px;
+}
+
+header {
+		background-color: #009100;
+	color: white;
+	width: 100%;
+	height: 50px;
+}
+
+nav {
+	height: 10px;
+}
+
+hr {
+	background-color: green;
+	box-shadow: none;
+	border: none;
+}
+
+div {
+    width: 100px;
+	height: 100px;
+    padding: 10px;
+    border: none;
+	background-color: white;
+	display: inline-block;
+    margin-left: 5%;
+    margin-right: auto;
+}
+
+
+p {
+	position: absolute;
+	left: 15%;
+	top: 0px;
+	color: white;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	font-weight: normal;
+}
+

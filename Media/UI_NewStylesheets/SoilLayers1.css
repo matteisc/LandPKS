@@ -1,0 +1,91 @@
+@charset "UTF-8";
+/* CSS Document */
+header {
+	background-color: #009100;
+	color: white;
+	width: 100%;
+	height: 55px;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 16px;
+}
+nav {
+	height: 50px;
+	width: 100%;
+	background-color: white;
+	text-align: center;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 13px;
+}
+body {
+	background-color: #EDEDED;
+	color: black;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	margin: 0px;
+	padding: 0px;
+}
+
+#headersoil {
+	margin: 0px;
+	padding: 0px;
+	position: absolute;
+	top: 15px;
+	left: 75px;
+}
+
+img {
+	height: 50px;
+	width: 50px;
+}
+
+#rockfragment {
+	text-align: center;
+	font-weight: bold;
+}
+
+#first {
+	font-weight: bold;
+	text-indent: 20px;
+}
+
+#soiltexture {
+	font-weight: bold;
+	text-align: center;
+}
+
+#restrictive {
+	font-weight: bold;
+	text-align: center;
+}
+
+#bed {
+	text-align: center;
+}
+
+#digging {
+	text-align: center;
+}
+
+#or {
+	font-weight: bold;
+	text-align: center;
+}
+
+button {
+	background-color: #009100;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: white;
+	font-size: 14px;
+	border-radius: 25px;
+	box-shadow: none;
+	border: none;
+	padding: 10px;
+}
+
+table {
+	background-color: white;
+	border-radius: 10px;
+	padding: 10px;
+	width: 95%;
+	
+}

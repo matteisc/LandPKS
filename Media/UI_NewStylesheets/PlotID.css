@@ -1,0 +1,85 @@
+header {
+	background-color: #009100;
+	color: white;
+	width: 100%;
+	height: 50px;
+}
+
+body {
+	background-color: #EBEBEB;
+	color: #009100;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	text-align: right;
+	margin: 0px;
+	padding: 0px;
+}
+
+nav {
+	height: 10px;
+}
+
+table {
+	width: 95%;
+	color: black;
+	background-color: white;
+	border-collapse: collapse;
+	align: left;
+	border-radius: 10px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+tr {
+	border-radius: 10px;
+	border-collapse: collapse;
+	display: inline;
+}
+tr:nth-child(even){
+	background-color: #D2D2D2;
+	font-size: 14px;
+	border-radius: 10px;
+}
+p {
+	font-size: 14px;
+	text-align: right;
+	display: block;
+	position: absolute;
+	margin-top: auto;
+	margin-left: 10px;
+	
+	
+}
+
+form {
+	font-size: 12px;
+}
+
+button {
+	background-color: #009100;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: white;
+	font-size: 14px;
+	border-radius: 25px;
+	box-shadow: none;
+	border: none;
+	padding: 10px;
+}
+
+input {
+	border-radius: 3px;
+	background-color: white;
+	color: black;
+	box-shadow: none;
+	border: none;
+	padding: 3px;
+}
+td {
+	border-radius: 10px;
+	border-collapse: collapse;
+	padding: 10px;
+}
+
+
+	

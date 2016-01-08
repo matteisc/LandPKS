@@ -1,0 +1,39 @@
+header {
+	background-color: #009100;
+	color: white;
+	width: 100%;
+	height: 50px;
+}
+body {
+	background-color: #EBEBEB;
+	color: #009100;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+nav {
+	height: 10px;
+}
+table {
+	width: 95%;
+	color: black;
+	background-color: white;
+	border-collapse: collapse;
+	align: center;
+	border-radius: 10px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+td {
+	padding: 10px;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: small;
+	text-align: left;
+	border-radius: 25px;
+}
+
+tr {
+	border-radius: 25px;
+}
+

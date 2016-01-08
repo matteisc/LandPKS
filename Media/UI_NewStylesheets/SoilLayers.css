@@ -1,0 +1,106 @@
+@charset "UTF-8";
+/* CSS Document */
+header {
+	background-color: #009100;
+	color: white;
+	width: 100%;
+	height: 55px;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 16px;
+}
+nav {
+	height: 10px;
+	width: 100%;
+}
+body {
+	background-color: #EDEDED;
+	color: black;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	margin: 0px;
+	padding: 0px;
+}
+
+#headersoil {
+	margin: 0px;
+	padding: 0px;
+	position: absolute;
+	top: 15px;
+	left: 75px;
+}
+
+table {
+	width: 95%;
+	color: black;
+	background-color: white;
+	border-collapse: collapse;
+	align: left;
+	border-radius: 10px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+tr {
+	border-radius: 10px;
+	border-collapse: collapse;
+	display: inline;
+}
+tr:nth-child(even){
+	background-color: #D2D2D2;
+	font-size: 14px;
+	border-radius: 10px;
+}
+
+td {
+	border-radius: 10px;
+	border-collapse: collapse;
+	padding: 10px;
+}
+img {
+	height: 50px;
+	width: 50px;
+}
+
+#checkmark1 {
+	height: 25px;
+	width: 25px;
+	position: relative;
+	left: 150px;
+}
+#checkmark2 {
+	height: 25px;
+	width: 25px;
+	position: relative;
+	left: 150px;
+}
+#checkmark3 {
+	height: 25px;
+	width: 25px;
+	position: relative;
+	left: 150px;
+}
+#checkmark4 {
+	height: 25px;
+	width: 25px;
+	position: relative;
+	left: 150px;
+}
+#checkmark5 {
+	height: 25px;
+	width: 25px;
+	position: relative;
+	left: 150px;
+}
+#checkmark6 {
+	height: 25px;
+	width: 25px;
+	position: relative;
+	left: 150px;
+}
+#checkmark7 {
+	height: 25px;
+	width: 25px;
+	position: relative;
+	left: 150px;
+}
